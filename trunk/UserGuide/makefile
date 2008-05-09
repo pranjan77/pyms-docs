@@ -1,7 +1,7 @@
 # makefile for PyMS User Guide
 # Copyright (c) 2006, Vladimir Likic <vlikic@unimelb.edu.au>
 
-TEXFILE	= user_guide.tex
+TEXFILE	= UserGuide.tex
 
 pdf:	$(TEXFILE:.tex=.pdf)
 ps:	$(TEXFILE:.tex=.ps)
