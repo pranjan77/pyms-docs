@@ -1,0 +1,66 @@
+% LaTeX source for META-B User Guide
+
+\documentclass[twoside,a4paper]{book}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{makeidx}
+\usepackage{tlk2e/tlk2e}
+\usepackage{url}
+
+\setlength{\topmargin}{0.0cm}
+\setlength{\evensidemargin}{0.0cm}
+\setlength{\oddsidemargin}{0.0cm}
+\setlength{\textwidth}{16.0cm}
+\setlength{\textheight}{23.0cm}
+%\setlength{\footskip}{0.0cm}
+
+\parskip 0.2cm
+\parindent 0cm
+\makeindex
+
+\begin{document}
+
+\frontmatter
+
+\title{\includegraphics{logo/PyMS.eps}
+\Large{PyMS User Guide}}
+\author{Vladimir Liki\'{c}
+\medskip}
+
+\medskip
+
+\version{PyMS version 1.0}
+
+\abstract{PyMS is a modular software package for processing of
+chromatography--mass spectrometry data with emphasis on scripting
+capabilities.}
+
+\maketitle
+\tableofcontents
+
+\input epsf
+
+\newpage
+
+\setcounter{chapter}{1}
+\pagenumbering{arabic}
+\input{latex/chapter01.tex}
+
+\setcounter{chapter}{2}
+\input{latex/chapter02.tex}
+
+\setcounter{chapter}{3}
+\input{latex/chapter03.tex}
+
+\setcounter{chapter}{4}
+\input{latex/chapter04.tex}
+
+\bibliography{bibtex/refbase}
+\bibliographystyle{unsrt}
+
+\backmatter
+\printindex
+
+
+\end{document}
