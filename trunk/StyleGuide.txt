@@ -2,312 +2,149 @@
    PyMS coding Style Guide
    =========================
 
-   This basis for this document documents was PEP-8 "Style Guide for
-   Python Code", by Guido van Rossum and Barry Warsaw.
+   [This basis for this document documents was PEP-8 "Style Guide for
+   Python Code", by Guido van Rossum and Barry Warsaw]
 
-  Introduction
-  ------------
+  1. Identation
 
-    This document gives coding conventions for the Python code that
-    is a part of the Bioinformatics Toolkit for Metabolomics (pyms)
-    package.
+    1.1 Use 4 spaces per indentation level. Do not use tabs.
 
-  Code lay-out
-  ------------
+  2. Line length
 
-  1. Indentation
+    2.1 Limit all lines to a maximum of 80 characters.  Long lines should
+        be wrapped with implied line continuation if inside parentheses,
+        or explicitly using a backslash. Indent the continued line for 8
+        spaces to distinguish from the normal 4 spaces for one indentation
+        level.
 
-    Use 4 spaces for one indentation level. Do not use tabs, and never
-    mix tabs and spaces.
+  3. Imports
 
-  2. Maximum line length and line wrapping
+    3.1 Group imports as:
 
-    Limit all lines to a maximum of 80 characters.
+        1) Standard library imports
+        2) External module imports
+        3) Other PyMS subpackage imports
+        4) This subpackage imports
 
-    Long lines should be wrapped with implied line continuation if
-    inside parentheses, or explicitly using a backslash. Indent the
-    continued line for eight spaces to distinguish from the normal
-    4 spaces for one indentation level.
+        Separate each group by a blank line.
 
-    Examples:
+    3.2 Imports
 
-    class Rectangle(Blob):
+        3.2.1 For standard library modules, always import the entire module
+              name space. i.e.
 
-        def __init__(self, width, height, \
-                    color='black', emphasis=None, highlight=0):
-            if width == 0 and height == 0 and \
-               color == 'red' and emphasis == 'strong' or \
-                       highlight > 100:
-                raise ValueError("sorry, you lose")
-            if width == 0 and height == 0 and (color == 'red' or
-                    emphasis is None):
-                raise ValueError("I don't think so")
-            Blob.__init__(self, width, height,
-                    color, emphasis, highlight)
+              import os
+              ...
+              os.path()
 
-  3. Blank Lines
+        3.2.2 For PyMS modules always import specific functions, i.e.
 
-    Use a single blank line as follows:
-    1) To separate function and class definitions within a module.
-    2) Between the function, class, method def statement, and the
-    docstring.
-    3) Between each group of imports (see below Imports)
-    3) Extra blank lines may be used (sparingly) to separate groups
-    of related functions, or in functions to separate logical
-    sections.
+              from pyms.Utils.Utils import is_str, is_int 
 
-  4. Encodings
+  4. Whitespaces
 
-    Code files should aways use the ASCII encoding (a.k.a. ISO-8859-1).
+    4.1 Use tight parentheses, brackets or braces, as in: spam(ham[1],{eggs:2})
 
-  Imports
-  -------
+    4.2 Do not use whitespace after an expression, or immediately before a comma,
+        semicolon, or colon
 
-    - More than one object can be imported from a single module: 
+        if x == 4 : print x , y ; x , y = y , x
+        Write this as
+        if x == 4: print x, y; x, y = y, x
 
-        from types import StringType, ListType
+    4.3 Use only one space around binary operators (assignment (=), comparisons
+        (==, <, >, !=, <>, <=, >=, in, not in, is, is not), Booleans (and, or, not)
 
-    - Always use the absolute package path for all imports.
+    4.4 In complex expressions do not insert spaces around arithmetic operators
+        on the first level, but do insert a single space on the second level to
+        improve readability. For example:
+        i = i+1
+        x = x*2 - 1
 
-    - Imports are always put at the top of the file, immediately after
-      any module comments and docstrings, and before module globals and
-      constants.  Imports should be grouped in the following order:
+  5. Comments
 
-      1. Standard library imports
-      2. External module imports
-      2. Other pyms subpackage imports
-      3. This subpackage imports
+    5.1 Comments should be complete sentences.  If a comment is a phrase
+        or sentence, its first word should be capitalized, unless it is
+        an identifier that begins with a lower case letter.
 
-      Each group of imports should be separated by a blank line. For
-      example, in a module pyms.PeakList.Functions:
+    5.2 If a comment is short, the period at the end is best omitted.
+        Longer comments of block comments generally consist of one or
+        more paragraphs built out of complete sentences, and each sentence
+        should end with a period.
 
-      -- Functions.py: begin --
-      import os
-      import copy
+    5.3 Block comments generally apply to some (or all) code that follows
+        them, and are indented to the same level as that code.  Each line
+        of a block comment starts with a # and a single space (unless it
+        is indented text inside the comment).  Paragraphs inside a block
+        comment are separated by a line containing a single #.  Block
+        comments should be surrounded by a blank line above and below them.
 
-      from pyms.Utils.Utils import error 
-      from pyms.Utils.Lists import init_mat
-      -- Functions.py: end --
+    5.4 An inline comment is a comment on the same line as a statement.
+        Inline comments should be separated by a two spaces from the
+        statement, and should start with a # and a single space. Use
+        sparingly.
 
+  6. Naming Styles
+ 
+    6.1 Variable names
 
-  Whitespace in Expressions and Statements
-  ----------------------------------------
+        6.1.1 Global variable names should be prefixed with an underscore
+              to prevent their export from the module.
 
-    Do not use whitespace in the following places:
+        6.1.2 Specific variable names:
 
-    - Immediately inside parentheses, brackets or braces, as in:
-      "spam( ham[ 1 ], { eggs: 2 } )".  Write this as
-      "spam(ham[1], {eggs: 2})".
+              - Use 'file_name' instead of 'filename'
 
-    - Immediately before a comma, semicolon, or colon, as in:
-      "if x == 4 : print x , y ; x , y = y , x".  Write this as
-      "if x == 4: print x, y; x, y = y, x".
+              - Use 'fp' for file pointer, i.e.
+                   fp = open(file_name, 'r')
 
-    - Immediately before the open parenthesis that starts the argument
-      list of a function call, as in "spam (1)".  Write this as "spam(1)".
+    6.2 Module names.  Module names should be short, starting with an
+        uppercase letter (i.e. Utils.py).
 
-    - Immediately before the open parenthesis that starts an indexing or
-      slicing, as in: "dict ['key'] = list [index]".  Write this as
-      "dict['key'] = list[index]".
+    6.2 Class names.  Class names use the CapWords convention. Classes for
+        internal use have a leading underscore in addition.
 
-    - More than one space around an assignment (or other) operator to
-      align it with another, as in:
+    6.4 Exception Names. Exceptions should be handled via the function
+        pyms.Utils.Error.error() 
 
-          x             = 1
-          y             = 2
-          long_variable = 3
+    6.5 Function names should be lowercase, with words separated by
+        underscores where suitable to improve readability. 
 
-      Write this as:
+    6.6 Method Names names should follow the same principles as the function
+        names.
 
-          x = 1
-          y = 2
-          long_variable = 3
+    6.7 Internal methods and instance variables. Use one leading underscore
+        only for internal methods and instance variables which are not
+        intended to be part of the class's public interface.
 
-  Other Recommendations
-  ---------------------
+    6.8 Class-private names. Use two leading underscores to denote
+        class-private names, this includes class-private methods (eg.
+        __privfunc()). Note: Python "mangles" these names with the
+        class name: if class Foo has an attribute named __a, it cannot
+        be accessed by Foo.__a. (it still could be accessed by calling
+        Foo._Foo__a.)
 
-    - Always surround these binary operators with a single space on
-      either side: assignment (=), comparisons (==, <, >, !=, <>, <=,
-      >=, in, not in, is, is not), Booleans (and, or, not).
+    6.9 Private/public class attributes. Public attributes should have
+        no leading or trailing underscores. Private attributes should
+        have two leading underscores, no trailing underscores. Non-public
+        attributes should have a single leading underscore, no trailing
+        underscores (the difference between private and non-public is that
+        the former will never be useful for a derived class, while the
+        latter might be).
 
-    - In complex expressions do not insert spaces around arithmetic
-      operators on the first level, but do insert a single space on
-      the second level to improve readability. Examples:
+    6.10 Appendix: Python specific meanings
 
-          i = i+1
-          submitted = submitted + 1
-          x = x*2 - 1
-          hypot2 = x*x + y*y
-          c = (a+b) * (a-b)
-          c = (a + b) * (a - b)
+        - _single_leading_underscore: weak "internal use" indicator (e.g.
+          "from M import *" does not import objects whose name starts with
+          an underscore).
 
-    - For keyword arguments or default parameter values do not use
-      spaces around the '=' sign. For instance:
+        - single_trailing_underscore_: used by convention to avoid conflicts
+          with Python keyword, e.g.
+          "Tkinter.Toplevel(master, class_='ClassName')".
 
-          def complex(real, imag=0.0):
-              return magic(r=real, i=imag)
+        - __double_leading_underscore: class-private names as of Python 1.4.
 
-    - Use multiple lines for compound statements. For instance:
+        - __double_leading_and_trailing_underscore__: "magic" objects or
+          attributes that live in user-controlled namespaces, e.g. __init__,
+          __import__ or __file__.
 
-          No:  if foo == 'blah': do_blah_thing()
-          Yes: if foo == 'blah':
-                   do_blah_thing()
-
-    - Do not separate statements with semicolon, i.e.
-
-          No:  do_one(); do_two(); do_three()
-          Yes: do_one()
-               do_two()
-               do_three()
-
-  Comments
-  --------
-
-  1. General
-
-    Comments should be complete sentences.  If a comment is a phrase
-    or sentence, its first word should be capitalized, unless it is an
-    identifier that begins with a lower case letter.
-
-    If a comment is short, the period at the end is best omitted.
-    Longer comments of block comments generally consist of one or
-    more paragraphs built out of complete sentences, and each sentence
-    should end with a period.
-
-  2. Block Comments
-
-    Block comments generally apply to some (or all) code that follows
-    them, and are indented to the same level as that code.  Each line
-    of a block comment starts with a # and a single space (unless it
-    is indented text inside the comment).  Paragraphs inside a block
-    comment are separated by a line containing a single #.  Block
-    comments should be surrounded by a blank line above and below them.
-
-  3. Inline Comments
-
-    An inline comment is a comment on the same line as a statement.
-    Inline comments should be separated by a two spaces from the
-    statement, and should start with a # and a single space. Use
-    sparingly.
-
-  Documentation Strings (docstrings)
-  ----------------------------------
-
-    All modules, funcions, classes, and methods must have dosctrings
-    which concisely describe the purpose and functionality. The docstring
-    starts with '""""function_name()' or '"""class' on a line by itself,
-    and the closing """" should be on a line by itself. Parameter defaults
-    should be listed as well. For example:
-
-      """function_name(a1, a2)
-
-      Statement describing what this function does.
-
-      @param a1 An integer. The width of the convolution window (default: 5)
-      @param a2 A float. Time in minutes 
-      @return A list of peak pairs 
-      """
-
-  Naming Styles
-  -------------
-
-  1. Introduction
-
-    There are a lot of different naming styles.  The following naming
-    styles are commonly distinguished:
-
-    - b (single lowercase letter)
-    - B (single uppercase letter)
-    - lowercase
-    - lower_case_with_underscores
-    - UPPERCASE
-    - UPPER_CASE_WITH_UNDERSCORES
-    - CapitalizedWords (or CapWords, or CamelCase -- so named because
-      of the bumpy look of its letters[4]).  This is also sometimes
-      known as StudlyCaps.
-    - mixedCase (differs from CapitalizedWords by initial lowercase
-      character!)
-    - Capitalized_Words_With_Underscores (ugly!)
-
-    In addition, the following special forms using leading or trailing
-    underscores have specific meaning in Python (these can generally be
-    combined with any case convention):
-
-    - _single_leading_underscore: weak "internal use" indicator
-      (e.g. "from M import *" does not import objects whose name
-      starts with an underscore).
-
-    - single_trailing_underscore_: used by convention to avoid
-      conflicts with Python keyword, e.g.
-      "Tkinter.Toplevel(master, class_='ClassName')".
-
-    - __double_leading_underscore: class-private names as of Python 1.4.
-
-    - __double_leading_and_trailing_underscore__: "magic" objects or
-      attributes that live in user-controlled namespaces,
-      e.g. __init__, __import__ or __file__.
-
-  2. Prescriptive: Naming Conventions
-
-    Variable names
-
-      Global variable names should be prefixed with an underscore
-      to prevent their export from the module.
-
-      Specific variable names:
-          - Use 'file_name' instead of 'filename'
-          - Use 'fp' for file pointer, i.e.
-              fp = open(file_name, 'r')
-
-    Names to Avoid
-
-      Do not use the characters `l' (lowercase letter el), `O'
-      (uppercase letter oh), or `I' (uppercase letter eye) as single
-      character variable names because in some fonts these characters
-      are indistinguisable from the numerals one and zero.
-
-    Module Names
-
-      Module names should be short, starting with an uppercase letter
-      (i.e. Utils.py).
-
-    Class Names
-
-      Class names use the CapWords convention. Classes for internal use
-      have a leading underscore in addition.
-
-    Exception Names
-
-      Exceptions should be handled via the function
-      pyms.Utils.Error.error() 
-
-    Function Names
-
-      Function names should be lowercase, with words separated by
-      underscores where suitable to improve readability. 
-
-    Method Names and Instance Variables
-
-      Method names should follow the same principles as the function names.
-
-      Use one leading underscore only for internal methods and instance
-      variables which are not intended to be part of the class's public
-      interface.
-
-      Two leading underscores to denote class-private names, this
-      includes class-private methods (e.g. __privfunc()). Note: Python
-      "mangles" these names with the class name: if class Foo has an
-      attribute named __a, it cannot be accessed by Foo.__a.  (An
-      insistent user could still gain access by calling Foo._Foo__a.)
-
-    Private/public class attributes
-
-      Private attributes should have two leading underscores, no trailing
-      underscores. Non-public attributes should have a single leading
-      underscore, no trailing underscores (the difference between private
-      and non-public is that the former will never be useful for a derived
-      class, while the latter might be).
-
-      Public attributes should have no leading or trailing underscores,
-      unless they conflict with reserved words, in which case, a single
-      trailing underscore is to be used. 
