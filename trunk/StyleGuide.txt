@@ -151,13 +151,16 @@ by Guido van Rossum and Barry Warsaw.
       for all input arguments, and @return and @rtype must be defined.
       Other epytext parameters may be defined, but are optional
 
-    - Do not put the period at the end of the last sentence in docstring
-      (or the first sentence, if it is the only one)
-
-    - Leave one blank line above and below the docstring
-
     - When designating types for @type and @rtype, use the official names
       from the 'types' package i.e. BooleanType, StringType, FileType etc
+
+    - All docstrings must start with a single summary sentence conciely
+      describing the function, and this sentence must not be terminated
+      by a period.  Additional description may follow in the form of
+      multi-senteced paragraphs, separated by a blank line from the
+      summary sentence.
+
+    - Leave one blank line above and below the docstring
 
   5.2 Packages
 
@@ -204,5 +207,4 @@ by Guido van Rossum and Barry Warsaw.
             @param file_name: The name of the ANDI-MS file
             @type file_name: StringType
             """
-
 
