@@ -145,17 +145,19 @@ by Guido van Rossum and Barry Warsaw.
   5.1 General
 
     - All sub-packages, modules, functions, and classes must have proper
-      epydoc docstrings.
+      epydoc docstrings
 
     - In all functions and method, @param and @type must be documented
       for all input arguments, and @return and @rtype must be defined.
-      Other epytext parameters may be defined, but are optional.
+      Other epytext parameters may be defined, but are optional
 
     - Do not put the period at the end of the last sentence in docstring
-      (or the first sentence, if it is the only one).
+      (or the first sentence, if it is the only one)
+
+    - Leave one blank line above and below the docstring
 
     - When designating types for @type and @rtype, use the official names
-      from the 'types' package i.e. BooleanType, StringType, FileType etc.
+      from the 'types' package i.e. BooleanType, StringType, FileType etc
 
   5.2 Packages
 
@@ -187,6 +189,20 @@ by Guido van Rossum and Barry Warsaw.
         @rtype: FileType
         """
 
+  5.5 Classes. For the __init__ method @param and @type must be defined.
+    For example:
 
+    class ChemStation:
+
+        """
+        ANDI-MS reader for Agilent ChemStation NetCDF files
+        """
+
+        def __init__(self, file_name):
+
+            """
+            @param file_name: The name of the ANDI-MS file
+            @type file_name: StringType
+            """
 
 
