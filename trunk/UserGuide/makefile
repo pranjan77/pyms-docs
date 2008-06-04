@@ -21,7 +21,8 @@ aux:	$(TEXFILE:.tex=.aux)
 %.pdf: %.ps
 	\ps2pdf -dPDFSETTINGS=/prepress $<
 	make cleanup
-	\/usr/local/Adobe/Acrobat7.0/bin/acroread $(TEXFILE:.tex=.pdf)
+	\/usr/bin/evince $(TEXFILE:.tex=.pdf)
+	make clean
 
 cleanup:
 	if [ -e $(TEXFILE:.tex=.aux) ]; then rm $(TEXFILE:.tex=.aux); fi
