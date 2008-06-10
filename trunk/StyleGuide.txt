@@ -2,8 +2,8 @@
 PyMS coding Style Guide
 =======================
 
-The basis for this document documents was PEP-8 "Style Guide for Python Code",
-by Guido van Rossum and Barry Warsaw.
+The basis for this document was PEP-8 "Style Guide for Python Code", by
+Guido van Rossum and Barry Warsaw.
 
 1. General style
 
