@@ -16,6 +16,19 @@
 
 \section{Minmax peak detector}
 
+\subsection{Introduction}
+
+Minmax peak detector is the simplest kind of a peak finding algoritam for
+TIC. It operates by finding peak maxima, and then attempting to determine
+peak boundaries. Cursory evidence suggests that gives results similar to
+the ChemStation peak detection, but this was not examined rigorously.
+The purpose of this algorithm is to provide an example of how 1D peak
+pickin can be implemented in PyMS. {\em At present the Minmax algorithm
+was not properly tested, do not use it for critical publication quality
+results}.
+
+\subsection{A brief description of the algorithm}
+
 Many peak detection algorithms are used in practice to process GC/LC-MS data,
 but only a few are fully documented, most notable those of open source
 projects MZmine \cite{katajamaa06} and XCMS \cite{smith06}.  MZmine detects
