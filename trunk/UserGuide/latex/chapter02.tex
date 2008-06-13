@@ -1,8 +1,8 @@
-% chapter02.tex
+% chapter03.tex
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %                                                                           %
- %    PyMS documentation                                                     %
+ %    PyMS documentation                                                   %
  %    Copyright (C) 2005-8 Vladimir Likic                                    %
  %                                                                           %
  %    The files in this directory provided under the Creative Commons        %
@@ -12,122 +12,101 @@
  %                                                                           %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Using PyMS}
+\chapter{Algorithms}
 
-\section{Introduction}
+\section{Minmax peak detector}
 
-PyMS can be run either interactively or from the script in "batch" mode.
-When run in an interactive session commands are issued interactively through
-a Python shell. When run in the script mode the commands are collected
-into a file ('python script') which is then passed to python interpreter
-or processing.
+Many peak detection algorithms are used in practice to process GC/LC-MS data,
+but only a few are fully documented, most notable those of open source
+projects MZmine \cite{katajamaa06} and XCMS \cite{smith06}.  MZmine detects
+peaks by finding local maxima of a certain width \cite{katajamaa06}. In XCMS
+peaks are detected by using an empirical signal-to-noise cutoff after matched
+filtration with a second-derivative Gaussian \cite{smith06}. PyMS peak
+detection procedure was developed in-house, and relies on finding local
+maxima and local minima in the signal, followed by a subsequent refinement
+of peak left and right boundaries. Peak detection depends on two input
+parameters: window width over which a peak is expected to be a global maximum,
+and the scaling factor $S$ used to calculate the intensity threshold $S
+\sigma$ which must be exceeded at the peak apex. The noise level $\sigma$
+is estimated prior to peak detection by repeatedly calculating median
+absolute deviation (MAD -- a robust estimate of the average deviation) over
+randomly placed windows and taking the minimum. A detailed description of
+procedures for peak detection follows. 
 
-PyMS is a Python package which consists of several loosely coupled
-sub-packages. It is possible to load only one or a few sub-packages
-in Python (i.e. a part of PyMS), if a limited functionality is required.
-For example, one may want to use PyMS to read experimental data without
-having other parts of PyMS available.
+\begin{enumerate}
+\item {\bf Extracting local maxima}. Initially, an ordered list of
+local maxima in the signal with an intensity larger than a threshold
+is compiled. Two input parameters are specified by the user: the
+width of a window over which the peak is required to be a global
+maximum ($W$); and (2) the scaling factor $S$ used to calculate intensity
+threshold $S \sigma$, where $S$ is the noise level estimated previously
+(defaults: $W = 2$ data points, $S = 10$).  User specified window is
+centered on each point of the signal, and the point is deemed
+to be a local maximum if the following is satisfied:
 
-\section{Reading ANDI-MS data}
+   \begin{enumerate}
+   \item It is equal or greater than all of the points within
+         the window W.
+   \item It is greater than at least one point in the half-window
+         interval to the left, and at least one point in the
+         half-window interval to the right.\footnote{This is
+         to reject points within intervals of uniform intensity}
+   \item Any point closer to the edge of the signal than half-window
+         is rejected.
+   \end{enumerate}
 
-\subsection{About ANDI-MS data format}
+Intensity at each local maxima is tested, and those that have the
+intensity below the threshold N*S are rejected. Accepted local
+maxima are compiled into a list.
 
-ANDI-MS data format stands for Analytical Data Interchange for Mass
-Spectrometry, and is model for the description of mass spectrometric
-data developed in 1994 by Analytical Instrument Association. ANDI-MS 
-is essentially a recommendation. It is up to individual vendors of
-mass spectrometry processing software to implement "export to ANDI-MS"
-feature in their software. Furthermore, it is vendor's good will to
-implement ANDI-MS specifications properly. Because of these limitations
-it is difficult to be certain that one can properly read ANDI-MS
-files from a particular vendor without testing this.
+\item {\bf Determination of peak left/right boundaries}. For each
+local maxima (base maximum) the stretch of the signal between itself
+and the next local maximum on either side is extracted.  These
+two signal slices are searched for the first local minimum in
+the direction away from the base maximum point itself. The local
+maxima are defined in a very similar manner as the local maxima
+in the previous step.  A point is deemed to be a local maximum if:
 
-\subsection{Reading the ANDI-MS data with PyMS}
+   \begin{enumerate}
+   \item It is equal or smaller than all the points within the
+        window W.
+   \item It is smaller than at least one point in the half-window
+        interval to the left, and at least one point in the
+        half-window interval on the right.
+   \item Any point closer to the edge of the slice than half-window
+        is rejected. This has the effect that the boundary point
+        cannot approach next peak's apex closer than half-window.
+   \item If no minimum point is found, set the boundary point to
+        the point furtherest away from the base maximum, but
+        outside to the half-window range of the adjacent peak.
+   \end{enumerate}
 
-The PyMS sub-package pyms.IO provides capabilities to read the raw GC-MS
-data stored in the ANDI-MS format. More specifically, the function
-IO.ANDI.ChemStation() provides interface to ANDI-MS data files saved
-from Agilent ChemStation software. The name is a reminder that this
-function has been reasonably tested only on the data exported from
-Agilent ChemStation.
+\item {\bf Elimination of peak overlaps}. In spectra dense with
+peaks peak boundaries as found in the step (2) may overlap due to
+the effect of user supplied window. The list of pre-peaks is
+searched for overlapping peaks. In overlapping peaks the right
+boundary of the lower retention time peak overlaps with the
+left boundary of the higher retention time peak. The overlapping
+boundaries are resolved by finding the point of minimum intensity
+between the two peaks (the split point). The peak boundaries are
+set to one point to the left from the split point for the right
+boundary of the lower retention time peak, and to one point to
+the right from the split point for the left boundary of the
+higher retention time peak.
 
-In an interactive session from Python, the ANDI-MS file can be loaded
-in the memory as follows:
+\item {\bf Correction for long tails}.  In this step peak boundaries
+are adjusted to remove stretches of near-uniform intensities
+(i.e. long tails). Each peak is divided at the apex into two
+halves, and each half is processed individually in the
+boundary-to-apex direction. A line is fitted through $M$ points
+from the boundary in the least-squares sense. Prior to calculating
+the angle between the line and the retention time axis, the
+rise in intensity is normalized with the intensity at the peak
+apex.  If this angle is below the user specified cutoff ($Q$)
+the boundary point is dropped, and the process is repeated.
+This adjustment is repeated until the best fit through $M$ points
+from the boundary gives an angle greater than the cutoff. The
+parameters $M$ and $Q$ are user specified (defaults: $M = 3$,
+$Q = 1.0^\circ$).
 
-\begin{verbatim}
->>> from pyms import IO
->>> data = IO.ANDI.Class.ChemStation('0510_217.CDF')
- -> Processing netCDF file '0510_217.CDF'
-    [ 2784 scans, masses from 50 to 550 ]
->>>
-\end{verbatim}
-
-Where '0510\_217.CDF' is the name of the GC-MS data saved in the ANDI-MS
-format from the Agilent ChemStation software.  The above command creates
-the object 'data' which is an {\em instance} of the class IO.ANDI.ChemStation.
-The instance 'data' has several attributes and methods associated with it:
-
-\begin{itemize}
-
-\item {\tt get\_filename()} -- Returns the name of the file from which
-the data was loaded. Usage example:
-
-\begin{verbatim}
->>> data.get_filename()
-'0510_217.CDF'
-\end{verbatim}
-
-\item {\tt get\_ic\_at\_index(i)} -- Returns an IonChromatogram object
-at index i.  For example, to get the first ion chromatogram from the data
-matrix:
-
-\begin{verbatim}
->>> ic = data.get_ic_at_index(1)
-\end{verbatim}
-
-\noindent
-An IonChromatogram object is the one dimensional time vector containing
-mass intensities.  One often deals with two types of IonChromatogram
-objects: ion chromatograms at particular m/z value (for example, ion
-chromatograms at m/z = 65), or total ion chromatograms (TICs), which
-contain the sum of intensities for all masses at any given time point. 
-The nature of an IonChromatogram object can be revealed by the content
-of the attribute '\_mass', which is set to None if the ion chromatogram
-is TIC; otherwise it contains the m/z value of the ion chromatogram.
-Continuing the previous example:
-
-\begin{verbatim}
->>> ic._mass
-51
-\end{verbatim}
-
-\noindent
-This shows that the first ion chromatogram in the data file is for
-m/z = 51.
-
-\item {\tt get\_ic\_at\_mass(mz)} -- Returns an IonChromatogram
-object corresponding to given m/z. For example, to get the ion
-chromatogram that corresponds to m/z = 73:
-
-\begin{verbatim}
->>> ic = data.get_ic_at_mass(73)
->>> ic._mass
-73
-\end{verbatim}
-
-\item {\tt get\_intensity\_matrix()} -- Returns the entire data
-matrix, i.e. time vs m/z as numarray object. Usage example:
-
-\begin{verbatim}
->>> im = data.get_intensity_matrix()
->>> len(im)
-2784
->>> len(im[0])
-501
-\end{verbatim}
-
-This data matrix contains 2784 time points (MS scans) and each time
-point corresponds to a mass spectrum of 501 m/z points.
-
-\end{itemize}
-
+\end{enumerate}
