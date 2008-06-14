@@ -147,10 +147,6 @@ Guido van Rossum and Barry Warsaw.
     - All sub-packages, modules, functions, and classes must have proper
       epydoc docstrings
 
-    - In all functions and method, @param and @type must be documented
-      for all input arguments, and @return and @rtype must be defined.
-      Other epytext parameters may be defined, but are optional
-
     - When designating types for @type and @rtype, use the official names
       from the 'types' package i.e. BooleanType, StringType, FileType etc
 
@@ -164,55 +160,56 @@ Guido van Rossum and Barry Warsaw.
 
   5.2 Packages
 
-    - Package doctrings are in __init__.py. For example (top three lines of
-      pyms.__input__.py):
+    - Package doctrings are defined in __init__.py. This example shows
+      top three lines of pyms.__input__.py:
 
         """
         The root of the package pyms
         """
 
-  5.3 Modules.
+  5.3 Modules
 
-    - Write module docstrings as (example: top three lines of
-      pyms.Utils.Utils.py):
+    - A summary for the module should be written concisely in a single
+      sentence, enclosed above and below with lines containint only """
+      For example:
 
       """
       Provides general I/O functions
       """
 
-  5.4 Functions.
+  5.4 Functions
 
-    - The following must be defined, in this order: @param, @type, @return,
-      @rtype, @author. For example:
+    - In all functions the following epydoc fields must be defined:
+      @summary, @param, @type (for all input arguments), and @return,
+      @rtype, and @author. Other epytext fields may be defined, but
+      are optional.  An example: 
 
       def open_for_reading(file_name):
 
           """
-          Opens file for reading, returns file pointer
+          @summary: Opens file for reading, returns file pointer
 
           @param file_name: Name of the file to be opened for reading
           @type file_name: StringType
           @return: Pointer to the opened file
           @rtype: FileType
-          @author: Vladimir Likic
+          @author: Jake Blues 
           """
 
-  5.5 Classes.
+  5.5 Classes
 
-    - For the __init__ method only @param and @type must be defined.
+    - The class docstring must contain @summary and @author fields
 
-    - Normally, the @author tag for the class is defined in the class
-      docstring, and only in the class docstring.
+    - The __init__ method must contain @param and @type fields
 
     - Example:
 
       class ChemStation:
 
           """
-          ANDI-MS reader for Agilent ChemStation NetCDF files
+          @summary: ANDI-MS reader for Agilent ChemStation NetCDF files
 
-          @author: Lewis Lee
-          @author: Vladimir Likic
+          @author: Jake Blues
           """
 
           def __init__(self, file_name):
