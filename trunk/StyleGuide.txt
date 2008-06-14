@@ -171,40 +171,54 @@ Guido van Rossum and Barry Warsaw.
         The root of the package pyms
         """
 
-  5.3 Modules. Write module docstrings as (example: top three lines of
-    pyms.Utils.Utils.py):
+  5.3 Modules.
 
-    """
-    Provides general I/O functions
-    """
+    - Write module docstrings as (example: top three lines of
+      pyms.Utils.Utils.py):
 
-  5.4 Functions. Use the follwing order of @param, @type, @return, @rtype.
-    For example:
+      """
+      Provides general I/O functions
+      """
 
-    def open_for_reading(file_name):
+  5.4 Functions.
 
-        """
-        Opens file for reading, returns file pointer
+    - The following must be defined, in this order: @param, @type, @return,
+      @rtype, @author. For example:
 
-        @param file_name: Name of the file to be opened for reading
-        @type file_name: StringType
-        @return: Pointer to the opened file
-        @rtype: FileType
-        """
+      def open_for_reading(file_name):
 
-  5.5 Classes. For the __init__ method @param and @type must be defined.
-    For example:
+          """
+          Opens file for reading, returns file pointer
 
-    class ChemStation:
+          @param file_name: Name of the file to be opened for reading
+          @type file_name: StringType
+          @return: Pointer to the opened file
+          @rtype: FileType
+          @author: Vladimir Likic
+          """
 
-        """
-        ANDI-MS reader for Agilent ChemStation NetCDF files
-        """
+  5.5 Classes.
 
-        def __init__(self, file_name):
+    - For the __init__ method only @param and @type must be defined.
 
-            """
-            @param file_name: The name of the ANDI-MS file
-            @type file_name: StringType
-            """
+    - Normally, the @author tag for the class is defined in the class
+      docstring, and only in the class docstring.
+
+    - Example:
+
+      class ChemStation:
+
+          """
+          ANDI-MS reader for Agilent ChemStation NetCDF files
+
+          @author: Lewis Lee
+          @author: Vladimir Likic
+          """
+
+          def __init__(self, file_name):
+
+              """
+              @param file_name: The name of the ANDI-MS file
+              @type file_name: StringType
+              """ 
 
