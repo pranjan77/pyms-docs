@@ -16,47 +16,44 @@
 
 \section{About PyMS}
 
-PyMS is a Python toolkit for processing of chromatography--mass
-spectrometry data. The idea behind PyMS is to decouple processing
-methods form visualization and the concept of interactive processing.
-The purpose of this is to provide a set of components for rapid
-development and testing of new processing methods and algorithms,
-as well as automated data processing. PyMS is released as open source,
-under the GNU Public License version 2.  
+PyMS is a Python toolkit for processing of chromatography--mass spectrometry
+data. The idea behind PyMS is to decouple processing methods form visualization
+and the concept of interactive processing, and to provdie a set of components
+useful for experimentation and the development of new methods for processing
+of chromatography--mass spectrometry data. Current PyMS development is
+strongly influenced by the needs in processing of gas chromatography-mass
+spectrometry (GC-MS) data.
 
-PyMS can be run either interactively or from the script.  In an
-interactive session commands are issued interactively through the
-Python shell. In the script mode the commands are collected into a
-file (a python script) which is then passed to the python interpreter
-for processing.
+PyMS is highly modular and consists of several sub-packages written in Python
+programming language \cite{python}.  PyMS is released as open source, under
+the GNU Public License version 2.
 
-PyMS is highly modular and consists of several sub-packages. It is
-possible to load and use only some PyMS sub-packages in Python (i.e.
-a part of PyMS).  For example, one may want to use PyMS to read
-experimental data without using other parts of PyMS.
+\section{Reading GC-MS data}
 
-\section{Reading ANDI-MS data}
+\subsection{ANDI-MS data format}
 
-\subsection{About ANDI-MS data format}
+Unfortunately, the field of chromatography--mass spectrometry is ruled
+by proprietary, closed data formats.  Anything that comes even closse
+to an open standard is the incomplete and now obsolete ANDI-MS data
+format.
 
 ANDI-MS data format stands for Analytical Data Interchange for Mass
-Spectrometry, and is model for the description of mass spectrometric
+Spectrometry, and was developed for the description of mass spectrometric
 data developed in 1994 by Analytical Instrument Association. ANDI-MS 
-is essentially a recommendation. It is up to individual vendors of
+is essentially a recommendation, and it is up to individual vendors of
 mass spectrometry processing software to implement "export to ANDI-MS"
 feature in their software. Furthermore, it is vendor's good will to
 implement ANDI-MS specifications properly. Because of these limitations
-it is difficult to be certain that one can properly read ANDI-MS
-files from a particular vendor without testing this.
+it is difficult to be certain that one can properly read ANDI-MS files
+from a particular vendor without testing this first.
 
-\subsection{Reading the ANDI-MS data with PyMS}
+\subsection{Reading the data in PyMS}
 
-The PyMS sub-package pyms.IO provides capabilities to read the raw GC-MS
-data stored in the ANDI-MS format. More specifically, the function
-IO.ANDI.ChemStation() provides interface to ANDI-MS data files saved
-from Agilent ChemStation software. The name is a reminder that this
-function has been reasonably tested only on the data exported from
-Agilent ChemStation.
+The PyMS package pyms.IO provides capabilities to read the raw GC-MS
+data stored in the ANDI-MS format. The function IO.ANDI.ChemStation()
+provides the interface to ANDI-MS data files saved from Agilent
+ChemStation software. The name is a reminder that this function has
+been reasonably tested only on the data exported from Agilent ChemStation.
 
 In an interactive session from Python, the ANDI-MS file can be loaded
 in the memory as follows:
