@@ -20,20 +20,8 @@ aux:	$(TEXFILE:.tex=.aux)
 
 %.pdf: %.ps
 	\ps2pdf -dPDFSETTINGS=/prepress $<
-	make cleanup
-	\/usr/bin/evince $(TEXFILE:.tex=.pdf)
 	make clean
-
-cleanup:
-	if [ -e $(TEXFILE:.tex=.aux) ]; then rm $(TEXFILE:.tex=.aux); fi
-	if [ -e $(TEXFILE:.tex=.log) ]; then rm $(TEXFILE:.tex=.log); fi
-	if [ -e $(TEXFILE:.tex=.dvi) ]; then rm $(TEXFILE:.tex=.dvi); fi
-	if [ -e $(TEXFILE:.tex=.toc) ]; then rm $(TEXFILE:.tex=.toc); fi
-	if [ -e $(TEXFILE:.tex=.idx) ]; then rm $(TEXFILE:.tex=.idx); fi
-	if [ -e $(TEXFILE:.tex=.bbl) ]; then rm $(TEXFILE:.tex=.bbl); fi
-	if [ -e $(TEXFILE:.tex=.blg) ]; then rm $(TEXFILE:.tex=.blg); fi
-	if [ -e $(TEXFILE:.tex=.ilg) ]; then rm $(TEXFILE:.tex=.ilg); fi
-	if [ -e $(TEXFILE:.tex=.ind) ]; then rm $(TEXFILE:.tex=.ind); fi
+	\/usr/bin/evince $(TEXFILE:.tex=.pdf)
 	if [ -e $(TEXFILE:.tex=.ps) ]; then rm $(TEXFILE:.tex=.ps); fi
 
 clean:
@@ -47,5 +35,4 @@ clean:
 	if [ -e $(TEXFILE:.tex=.ilg) ]; then rm $(TEXFILE:.tex=.ilg); fi
 	if [ -e $(TEXFILE:.tex=.ind) ]; then rm $(TEXFILE:.tex=.ind); fi
 	if [ -e $(TEXFILE:.tex=.ps) ]; then rm $(TEXFILE:.tex=.ps); fi
-	if [ -e $(TEXFILE:.tex=.pdf) ]; then rm $(TEXFILE:.tex=.pdf); fi
 
