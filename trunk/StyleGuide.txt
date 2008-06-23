@@ -198,9 +198,11 @@ Guido van Rossum and Barry Warsaw.
 
   5.5 Classes
 
-    - The class docstring must contain @summary and @author fields
-
+    - The root class docstring must contain @summary and @author fields
     - The __init__ method must contain @param and @type fields
+    - Methods docstrings adhere to rules 5.4 for Functions. Except for
+      special methods (i.e. __len__(), __del__(), etc) which should
+      contain only the @summary field, and possibly the @author field.
 
     - Example:
 
