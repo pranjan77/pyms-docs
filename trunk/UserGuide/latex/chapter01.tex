@@ -14,8 +14,6 @@
 
 \chapter{Introduction}
 
-%%% section 1 %%%
-
 \section{About PyMS}
 
 PyMS is a Python toolkit for processing of chromatography--mass spectrometry
@@ -30,16 +28,73 @@ PyMS is highly modular and consists of several sub-packages written in Python
 programming language \cite{python}. PyMS is released as open source, under
 the GNU Public License version 2.
 
-%%% section 2 %%%
-
 \section{PyMS installation}
+
+There are many ways to install PyMS depending your computer configuration
+and preferences. The recommended way install PyMS is to compile Python
+from sources and install PyMS within the local Python installation. This
+procedure is described in detail below.
 
 PyMS has been developed on Linux, and a detailed installation instructions
 for Linux are given below. Installation on any Unix-like system should be
-similar.
+similar. We have not tested PyMS under Microsoft Windows.
 
-We have not tested PyMS under Microsoft Windows. If you are using/testing
-PyMS under Windows please let us know about your experience.
+\subsection{Installing Python locally}
+
+Download the latest Python from {\tt www.python.org}. At the time of
+writing this was {\tt Python-2.5.2.tgz}. Place the Python tarball in
+some temporary directory, and unpack it:
+
+\begin{verbatim}
+$ tar xvfz Python-2.5.2.tgz
+Python-2.5.2/
+Python-2.5.2/Include/
+Python-2.5.2/Include/pymem.h
+Python-2.5.2/Include/compile.h
+Python-2.5.2/Include/pyexpat.h
+[..output deleted..]
+\end{verbatim}
+
+Change to {\tt Python-2.5.2/}, configure and compile Python:
+
+\begin{verbatim}
+$ cd Python-2.5.2
+$ ./configure --prefix=/home/likic/programs/python2.5.2
+[..output deleted..]
+$ mkdir -p /home/likic/programs/python2.5.2
+\end{verbatim}
+
+The above command specifies that Python will be installed in the
+directory {\tt /home/likic/programs/python}. The last command
+creates this directory in preparation for installation. Python
+is compiled and installation as follows:
+
+\begin{verbatim}
+$ make
+[..output deleted..]
+$ make install
+[..output deleted..]
+\end{verbatim}
+
+To check the installation directory:
+
+\begin{verbatim}
+$ ls -CF  /home/likic/programs/python2.5.2
+bin/  include/  lib/  share/
+\end{verbatim}
+
+The compiled Python executable is {\tt
+/home/likic/programs/python2.5.2/bin/python}:
+
+\begin{verbatim}
+$ /home/likic/programs/python2.5.2/bin/python
+Python 2.5.2 (r252:60911, Aug  1 2008, 07:57:44)
+[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>>
+\end{verbatim}
+
+This completes Python installation.
 
 \subsection{Downloading PyMS source code}
 
@@ -79,170 +134,6 @@ $ ls -CF
 pyms/
 $
 \end{verbatim}
-
-\subsection{The PyMS installation, the simplest way}
-
-At present PyMS is merely a Python package. The PyMS installation consist
-of placing the PyMS directory into the location where your python will
-find it.
-
-For example, Red Hat 5 Linux comes with Python 2.4, which is by default
-installed in {\tt /usr/lib}, and the Python interpreter is copied to 
-{\tt /usr/bin/python}. To install PyMS one need to copy the directory
-{\tt pyms/} to {\tt /usr/lib/python2.4/site-packages/}, which is the
-standard location for third-party Python packages.
-
-The following is a simple test to check if PyMS is installed:
-
-\begin{verbatim}
-$ python
-Python 2.4.1 (#1, Jun 27 2005, 12:53:02) 
-[GCC 3.4.3 20041212 (Red Hat 3.4.3-9.EL4)] on linux2
-Type "help", "copyright", "credits" or "license" for more information.
->>> import pyms
->>>
-\end{verbatim}
-
-It there are no feedback messaged to the import command, Python
-was able to load PyMS.
-
-\subsection{Installing PyMS locally, the simple way}
-
-The above method of installing PyMS is likely to require switching
-to the root account, because typically only root can write to
-{\tt /usr/lib}.  The alternative is to install PyMS somewhere
-locally. For example, the directory {\tt pyms/} could be placed
-in the directory /home/projects/. To make Python aware of PyMS
-the following commands are required before any part of PyMS is
-called:
-
-\begin{verbatim}
-import sys
-sys.path.append("/home/projects")
-\end{verbatim}
-
-Alternatively the environment variable PYTHONPATH could be set
-to "/home/projects/". For example, under the bash shell: 
-
-\begin{verbatim}
-$ PYTHONPATH=/home/projects/; export PYTHONPATH
-\end{verbatim}
-
-The standard Python documentation provides more information about
-sys.path.append() and PYTHONPATH.
-
-\subsection{Installing PyMS locally, with local Python}
-
-
-%%% section 3 %%%
-
-\section{Reading GC-MS data}
-
-\subsection{ANDI-MS data format}
-
-The field of chromatography--mass spectrometry is ruled by proprietary, closed
-data formats.  Anything that comes even closse to an open standard is the
-incomplete and now obsolete ANDI-MS data format.
-
-ANDI-MS data format stands for Analytical Data Interchange for Mass
-Spectrometry, and was developed for the description of mass spectrometric
-data developed in 1994 by Analytical Instrument Association. ANDI-MS 
-is essentially a recommendation, and it is up to individual vendors of
-mass spectrometry processing software to implement "export to ANDI-MS"
-feature in their software. Furthermore, it is vendor's good will to
-implement ANDI-MS specifications properly. Because of these limitations
-it is difficult to be certain that one can properly read ANDI-MS files
-from a particular vendor without testing this first.
-
-\subsection{Reading the data in PyMS}
-
-The PyMS package pyms.IO provides capabilities to read the raw GC-MS
-data stored in the ANDI-MS format. The function IO.ANDI.ChemStation()
-provides the interface to ANDI-MS data files saved from Agilent
-ChemStation software. The name is a reminder that this function has
-been reasonably tested only on the data exported from Agilent ChemStation.
-
-In an interactive session from Python, the ANDI-MS file can be loaded
-in the memory as follows:
-
-\begin{verbatim}
->>> from pyms import IO
->>> data = IO.ANDI.Class.ChemStation('0510_217.CDF')
- -> Processing netCDF file '0510_217.CDF'
-    [ 2784 scans, masses from 50 to 550 ]
->>>
-\end{verbatim}
-
-Where '0510\_217.CDF' is the name of the GC-MS data saved in the ANDI-MS
-format from the Agilent ChemStation software.  The above command creates
-the object 'data' which is an {\em instance} of the class IO.ANDI.ChemStation.
-The instance 'data' has several attributes and methods associated with it:
-
-\begin{itemize}
-
-\item {\tt get\_filename()} -- Returns the name of the file from which
-the data was loaded. Usage example:
-
-\begin{verbatim}
->>> data.get_filename()
-'0510_217.CDF'
-\end{verbatim}
-
-\item {\tt get\_ic\_at\_index(i)} -- Returns an IonChromatogram object
-at index i.  For example, to get the first ion chromatogram from the data
-matrix:
-
-\begin{verbatim}
->>> ic = data.get_ic_at_index(1)
-\end{verbatim}
-
-\noindent
-An IonChromatogram object is the one dimensional time vector containing
-mass intensities.  One often deals with two types of IonChromatogram
-objects: ion chromatograms at particular m/z value (for example, ion
-chromatograms at m/z = 65), or total ion chromatograms (TICs), which
-contain the sum of intensities for all masses at any given time point. 
-The nature of an IonChromatogram object can be revealed by the content
-of the attribute '\_mass', which is set to None if the ion chromatogram
-is TIC; otherwise it contains the m/z value of the ion chromatogram.
-Continuing the previous example:
-
-\begin{verbatim}
->>> ic._mass
-51
-\end{verbatim}
-
-\noindent
-This shows that the first ion chromatogram in the data file is for
-m/z = 51.
-
-\item {\tt get\_ic\_at\_mass(mz)} -- Returns an IonChromatogram
-object corresponding to given m/z. For example, to get the ion
-chromatogram that corresponds to m/z = 73:
-
-\begin{verbatim}
->>> ic = data.get_ic_at_mass(73)
->>> ic._mass
-73
-\end{verbatim}
-
-\item {\tt get\_intensity\_matrix()} -- Returns the entire data
-matrix, i.e. time vs m/z as numarray object. Usage example:
-
-\begin{verbatim}
->>> im = data.get_intensity_matrix()
->>> len(im)
-2784
->>> len(im[0])
-501
-\end{verbatim}
-
-This data matrix contains 2784 time points (MS scans) and each time
-point corresponds to a mass spectrum of 501 m/z points.
-
-\end{itemize}
-
-%%% section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Minmax peak detector}
 

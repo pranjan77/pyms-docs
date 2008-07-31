@@ -2,13 +2,14 @@
 # Copyright (c) 2006, Vladimir Likic <vlikic@unimelb.edu.au>
 
 TEXFILE	= UserGuide.tex
+CHAPTERS = latex/chapter01.tex latex/chapter02.tex
 
 pdf:	$(TEXFILE:.tex=.pdf)
-ps:	$(TEXFILE:.tex=.ps)
+ps:		$(TEXFILE:.tex=.ps)
 dvi:	$(TEXFILE:.tex=.dvi)
 aux:	$(TEXFILE:.tex=.aux)
 
-%.dvi: %.tex
+%.dvi: %.tex $(CHAPTERS)
 	\latex $<;
 	\bibtex $(TEXFILE:.tex=);
 	\makeindex $(TEXFILE:.tex=);
@@ -38,3 +39,4 @@ clean:
 
 cleanup:
 	if [ -e $(TEXFILE:.tex=.pdf) ]; then rm $(TEXFILE:.tex=.pdf); fi
+
