@@ -14,43 +14,52 @@
 
 \chapter{PyMS User Guide}
 
-%%% section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% section 1 %%%
 
 \section{About PyMS}
 
 PyMS is a Python toolkit for processing of chromatography--mass spectrometry
-data. The idea behind PyMS is to provdie a set of components for the development
-of new methods for processing of chromatography--mass spectrometry data, and to
-decouple processing methods form visualization and the concept of interactive
-processing.
+data. The main idea behind PyMS is to provde a framework and a set of
+components for the development and testing of methods for processing of
+chromatography--mass spectrometry data. An important objective of PyMS is
+to decouple processing methods form visualization and the concept of interactive
+processing. This is useful for high-throughput processing tasks and when
+there is a need to run calculations in the batch mode.
 
-Current PyMS development is strongly influenced by the needs in processing of gas
-chromatography-mass spectrometry (GC-MS) data.
+Current PyMS development is strongly influenced by the needs in processing of
+gas chromatography-mass spectrometry (GC-MS) data.
 
 PyMS is highly modular and consists of several sub-packages written in Python
 programming language \cite{python}. PyMS is released as open source, under
 the GNU Public License version 2.
 
-
-%%% section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% section 2 %%%
 
 \section{PyMS installation}
 
-The instructions below refer to installation under Linux, and assume
-a reasonably savvy Linux user.  Python is however fully cross-platform
-compatible, and PyMS should work equally well under other operating
-systems as long as the dependencies can be satisfied.
+PyMS has been developed on Linux, and we give a detailed installation instructions
+for Linux. PyMS installation on any Unix-like system should be very similar.
+
+We do not provide instructions for PyMS installation on Microsoft Windows.
+This is simply because we do not use Windows. However the Python programming
+language is fully cross-platform compatible, and PyMS should work equally well
+under Windows. If you are using/testing PyMS under Windows please let us know
+about your experience.
+
+There are two ways that PyMS can be installed on a Linux computer. PyMS can
+be installed by using the Python interpreter that comes with the Linux
+distribution. The other option is to install your own Python locally, and
+then install PyMS within your local Python installation. We recommend the
+latter for the reasons explained below.
+
+Most modern Linux systems come with the Python interpreter installed. For
+example, Red Hat 5 Linux comes with Python 2.4, which is by default
+installed in {\tt /usr/lib}, and the Python interpreter is copied as
+{\tt /usr/bin/python}.
+ 
+
 
 \subsection{Preparing the environment for a local installation}
-
-There are two methods of installing PyMS dependencies. The first is
-{\it system-wide}, when root access is available. The second is {\it locally},
-when write access to the system directories is unavailable, or when PyMS is
-only used by one user. In this case, the dependencies are installed into a
-user's home directory.
-
-Before performing a local installation, the following extra two steps are
-required.
 
 \begin{description}
   \item [Directory structure:] \
@@ -413,7 +422,7 @@ description below refers to the installation of IPython version 0.7.2.
   \end{enumerate}
 \end{description}
 
-%%% section %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% section 3 %%%
 
 \section{Reading GC-MS data}
 
