@@ -20,11 +20,11 @@
 
 PyMS is a Python toolkit for processing of chromatography--mass spectrometry
 data. The main idea behind PyMS is to provde a framework and a set of
-components for the development and testing of methods for processing of
+components for rapid development and testing of methods for processing of
 chromatography--mass spectrometry data. An important objective of PyMS is
-to decouple processing methods form visualization and the concept of interactive
-processing. This is useful for high-throughput processing tasks and when
-there is a need to run calculations in the batch mode.
+to decouple processing methods form visualization and the concept of
+interactive processing. This is useful for high-throughput processing tasks
+and when there is a need to run calculations in the batch mode.
 
 Current PyMS development is strongly influenced by the needs in processing of
 gas chromatography-mass spectrometry (GC-MS) data.
@@ -37,250 +37,12 @@ the GNU Public License version 2.
 
 \section{PyMS installation}
 
-PyMS has been developed on Linux, and we give a detailed installation instructions
-for Linux. PyMS installation on any Unix-like system should be very similar.
+PyMS has been developed on Linux, and a detailed installation instructions
+for Linux are given below. Installation on any Unix-like system should be
+similar.
 
-We do not provide instructions for PyMS installation on Microsoft Windows.
-This is simply because we do not use Windows. However the Python programming
-language is fully cross-platform compatible, and PyMS should work equally well
-under Windows. If you are using/testing PyMS under Windows please let us know
-about your experience.
-
-There are two ways that PyMS can be installed on a Linux computer. PyMS can
-be installed by using the Python interpreter that comes with the Linux
-distribution. The other option is to install your own Python locally, and
-then install PyMS within your local Python installation. We recommend the
-latter for the reasons explained below.
-
-Most modern Linux systems come with the Python interpreter installed. For
-example, Red Hat 5 Linux comes with Python 2.4, which is by default
-installed in {\tt /usr/lib}, and the Python interpreter is copied as
-{\tt /usr/bin/python}.
- 
-
-
-\subsection{Preparing the environment for a local installation}
-
-\begin{description}
-  \item [Directory structure:] \
-        Create a directory for the dependencies to install into. For this
-        guide, we choose \~{}/pyms-deps.
-  \item [Environment variables:] \
-        The \$PATH variable needs to be configured for the target installation
-        directory. In the case of the bash shell, add
-        {\tt PATH=\$HOME/pyms-deps/bin:\$PATH} to your .bash\_profile file,
-        then reopen the terminal.
-\end{description}
-
-\subsection{Python}
-
-Python is a general purpose object oriented programming language, which
-PyMS is written in.  Python is open source and freely available
-from \url{http://www.python.org/download}.
-
-The instructions below refer to the installation of Python version
-2.5.
-
-\begin{description}
-\item [Filename:] {\tt Python-2.5.tgz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item {\tt tar -zxvf Python-2.5.tgz}
-  \item {\tt cd Python-2.5}
-  \item {\tt ./configure} {\it if installing system-wide, or}\newline
-        {\tt ./configure --prefix=\$HOME/pyms-deps} {\it if installing locally}
-  \item {\tt make}
-  \item {\tt make install}
-  \end{enumerate}
-Please refer to the file {\tt Python-2.5/README} for more details.
-\end{description}
-
-\subsection{netCDF}
-
-netCDF (network Common Data Form) is an interface for array-oriented
-data access and a library that provides an implementation of the
-interface. The netCDF library also defines a machine-independent
-format for representing scientific data. Together, the interface,
-library, and format support the creation, access, and sharing of
-scientific data.
-
-netCDF is available from \url{http://www.unidata.ucar.edu/downloads/netcdf/}.
-
-The description below refers to the installation of netCDF version
-3.6.1.
-
-\begin{description}
-\item [Filename:] {\tt netcdf-3.6.1.tar.gz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item {\tt tar -zxvf netcdf-3.6.1.tar.gz}
-  \item {\tt cd netcdf-3.6.1/src}
-  \item {\tt ./configure} {\it if installing system-wide, or}\newline
-        {\tt ./configure --prefix=\$HOME/pyms-deps} {\it if installing locally}
-  \item {\tt make}
-  \item {\tt make install}
-  \end{enumerate}
-Please refer to the file {\tt netcdf-3.6.1/src/INSTALL} for more details.
-\end{description}
-
-\subsection{numarray}
-
-numarray is a set of extensions to the Python programming language which
-allows large sets of numerical values to be efficiently manipulated.
-
-numarray is available from \url{http://www.stsci.edu/resources/software_hardware/numarray}.
-
-The description below refers to the installation of numarray version
-1.5.2.
-
-\begin{description}
-\item [Filename:] {\tt numarray-1.5.2.tar.gz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item {\tt tar -zxvf numarray-1.5.2.tar.gz}
-  \item {\tt cd numarray-1.5.2}
-  \item {\tt python setup.py config install --gencode}
-  \end{enumerate}
-Please refer to the file {\tt numarray-1.5.2/Doc/INSTALL.txt} for more
-details.
-\end{description}
-
-\subsection{pycdf}
-
-pycdf is a set of extensions to the Python programming language
-providing an interface to to the netCDF library. The description
-below refers to the installation of pycdf version 0.6-2-rc1.
-
-pycdf is available from \url{http://pysclint.sourceforge.net/pycdf/}.
-
-The description below refers to the installation of pycdf version
-0.6-2-rc1.
-
-\begin{description}
-\item [Filename:] {\tt pycdf-0.6-2-rc1.tar.gz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item {\tt tar -zxvf pycdf-0.6-2-rc1.tar.gz}
-  \item {\tt cd pycdf-0.6-2-rc1}
-  \item {\tt vi setup.py}
-    \begin{enumerate}
-    \item At line 31 ({\tt USE = NUMERIC}), add a \# at the start of the line
-    \item At line 32 ({\tt \#USE = NUMARRAY}), remove the \# at the start
-    of the line
-    \item Save the file and exit
-    \end{enumerate}
-  \item {\tt python setup.py install}
-  \end{enumerate}
-Please refer to the file {\tt pycdf-0.6-2-rc1/INSTALL} for more details.
-\end{description}
-
-\subsection{matplotlib}
-
-matplotlib is a python 2D plotting library.  It is used by pyms for 
-visualizations of data.
-
-matplotlib is available from \url{http://matplotlib.sourceforge.net/}.
-
-The description below refers to the installation of matplotlib version
-0.87.7.
-
-\begin{description}
-\item [Filename:] {\tt matplotlib-0.87.7.tar.gz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item Ensure that you have the preequisites for matplotlib's GUI
-        extensions, as the plots will not display otherwise. Any one of
-        the following can be used:
-        \begin{enumerate}
-        \item pygtk
-        \item wxpython
-        \item tk
-        \end{enumerate}
-  \item {\tt tar -zxvf matplotlib-0.87.7.tar.gz}
-  \item {\tt cd matplotlib-0.87.7}
-  \item {\tt python setup.py build}
-  \item {\tt python setup.py install}
-  \end{enumerate}
-Please refer to the file {\tt matplotlib-0.87.7/INSTALL} for more
-details.
-\end{description}
-
-\section{Installing optional dependencies}
-
-Optional dependencies are packages which are not required for the
-core functionality of PyMS, but may be required for some extra
-functionality, or are highly recommended (such as IPython, interactive
-Python shell). 
-
-\subsection{IPython}
-
-IPython is enhanced Python shell suitable for interactive work.
-
-IPython is available from \url{http://ipython.scipy.org/moin/}.
-
-The description below refers to the installation of IPython version
-0.7.3.
-
-\begin{description}
-\item [Filename:] {\tt ipython-0.7.3.tar.gz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item {\tt tar -zxvf ipython-0.7.3.tar.gz}
-  \item {\tt cd ipython-0.7.3}
-  \item {\tt python setup.py install}
-  \end{enumerate}
-Please refer to the file {\tt ipython-0.7.3/doc/manual.pdf} for more
-details.
-\end{description}
-
-\subsection{Numeric}
-
-Numeric is Python module for high-performance numeric computing.
-This module is required by Pycluster, and needs to be installed
-only if Pycluster is used (see below).
-
-Numeric is available from
-\url{http://optusnet.dl.sourceforge.net/sourceforge/numpy/Numeric-24.2.tar.gz}.
-
-The description below refers to the installation of Numeric version
-24.2.
-
-\begin{description}
-\item [Filename:] {\tt Numeric-24.2.tar.gz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item {\tt tar -zxvf Numeric-24.2.tar.gz}
-  \item {\tt cd Numeric-24.2}
-  \item {\tt python setup.py build}
-  \item {\tt python setup.py install}
-  \end{enumerate}
-Please refer to the file {\tt Numeric-24.2/README} for more
-details.
-\end{description}
-
-\subsection{Pycluster}
-
-Pycluster is a Python extension module to the clustering routines
-in the C Clustering Library by Michiel de Hoon.  Most people will
-not use this PyMS, and the installation is highly optional. 
-
-Pycluster is available from
-\url{http://bonsai.ims.u-tokyo.ac.jp/~mdehoon/software/cluster/software.htm}.
-
-The description below refers to the installation of Pycluster version
-1.33.
-
-\begin{description}
-\item [Filename:] {\tt Pycluster-1.33.tar.gz}
-\item [Installation:] $ $
-  \begin{enumerate}
-  \item {\tt tar -zxvf Pycluster-1.33.tar.gz}
-  \item {\tt cd Pycluster-1.33}
-  \item {\tt python setup.py install}
-  \end{enumerate}
-\end{description}
-
-\section{PyMS}
+We have not tested PyMS under Microsoft Windows. If you are using/testing
+PyMS under Windows please let us know about your experience.
 
 \subsection{Downloading PyMS source code}
 
@@ -322,7 +84,18 @@ pyms/
 $
 \end{verbatim}
 
-\subsection{PyMS installation}
+\subsection{PyMS installation on Linux}
+
+There are two ways that PyMS can be installed on a Linux computer: PyMS can
+be installed by using the Python interpreter that comes with the Linux
+distribution or one can re-install Python locally, and then install PyMS
+within the local Python installation. We recommend the latter because this
+is a more flexible option.
+
+Most modern Linux systems come with the Python interpreter installed. For
+example, Red Hat 5 Linux comes with Python 2.4, which is by default
+installed in {\tt /usr/lib}, and the Python interpreter is copied to 
+{\tt /usr/bin/python}.
 
 The process described above shows the installation of netCDF, numarray,
 and pycdf within the Python standard distribution. This is typically
