@@ -39,63 +39,6 @@ PyMS has been developed on Linux, and a detailed installation instructions
 for Linux are given below. Installation on any Unix-like system should be
 similar. We have not tested PyMS under Microsoft Windows.
 
-\subsection{Installing Python locally}
-
-Download the latest Python from {\tt www.python.org}. At the time of
-writing this was {\tt Python-2.5.2.tgz}. Place the Python tarball in
-some temporary directory, and unpack it:
-
-\begin{verbatim}
-$ tar xvfz Python-2.5.2.tgz
-Python-2.5.2/
-Python-2.5.2/Include/
-Python-2.5.2/Include/pymem.h
-Python-2.5.2/Include/compile.h
-Python-2.5.2/Include/pyexpat.h
-[..output deleted..]
-\end{verbatim}
-
-Change to {\tt Python-2.5.2/}, configure and compile Python:
-
-\begin{verbatim}
-$ cd Python-2.5.2
-$ ./configure --prefix=/home/likic/programs/python2.5.2
-[..output deleted..]
-$ mkdir -p /home/likic/programs/python2.5.2
-\end{verbatim}
-
-The above command specifies that Python will be installed in the
-directory {\tt /home/likic/programs/python}. The last command
-creates this directory in preparation for installation. Python
-is compiled and installation as follows:
-
-\begin{verbatim}
-$ make
-[..output deleted..]
-$ make install
-[..output deleted..]
-\end{verbatim}
-
-To check the installation directory:
-
-\begin{verbatim}
-$ ls -CF  /home/likic/programs/python2.5.2
-bin/  include/  lib/  share/
-\end{verbatim}
-
-The compiled Python executable is {\tt
-/home/likic/programs/python2.5.2/bin/python}:
-
-\begin{verbatim}
-$ /home/likic/programs/python2.5.2/bin/python
-Python 2.5.2 (r252:60911, Aug  1 2008, 07:57:44)
-[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
-Type "help", "copyright", "credits" or "license" for more information.
->>>
-\end{verbatim}
-
-This completes Python installation.
-
 \subsection{Downloading PyMS source code}
 
 PyMS source code resides on Google Code servers, and can be accessed
@@ -134,6 +77,58 @@ $ ls -CF
 pyms/
 $
 \end{verbatim}
+
+\subsection{Minimal PyMS installation}
+
+The minimal PyMS installation involves dowloading the PyMS code and
+installing the pycdf package. Download the pycdf package from
+{\tt http://pysclint.sourceforge.net/pycdf/}, and follow the
+installation instructions that come with it. To test your pycdf
+installation:
+
+\begin{verbatim}
+$ python
+Python 2.5.1 (r251:54863, Jul 10 2007, 08:23:47)
+[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pycdf
+>>>
+\end{verbatim}
+
+If the pycdf is installed properly the above import statement will produce
+no error messages.
+
+The PyMS code (ie. directory pyms/) can be placed anywhere as long as the
+Python interpreter is made aware where it is (see Python documentation
+for details on how to make packages visible to Python interpreter). In
+example, we keep the pyms code in {\tt /home/current/proj/PyMS/} (ie. the
+PyMS code is {\tt /home/current/proj/PyMS/pyms/}). Since this is a
+non-standard location for Python packages, before running PyMS we set the
+following in Python:
+
+\begin{verbatim}
+import sys
+sys.path.append("/home/current/proj/PyMS/")
+\end{verbatim}
+
+This makes Python aware that some packages may be in {\tt
+/home/current/proj/PyMS/}. Therefore to check the PyMS installation one
+might try the following:
+
+\begin{verbatim}
+$ python
+Python 2.5.1 (r251:54863, Jul 10 2007, 08:23:47)
+[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import sys
+>>> sys.path.append("/home/current/proj/PyMS/")
+>>> from pyms.IO.ANDI.Class import ChemStation
+>>>
+\end{verbatim}
+
+The last command has loaded the class 'ChemStation' from PyMS. This did not
+produce any error messages signalling that PyMS is accessible (and moreover,
+that pycdf is installed, since the class 'ChemStation' uses pycdf).
 
 \section{Minmax peak detector}
 
