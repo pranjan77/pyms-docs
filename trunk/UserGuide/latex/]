@@ -12,7 +12,7 @@
  %                                                                           %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Introduction}
+\chapter{PyMS User Guide}
 
 %%% section 1 %%%
 
@@ -80,7 +80,7 @@ pyms/
 $
 \end{verbatim}
 
-\subsection{The PyMS installation, the simplest way}
+\subsection{PyMS installation on Linux}
 
 At present PyMS is merely a Python package. The PyMS installation consist
 of placing the PyMS directory into the location where your python will
@@ -92,7 +92,10 @@ installed in {\tt /usr/lib}, and the Python interpreter is copied to
 {\tt pyms/} to {\tt /usr/lib/python2.4/site-packages/}, which is the
 standard location for third-party Python packages.
 
-The following is a simple test to check if PyMS is installed:
+The above is likely to require switching to the root account, because
+typically only root can write to {\tt /usr/lib}.
+
+The following is a simple test that PyMS is installed:
 
 \begin{verbatim}
 $ python
@@ -106,15 +109,16 @@ Type "help", "copyright", "credits" or "license" for more information.
 It there are no feedback messaged to the import command, Python
 was able to load PyMS.
 
-\subsection{Installing PyMS locally, the simple way}
 
-The above method of installing PyMS is likely to require switching
-to the root account, because typically only root can write to
-{\tt /usr/lib}.  The alternative is to install PyMS somewhere
-locally. For example, the directory {\tt pyms/} could be placed
-in the directory /home/projects/. To make Python aware of PyMS
-the following commands are required before any part of PyMS is
-called:
+
+\subsection{Installing PyMS elsewhere}
+
+Installing PyMS in the python standard directory may require
+super-user password. The alternative installation is to install
+PyMS somewhere locally. For example, the directory pyms/ with
+PyMS source code could be placed in the directory /home/projects/.
+To make Python aware of PyMS the following commands are required
+before any part of PyMS is called:
 
 \begin{verbatim}
 import sys
@@ -128,11 +132,47 @@ to "/home/projects/". For example, under the bash shell:
 $ PYTHONPATH=/home/projects/; export PYTHONPATH
 \end{verbatim}
 
-The standard Python documentation provides more information about
-sys.path.append() and PYTHONPATH.
+More information about sys.path.append() and PYTHONPATH is possible
+to find in Python documentation.
 
-\subsection{Installing PyMS locally, with local Python}
+\section{IPython}
 
+IPython is a substitute for the stock Python interactive shell. It
+provides several features which enhances the day-to-day workflow of
+using PyMS, but is not required for its operation.
+
+Its improvements include:
+\begin{enumerate}
+    \item {\bf Tab completion:} Press the {\tt TAB key} to autocomplete
+          variable and function names, and directory entries.
+    \item {\bf Object inspection:} Type {\tt \$objectname} to obtain
+          information and documentation about it.
+    \item {\bf Shell passthrough:} Type {\tt !commandname} to execute a
+          shell command. The output of the command can be assigned to a
+          variable if necessary.
+    \item {\bf Color highlighting:} Input and output are highlighted in
+          different colors for easier distinguishing.
+    \item {\bf Command history:} Press {\tt UP} or {\tt DOWN} to scroll through the
+          command history, and {\tt CTRL-R} to search through the history. The
+          history is persistent across sessions.
+    \item {\bf Logging:} Input can be logged to a file, allowing for
+          future inspection or replay. Type {\tt \%logstart logname}
+          in IPython to activate logging.
+\end{enumerate}
+
+IPython can be obtained from \url{http://ipython.scipy.org/dist/}. The
+description below refers to the installation of IPython version 0.7.2.
+
+\begin{description}
+\item [Filename:] {\tt ipython-0.7.2.tar.gz} (or newer)
+\item [Installation:] $ $
+  \begin{enumerate}
+  \item {\tt tar -zxvf ipython-0.7.2.tar.gz}
+  \item {\tt cd ipython-0.7.2}
+  \item {\tt python setup.py build}
+  \item {\tt python setup.py install}
+  \end{enumerate}
+\end{description}
 
 %%% section 3 %%%
 
