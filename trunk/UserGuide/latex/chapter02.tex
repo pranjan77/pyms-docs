@@ -111,13 +111,12 @@ chromatograms at m/z = 65), or cumulative intensities over all measured
 m/z. In the latter case the ion chromatogram is total ion chromatogram
 (TIC).
 
-The nature of an IonChromatogram object can be revealed by inspecting
-the value of the attribute '\_mass'. This is se to the m/z value of
-the ion chromatogram, or to None for TIC.
+The nature of an IonChromatogram object can be revealed by calling
+the method .is\_tic():
 
 \begin{verbatim}
->>> print ic._mass
-51
+>>> print ic.is_tic()
+False
 \end{verbatim}
 
 \noindent
@@ -126,9 +125,8 @@ m/z = 51.
 
 \begin{verbatim}
 >>> tic = data.get_tic()
->>> print tic._mass
-None
->>>
+>>> print tic.is_tic()
+True
 \end{verbatim}
 
 \noindent
@@ -141,8 +139,8 @@ chromatogram that corresponds to m/z = 73:
 
 \begin{verbatim}
 >>> ic = data.get_ic_at_mass(73)
->>> print ic._mass
-73
+>>> print ic.is_tic()
+False
 \end{verbatim}
 
 The method {\tt get\_intensity\_matrix()} returns the entire matrix of
