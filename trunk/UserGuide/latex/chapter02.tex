@@ -152,8 +152,7 @@ intensities:
 This data matrix contains 2784 time points (MS scans), and each time point
 corresponds to a mass spectrum of 501 m/z points.
 
-\subsection{Example 3: How to write an ion chromatogram or the entire
-intensity matrix to a file}
+\subsection{Example 3: How to write data to external files}
 
 Load the data as shown in the Example 2.
 
@@ -207,10 +206,11 @@ time was divided by 60 to convert the x-axis into minutes.
 To get the intensity matrix and save to a file:
 
 \begin{verbatim}
-im = data.get_intensity_matrix()
-save_data("output/im.dat", im)
+>>> im = data.get_intensity_matrix()
+>>> save_data("output/im.dat", im)
 \end{verbatim}
 
+\noindent
 The TIC can of course be calculated from the intensity matrix. For a quick
 check whether the intensity matrix matches the TIC one can use matlab or
 octave:
@@ -223,4 +223,16 @@ octave:4> v2 = sum(im');
 octave:6> sum(abs(v1-v2))
 ans = 0
 \end{verbatim}
+
+Alternatively, one can export the entire data into the CSV format by
+calling the methods export\_csv():
+
+\begin{verbatim}
+>>> data.export_csv("output/data")
+\end{verbatim}
+
+\noindent
+This will create the files 'data.im.csv', 'data.mz.csv', and 'data.rt.csv'
+in the directory output/, where these are the intensity matrix, retention
+time vector, and m/z vector in the CSV format, respectively.
 
