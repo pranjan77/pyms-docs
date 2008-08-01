@@ -28,6 +28,18 @@ PyMS is highly modular and consists of several sub-packages written in Python
 programming language \cite{python}. PyMS is released as open source, under
 the GNU Public License version 2.
 
+There are four parts of the pyms project:
+
+\begin{itemize}
+  \item pyms -- The PyMS code
+  \item pyms-docs -- The PyMS documentation
+  \item pyms-test -- Examples of PyMS use
+  \item pyms-data -- Data used in pyms-test 
+\end{itemize}
+
+Each part is a separate project on Google Code that needs to be downloaded
+separately.
+
 \section{PyMS installation}
 
 There are many ways to install PyMS depending your computer configuration
@@ -126,9 +138,11 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 \end{verbatim}
 
-The last command has loaded the class 'ChemStation' from PyMS. This did not
-produce any error messages signalling that PyMS is accessible (and moreover,
-that pycdf is installed, since the class 'ChemStation' uses pycdf).
+The last command has loaded the class 'ChemStation' from PyMS. Since this
+did not produce any error messages the PyMS was accessible (and moreover,
+that pycdf is properly installed, since the class 'ChemStation' uses pycdf).
+
+For examples on PyMS use see Chapter 2.
 
 \section{Minmax peak detector}
 

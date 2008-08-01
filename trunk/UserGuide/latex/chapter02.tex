@@ -14,13 +14,38 @@
 
 \chapter{Using PyMS}
 
-\section{Reading GC-MS data}
+\section{Introduction}
 
-\subsection{ANDI-MS data format}
+This chapter gives examples of PyMS use. The commands used in the examples
+are collected into scripts and saved in the project 'pyms-test'.  Each example
+subsection given below has a corresponding directory in 'pyms-test'. The
+project 'pyms-data' contains data files used in all examples. Both 'pyms-data'
+and 'pyms-test' are downloadable from Google Code.
 
-The field of chromatography--mass spectrometry is ruled by proprietary, closed
-data formats.  Anything that comes even closse to an open standard is the
-incomplete and now obsolete ANDI-MS data format.
+The setup used for the examples below is as follows. The projects 'pyms',
+'pyms-data', and 'pyms-test' were all downloaded in the directory
+{\tt /home/current/proj/PyMS}. In each example the Python interpreter
+was made aware of the PyMS location with the following commands:
+
+\begin{verbatim}
+>>> import sys
+>>> sys.path.append("/home/current/proj/PyMS/")
+\end{verbatim}
+
+For brevity these commands will not be shown in the examples below.
+
+Each example was run from the corresponding sub-directory of 'pyms-test':
+Example 1 was run in {\tt pyms-test/example01}, and so on.
+
+\section{PyMS examples}
+
+\subsection{Example 1: Reading GC-MS data exported from Agilent ChemStation}
+
+The PyMS package pyms.IO provides capabilities to read the raw GC-MS
+data stored in the ANDI-MS format. The function IO.ANDI.ChemStation()
+provides the interface to ANDI-MS data files saved from Agilent
+ChemStation software. The name is a reminder that this function has
+been tested only on the data exported from Agilent ChemStation.
 
 ANDI-MS data format stands for Analytical Data Interchange for Mass
 Spectrometry, and was developed for the description of mass spectrometric
@@ -29,45 +54,47 @@ is essentially a recommendation, and it is up to individual vendors of
 mass spectrometry processing software to implement "export to ANDI-MS"
 feature in their software. Furthermore, it is vendor's good will to
 implement ANDI-MS specifications properly. Because of these limitations
-it is difficult to be certain that one can properly read ANDI-MS files
-from a particular vendor without testing this first.
+one cannot be certain that one can properly read ANDI-MS files from
+a particular vendor without testing this first.
 
-\subsection{Reading the data in PyMS}
-
-The PyMS package pyms.IO provides capabilities to read the raw GC-MS
-data stored in the ANDI-MS format. The function IO.ANDI.ChemStation()
-provides the interface to ANDI-MS data files saved from Agilent
-ChemStation software. The name is a reminder that this function has
-been reasonably tested only on the data exported from Agilent ChemStation.
-
-In an interactive session from Python, the ANDI-MS file can be loaded
-in the memory as follows:
+The file '0510\_217.CDF' is a GC-MS experiment exported from Agilent
+ChemStation (located in 'pyms-data'). This file can be loaded in the
+memory as follows:
 
 \begin{verbatim}
->>> from pyms import IO
->>> data = IO.ANDI.Class.ChemStation('0510_217.CDF')
- -> Processing netCDF file '0510_217.CDF'
+>>> from pyms.IO.ANDI.Class import ChemStation
+>>> andi_file = "/home/current/proj/PyMS/pyms-data/0510_217.CDF"
+>>> data = ChemStation(andi_file)
+ -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/0510_217.CDF'
     [ 2784 scans, masses from 50 to 550 ]
 >>>
 \end{verbatim}
 
-Where '0510\_217.CDF' is the name of the GC-MS data saved in the ANDI-MS
-format from the Agilent ChemStation software.  The above command creates
-the object 'data' which is an {\em instance} of the class IO.ANDI.ChemStation.
-The instance 'data' has several attributes and methods associated with it:
+\noindent
+The above command creates the object 'data' which is an {\em instance}
+of the class IO.ANDI.ChemStation.  The instance 'data' has several
+attributes and methods associated with it.
 
-\begin{itemize}
+\subsection{Example 2: Exploring data attributes}
 
-\item {\tt get\_filename()} -- Returns the name of the file from which
+To load the data execute:
+
+\begin{verbatim}
+from pyms.IO.ANDI.Class import ChemStation
+andi_file = "/home/current/proj/PyMS/pyms-data/0510_217.CDF"
+data = ChemStation(andi_file)
+\end{verbatim}
+
+The method {\tt get\_filename()} returns the name of the file from which
 the data was loaded. Usage example:
 
 \begin{verbatim}
->>> data.get_filename()
-'0510_217.CDF'
+>>> print data.get_filename()
+/home/current/proj/PyMS/pyms-data/0510_217.CDF
 \end{verbatim}
 
-\item {\tt get\_ic\_at\_index(i)} -- Returns an IonChromatogram object
-at index i.  For example, to get the first ion chromatogram from the data
+The method {\tt get\_ic\_at\_index(i)} returns an IonChromatogram object
+at index i. For example, to get the first ion chromatogram from the data
 matrix:
 
 \begin{verbatim}
@@ -76,17 +103,20 @@ matrix:
 
 \noindent
 An IonChromatogram object is the one dimensional time vector containing
-mass intensities.  One often deals with two types of IonChromatogram
-objects: ion chromatograms at particular m/z value (for example, ion
-chromatograms at m/z = 65), or total ion chromatograms (TICs), which
-contain the sum of intensities for all masses at any given time point. 
-The nature of an IonChromatogram object can be revealed by the content
-of the attribute '\_mass', which is set to None if the ion chromatogram
-is TIC; otherwise it contains the m/z value of the ion chromatogram.
-Continuing the previous example:
+mass intensities as a function of retention time.
+
+An ion chromatogram is a set of intensities as a function of retention
+time. This can can be either m/z channel intensities (for example, ion
+chromatograms at m/z = 65), or cumulative intensities over all measured
+m/z. In the latter case the ion chromatogram is total ion chromatogram
+(TIC).
+
+The nature of an IonChromatogram object can be revealed by inspecting
+the value of the attribute '\_mass'. This is se to the m/z value of
+the ion chromatogram, or to None for TIC.
 
 \begin{verbatim}
->>> ic._mass
+>>> print ic._mass
 51
 \end{verbatim}
 
@@ -94,30 +124,40 @@ Continuing the previous example:
 This shows that the first ion chromatogram in the data file is for
 m/z = 51.
 
-\item {\tt get\_ic\_at\_mass(mz)} -- Returns an IonChromatogram
+\begin{verbatim}
+>>> tic = data.get_tic()
+>>> print tic._mass
+None
+>>>
+\end{verbatim}
+
+\noindent
+This shows the method to obtain a TIC from the data. Note that both
+'ic' and 'tic' are instances of the IonChromatogram class.
+
+The method {\tt get\_ic\_at\_mass(mz)} returns an IonChromatogram
 object corresponding to given m/z. For example, to get the ion
 chromatogram that corresponds to m/z = 73:
 
 \begin{verbatim}
 >>> ic = data.get_ic_at_mass(73)
->>> ic._mass
+>>> print ic._mass
 73
 \end{verbatim}
 
-\item {\tt get\_intensity\_matrix()} -- Returns the entire data
-matrix, i.e. time vs m/z as numarray object. Usage example:
+The method {\tt get\_intensity\_matrix()} returns the entire data matrix,
+i.e. time vs m/z as numarray object. Usage example:
 
 \begin{verbatim}
 >>> im = data.get_intensity_matrix()
->>> len(im)
+>>> print len(im)
 2784
->>> len(im[0])
+>>> print len(im[0])
 501
 \end{verbatim}
 
-This data matrix contains 2784 time points (MS scans) and each time
-point corresponds to a mass spectrum of 501 m/z points.
+This data matrix contains 2784 time points (MS scans) and each time point
+corresponds to a mass spectrum of 501 m/z points.
 
-\end{itemize}
 
 
