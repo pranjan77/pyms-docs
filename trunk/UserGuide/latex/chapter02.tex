@@ -77,13 +77,7 @@ attributes and methods associated with it.
 
 \subsection{Example 2: Exploring data attributes}
 
-To load the data:
-
-\begin{verbatim}
->>> from pyms.IO.ANDI.Class import ChemStation
->>> andi_file = "/home/current/proj/PyMS/pyms-data/0510_217.CDF"
->>> data = ChemStation(andi_file)
-\end{verbatim}
+Load the data as shown in the Example 2.
 
 The method {\tt get\_filename()} returns the name of the file from which
 the data was loaded. Usage example:
@@ -154,7 +148,79 @@ intensities:
 501
 \end{verbatim}
 
+\noindent
 This data matrix contains 2784 time points (MS scans), and each time point
 corresponds to a mass spectrum of 501 m/z points.
 
+\subsection{Example 3: How to write an ion chromatogram or the entire
+intensity matrix to a file}
+
+Load the data as shown in the Example 2.
+
+Get the TIC as shown in Example 2 and save to a file:
+
+\begin{verbatim}
+>>> ic = data.get_tic()
+>>> ic.write("output/tic.dat")
+\end{verbatim}
+
+\noindent
+The TIC will be written as a number of pairs (retention time, intensity),
+with one such pair per line:
+
+\begin{verbatim}
+$ cat tic.dat
+ 305.666      745997
+ 306.009      726566
+ 306.352      717704
+ 306.695      684214
+ 307.038      701866
+ 307.381      893306
+ 307.724     1278099
+ 308.067     1290984
+ 308.410      925558
+ 308.752      644122
+[..output deleted..]
+\end{verbatim}
+
+\noindent
+The left column is the retention time in seconds, while the right column
+is the corresponding intensity. This data can be conveniently loaded and
+plotted in matlab or octave:
+
+\begin{verbatim}
+octave:1> load tic.dat
+octave:2> plot(tic(:,1)/60, tic(:,2))
+\end{verbatim}
+
+The output is shown in Figure \ref{ticplot}. In the above command the
+time was divided by 60 to convert the x-axis into minutes.
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/tic.eps}
+\caption{The octave plot of the file 'tic.dat'.}
+\label{ticplot}
+\end{center}
+\end{figure}
+
+To get the intensity matrix and save to a file:
+
+\begin{verbatim}
+im = data.get_intensity_matrix()
+save_data("output/im.dat", im)
+\end{verbatim}
+
+The TIC can of course be calculated from the intensity matrix. For a quick
+check whether the intensity matrix matches the TIC one can use matlab or
+octave:
+
+\begin{verbatim}
+octave:1> load tic.dat
+octave:2> load im.dat
+octave:3> v1 = tic(:,2)';
+octave:4> v2 = sum(im');
+octave:6> sum(abs(v1-v2))
+ans = 0
+\end{verbatim}
 
