@@ -77,12 +77,12 @@ attributes and methods associated with it.
 
 \subsection{Example 2: Exploring data attributes}
 
-To load the data execute:
+To load the data:
 
 \begin{verbatim}
-from pyms.IO.ANDI.Class import ChemStation
-andi_file = "/home/current/proj/PyMS/pyms-data/0510_217.CDF"
-data = ChemStation(andi_file)
+>>> from pyms.IO.ANDI.Class import ChemStation
+>>> andi_file = "/home/current/proj/PyMS/pyms-data/0510_217.CDF"
+>>> data = ChemStation(andi_file)
 \end{verbatim}
 
 The method {\tt get\_filename()} returns the name of the file from which
@@ -145,8 +145,8 @@ chromatogram that corresponds to m/z = 73:
 73
 \end{verbatim}
 
-The method {\tt get\_intensity\_matrix()} returns the entire data matrix,
-i.e. time vs m/z as numarray object. Usage example:
+The method {\tt get\_intensity\_matrix()} returns the entire matrix of
+intensities:
 
 \begin{verbatim}
 >>> im = data.get_intensity_matrix()
@@ -156,8 +156,7 @@ i.e. time vs m/z as numarray object. Usage example:
 501
 \end{verbatim}
 
-This data matrix contains 2784 time points (MS scans) and each time point
+This data matrix contains 2784 time points (MS scans), and each time point
 corresponds to a mass spectrum of 501 m/z points.
-
 
 
