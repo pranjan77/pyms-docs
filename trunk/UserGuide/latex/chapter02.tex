@@ -210,9 +210,7 @@ time was divided by 60 to convert the x-axis into minutes.
 \end{center}
 \end{figure}
 
-\section{Example 2: Creating and manipulating experiments}
-
-\subsection{Creating signal peaks}
+\section{Example 2: Creating signal peaks}
 
 \noindent
 {\em The python script for this example is pyms-test/02/proc1.py}
@@ -297,6 +295,36 @@ The length of the two arrays must match:
 501
 \end{verbatim}
 
-\subsection{Creating an experiment from the ChemStation report}
+The mass spectrum can be written to a file by calling the peak
+{\tt write_mass_spectum()} method:
+
+\begin{verbatim}
+>>> p.write_mass_spectrum("output/ms.dat")
+\end{verbatim}
+
+\noindent
+The file 'output/ms.dat' contains the pairs (mz, intensity), one pair
+per line:
+
+\begin{verbatim}
+$ head output/ms.dat
+  50.000        49976.000
+  51.000        54520.000
+  52.000       102752.000
+  53.000        15570.000
+  54.000         1872.000
+  55.000        18392.000
+  56.000         8765.000
+  57.000        14966.000
+  58.000        46136.000
+  59.000        16141.000
+\end{verbatim}
+
+\noindent
+From this file the mass spectrum can be easily visualized in gnuplot:
+
+\begin{verbatim}
+gnuplot> plot "ms.dat" with impulses
+\end{verbatim}
 
 
