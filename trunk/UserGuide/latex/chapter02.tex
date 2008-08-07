@@ -257,7 +257,45 @@ Peak mass spectrum is None
 \end{verbatim}
 
 \noindent
+The peak mass spectrum can be set by calling the method {\tt set\_mass\_spectrum()}.
+This method requires the raw data, and fetches mass spectrum at peak
+retention time:
 
+\begin{verbatim}
+>>> p.set_mass_spectrum(andi_data)
+\end{verbatim}
+
+\noindent
+This will set the mass spectrum attribute: 
+
+\begin{verbatim}
+>>> print p.mass_spectrum
+ 49976  54520 102752  15570   1872  18392   8765  14966  46136  16141
+  1635   1743    686   1019    712   1199   1641   3182   1234  30400
+  4261   3746   3348  82392   8354  24824   3797   6086  23312 140480
+[--output deleted--]
+\end{verbatim}
+
+\noindent
+These are m/z channel intensities in arbitrary units. The m/z values
+themselves are in the mass list attribute:
+
+\begin{verbatim}
+>>> print p.mass_list
+[50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
+66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
+[--outout deleted--]
+\end{verbatim}
+
+\noindent
+The length of the two arrays must match:
+
+\begin{verbatim}
+>>> print len(p.mass_spectrum)
+501
+>>> print len(p.mass_list)
+501
+\end{verbatim}
 
 \subsection{Creating an experiment from the ChemStation report}
 
