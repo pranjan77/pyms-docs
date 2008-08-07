@@ -43,9 +43,13 @@ All data files (raw data files, peak lists etc) used in the example below
 can be found in 'pyms-data'.
 
 
-\section{Example 1: Reading of GC-MS data and basic manipulations}
+\section{Example 1: Reading of GC-MS data and basic manipulations with
+data}
 
 \subsection{Reading ChemStation GC-MS data into PyMS}
+
+\noindent
+{\em The python script for this example is pyms-test/01/proc.py}
 
 The PyMS package pyms.IO provides capabilities to read the raw GC-MS
 data stored in the ANDI-MS format. The function IO.ANDI.ChemStation()
@@ -75,6 +79,9 @@ The above command creates the object 'andi\_data' which is an {\em instance}
 of the class IO.ANDI.ChemStation.
 
 \subsection{Exploring an ANDI-MS data object}
+
+\noindent
+{\em The python script for this example is pyms-test/01/proc.py}
 
 The object 'andi\_data' has several attributes and methods associated with it.
 
@@ -120,6 +127,9 @@ True is the ion chromatogram is TIC, False otherwise:
 
 \subsection{Writing data to a file}
 
+\noindent
+{\em The python script for this example is pyms-test/01/proc.py}
+
 The method {\tt write()} of IonChromatogram object allows one to save
 the ion chromatogram object to a file:
 
@@ -157,7 +167,6 @@ The entire data (ie. ChemStation object) can be saved as CSV with the method
 \noindent
 will create 'data.im.csv, data.mz.csv, and data.rt.csv where these are the
 intensity matrix, retention time vector, and m/z vector in the CSV format.
-
 
 \subsection{Using Octave or Matlab to plot the data}
 
@@ -200,4 +209,56 @@ time was divided by 60 to convert the x-axis into minutes.
 \label{ticplot}
 \end{center}
 \end{figure}
+
+\section{Example 2: Creating and manipulating experiments}
+
+\subsection{Creating signal peaks}
+
+\noindent
+{\em The python script for this example is pyms-test/02/proc1.py}
+
+In PyMS a signal peak is represented as 'Peak' object defined in
+pyms.Peak.Class.py. A peak object is initialized with two arguments:
+peak retention time and peak raw area. The following commands create
+a peak named 'p' with the retetion time of 5.553 min and a peak area
+of 2759280 (this is the peak no. 3 in the ChemStation peak area report
+file 'a0806\_140.txt'):
+
+\begin{verbatim}
+>>> from pyms.Peak.Class import Peak
+>>> p = Peak(5.553*60.0,2759280)
+\end{verbatim}
+
+\noindent
+As a matter of convention PyMS internally stores retention times in
+seconds, hence above the retention time is multiplied by 60. Peak
+raw area is in arbitrary units.
+
+Peak properties can be accessed through its attributes:
+
+\begin{verbatim}
+>>> print "Peak retention time is", p.rt
+Peak retention time is 333.18
+>>> print "Peak raw area is", p.raw_area
+Peak raw area is 2759280.0
+\end{verbatim}
+
+\noindent
+Other important properties of a peak object are peak normalized area
+and peak mass spectrum. The peak created in the above example does
+not have values associated with these two attributes, and they are
+merely initialized to 'None':
+
+\begin{verbatim}
+>>> print "Peak normalized area is", p.norm_area
+Peak normalized area is None
+>>> print "Peak mass spectrum is", p.mass_spectrum
+Peak mass spectrum is None
+\end{verbatim}
+
+\noindent
+
+
+\subsection{Creating an experiment from the ChemStation report}
+
 
