@@ -16,7 +16,12 @@
 
 \section{Introduction}
 
-The setup used for the examples below is as follows. The projects 'pyms',
+This chapter demonstrates main functions of PyMS in a tutorial like manner.
+The data files used in the examples are provided in the project 'pyms-data'.
+The commands executed interactively are grouped together by example, and
+provided as Python scripts in the project 'pyms-test'.
+
+The setup used in the examples below is as follows. The projects 'pyms',
 'pyms-test', 'pyms-docs', and 'pyms-data' were downloaded in the directory
 {\tt /home/current/proj/PyMS}. In the project 'pyms-test' there is a directory
 corresponding to each example coded with the example number (ie.
@@ -43,13 +48,13 @@ All data files (raw data files, peak lists etc) used in the example below
 can be found in 'pyms-data'.
 
 
-\section{Example 1: Reading of GC-MS data and basic manipulations with
+\section{Example 1: Reading of GC-MS data and basic manipulation of
 data}
 
 \subsection{Reading ChemStation GC-MS data into PyMS}
 
 \noindent
-{\em The python script for this example is pyms-test/01/proc.py}
+{\em This example is in pyms-test/01}
 
 The PyMS package pyms.IO provides capabilities to read the raw GC-MS
 data stored in the ANDI-MS format. The function IO.ANDI.ChemStation()
@@ -79,9 +84,6 @@ The above command creates the object 'andi\_data' which is an {\em instance}
 of the class IO.ANDI.ChemStation.
 
 \subsection{Exploring an ANDI-MS data object}
-
-\noindent
-{\em The python script for this example is pyms-test/01/proc.py}
 
 The object 'andi\_data' has several attributes and methods associated with it.
 
@@ -127,16 +129,46 @@ True is the ion chromatogram is TIC, False otherwise:
 
 \subsection{Writing data to a file}
 
-\noindent
-{\em The python script for this example is pyms-test/01/proc.py}
-
 The method {\tt write()} of IonChromatogram object allows one to save
 the ion chromatogram object to a file:
 
 \begin{verbatim}
->>> tic.write("output/tic.dat")
->>> ic.write("output/ic.dat")
+>>> tic.write("output/tic.dat", minutes=True)
+>>> ic.write("output/ic.dat", minutes=True)
 \end{verbatim}
+
+\noindent
+The flag minutes=True indicates that retention time will be saved in minutes.
+The ion chromatogram object saved with with the {\tt write{}} method is a
+plain ASCII file which contains a pair of (retention time, intensity) per
+line:
+
+\begin{verbatim}
+$ head tic.dat
+  5.0944      745997.0000
+  5.1002      726566.0000
+  5.1059      717704.0000
+  5.1116      684214.0000
+  5.1173      701866.0000
+  5.1230      893306.0000
+  5.1287     1278099.0000
+  5.1345     1290984.0000
+  5.1402      925558.0000
+  5.1459      644122.0000
+\end{verbatim}
+
+\noindent
+Figure \ref{tic-plot} shows the plot of the file 'tic.dat' produced with the
+program Gnuplot. The Gnuplot script used to produce this plot is provided
+as pyms-test/01/output/plot.gnu.
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/tic.eps}
+\caption{The Gnuplot plot of the file 'tic.dat'}
+\label{tic-plot}
+\end{center}
+\end{figure}
 
 The method {\tt get\_intensity\_matrix()} of ChemStation object returns
 the entire matrix of intensities:
@@ -168,52 +200,10 @@ The entire data (ie. ChemStation object) can be saved as CSV with the method
 will create 'data.im.csv, data.mz.csv, and data.rt.csv where these are the
 intensity matrix, retention time vector, and m/z vector in the CSV format.
 
-\subsection{Using Octave or Matlab to plot the data}
-
-The ion chromatogram object saved with with the {\tt write{}} method is a
-plain ASCII file which contains a pair of (retention time, intensity) per
-line:
-
-\begin{verbatim}
-$ cat tic.dat
- 305.666      745997
- 306.009      726566
- 306.352      717704
- 306.695      684214
- 307.038      701866
- 307.381      893306
- 307.724     1278099
- 308.067     1290984
- 308.410      925558
- 308.752      644122
-[..output deleted..]
-\end{verbatim}
-
-\noindent
-The left column is the retention time in seconds, while the right column
-is the corresponding intensity. This data can be conveniently loaded and
-plotted in matlab or octave:
-
-\begin{verbatim}
-octave:1> load tic.dat
-octave:2> plot(tic(:,1)/60, tic(:,2))
-\end{verbatim}
-
-The output is shown in Figure \ref{ticplot}. In the above command the
-time was divided by 60 to convert the x-axis into minutes.
-
-\begin{figure}[htp]
-\begin{center}
-\includegraphics{graphics/tic.eps}
-\caption{The octave plot of the file 'tic.dat'.}
-\label{ticplot}
-\end{center}
-\end{figure}
-
 \section{Example 2: Creating signal peaks}
 
 \noindent
-{\em The python script for this example is pyms-test/02/proc1.py}
+{\em This example is in pyms-test/02}
 
 In PyMS a signal peak is represented as 'Peak' object defined in
 pyms.Peak.Class.py. A peak object is initialized with two arguments:
@@ -296,7 +286,7 @@ The length of the two arrays must match:
 \end{verbatim}
 
 The mass spectrum can be written to a file by calling the peak
-{\tt write_mass_spectum()} method:
+{\tt write\_mass\_spectum()} method:
 
 \begin{verbatim}
 >>> p.write_mass_spectrum("output/ms.dat")
@@ -321,10 +311,17 @@ $ head output/ms.dat
 \end{verbatim}
 
 \noindent
-From this file the mass spectrum can be easily visualized in gnuplot:
 
-\begin{verbatim}
-gnuplot> plot "ms.dat" with impulses
-\end{verbatim}
 
+Figure \ref{mass-spectrum} shows the plot of ms.dat created with the
+program Gnuplot. The gnuplot script used to create this plot is
+provided as pyms-test/02/output/plot.gnu.
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/ms.eps}
+\caption{The plot of the file 'ms.dat' produced with Gnuplot}
+\label{mass-spectrum}
+\end{center}
+\end{figure}
 
