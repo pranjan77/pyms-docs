@@ -66,16 +66,16 @@ Instrument Association. ANDI-MS is essentially a recommendation, and
 it is up to individual vendors of mass spectrometry processing software
 to implement "export to ANDI-MS" feature in their software.}
 
-The file '0510\_217.CDF' is a GC-MS experiment exported from Agilent
+The file 'a0806\_140.CDF' is a GC-MS experiment exported from Agilent
 ChemStation (located in 'pyms-data'). This file can be loaded in the
 memory as follows:
 
 \begin{verbatim}
 >>> from pyms.IO.ANDI.Class import ChemStation
->>> andi_file = "/home/current/proj/PyMS/pyms-data/0510_217.CDF"
+>>> andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
 >>> andi_data = ChemStation(andi_file)
- -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/0510_217.CDF'
-    [ 2784 scans, masses from 50 to 550 ]
+ -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_140.CDF'
+    [ 3236 scans, masses from 50 to 550 ]
 >>>
 \end{verbatim}
 
@@ -89,7 +89,7 @@ The object 'andi\_data' has several attributes and methods associated with it.
 
 \begin{verbatim}
 >>> print "ANDI-MS data filename:", andi_data.get_filename()
-ANDI-MS data filename: /home/current/proj/PyMS/pyms-data/0510_217.CDF
+ANDI-MS data filename: /home/current/proj/PyMS/pyms-data/a0806_140.CDF
 \end{verbatim}
 
 The method {\tt get\_tic()} return total ion chromatogram (TIC) of the data
@@ -176,11 +176,11 @@ the entire matrix of intensities:
 \begin{verbatim}
 >>> im = andi_data.get_intensity_matrix()
 >>> print "Dimensions of the intensity matrix are:",len(im),"x",len(im[0])
-Dimensions of the intensity matrix are: 2784 x 501
+Dimensions of the intensity matrix are: 3236 x 501
 \end{verbatim}
 
 \noindent
-This data matrix contains 2784 time points (MS scans), and each time point
+This data matrix contains 3236 time points (MS scans), and each time point
 corresponds to a mass spectrum of 501 m/z points.
 
 The intensity matrix can be saved to a file with the function 'save\_data()':
@@ -309,9 +309,6 @@ $ head output/ms.dat
   58.000        46136.000
   59.000        16141.000
 \end{verbatim}
-
-\noindent
-
 
 Figure \ref{mass-spectrum} shows the plot of ms.dat created with the
 program Gnuplot. The gnuplot script used to create this plot is
@@ -472,5 +469,12 @@ pyms-test/04):
 >>> dump_expr(expr, "output/a0806_140.pickle")
  -> Experiment 'a0806_140' saved as 'output/a0806_140.pickle'
 \end{verbatim}
+
+\section{Example 4: Peak alignment from multiple experiments}
+
+\noindent
+{\em This example is in pyms-test/04}
+
+
 
 
