@@ -470,11 +470,20 @@ pyms-test/04):
  -> Experiment 'a0806_140' saved as 'output/a0806_140.pickle'
 \end{verbatim}
 
-\section{Example 4: Peak alignment from multiple experiments}
+\section{Example 4: Preparation of multiple experiments for peak alignment
+by dynamic programming}
 
 \noindent
 {\em This example is in pyms-test/04}
 
+This example considers preparation of three GC-MS experiments for the
+peak alignment. The experiments are "a0806\_140", "a0806\_141",
+"a0806\_142", and the input for each experiment consists of the
+peak list exported from Agilent ChemStation (peak area report file),
+and the corresponding ANDI-MS data file. The latter is required for
+the assignment of peak mass spectra (mass spectra taken at the peak
+apex) since peak alignment by dynamic programming uses both peak
+retention times and peak mass spectra \cite{Robinson07}.
 
 
 
