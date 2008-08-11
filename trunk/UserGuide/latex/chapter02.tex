@@ -476,28 +476,27 @@ by dynamic programming}
 \noindent
 {\em This example is in pyms-test/04}
 
-Before aligning peak lists from multiple experiments the peak objects
-need to be created in PyMS. It is often useful to pre-process in some
-way the peaks, for example to null certain m/z channels and to select
-a certain retentiontime range.
+Before aligning peak from multiple experiments the peak objects need to be
+created and encapsulated into PyMS experiment objects. During this process
+it is often useful to pre-process the peaks in some way, for example to
+null certain m/z channels and/or to select a certain retentiontime range.
 
-This example considers preparation of three GC-MS experiments for the
-peak alignment. The experiments are 'a0806\_140', 'a0806\_141',
-'a0806\_142', and the input for each experiment consists of two
-files: the peak list exported from Agilent ChemStation (peak area
-report file), and the corresponding ANDI-MS data file. For example,
-the input files for the experiment "a0806\_140" are:
+This example considers the preparation of three GC-MS experiments for
+the peak alignment, 'a0806\_140', 'a0806\_141', 'a0806\_142'. The input
+for each experiment consists of two files: the peak list file exported
+from Agilent ChemStation (peak area report file), and the corresponding
+ANDI-MS data file. For example, the input files for the experiment
+'a0806\_140' are:
 
 \begin{itemize}
 \item a0806\_140.txt.a -- ChemStation peak area report, manually edited
-to denote blanks peaks and the reference peak
+to denote non-informative peaks and the reference peak
 \item a0806\_140.CDF -- ANDI-MS file corresponding to 'a0806\_140.txt.a'
 \end{itemize}
 
-The ANDI-MS data files are required for the assignment of peak mass spectra
-(mass spectra taken at the peak apex), since peak alignment by dynamic
-programming uses both peak retention times and peak mass spectra
-\cite{Robinson07}.
+The ANDI-MS data files are required for the assignment of peak mass spectra,
+since peak alignment by dynamic programming uses both peak retention times
+and peak mass spectra \cite{Robinson07}.
 
 The listing below shows the Python code for the script pyms-test/04/proc.py:
 
@@ -540,22 +539,22 @@ The listing below shows the Python code for the script pyms-test/04/proc.py:
 36      expr.purge_peaks()
 37      expr.sele_rt_range(["6.5m", "21m"])
 38  
-39      dump_expr(expr, "output/" + expr_code + ".pickle")
+39      dump_expr(expr, "output/" + expr_code + ".expr")
 \end{verbatim}
 
 \noindent
-The line 14 defines three experiments, by defining only the root name
-for each experiment. In the line 16 a loop is initiated over all
-experiments defined in the list 'expr\_codes'.  The actions in the
-body of the loop are applied to each experiment in turn:
+The line 14 defines three experiments, by defining only the root name for
+each experiment. In the line 16 a loop is initiated over all experiments
+defined in the list 'expr\_codes'.  The actions in the body of the loop
+are applied to each experiment in turn:
 
 \begin{itemize}
 \item Full path names of the peak file and ANDI-MS file are created (lines 18-19)
 \item ANDI-MS and peak report files are loaded (lines 21-22) 
 \item The m/z channels 73 and 147 are nulled in the raw data files (lines
 24-25). These two m/z channels contain strong trailing signals from the
-derivatizing agent across all retentiontimes, and therefore can potentially
-lower the sensitivity in mass spectra comparison
+derivatizing agent across all retention times, and therefore can potentially
+lower the sensitivity in mass spectra comparison.
 \item For each peak in the experiment the mass spectrum is set, and the
 m/z range is restricted to 50-540 (lines 27-29)
 \item An experiment object is created from the input data (line 31)
@@ -564,7 +563,64 @@ removed (line 34), peak operation area is created from the raw peak area
 (line 35), peaks below the threshold are remove (here negative peaks, if
 any), and the retention time of between 6.5 minutes and 21 minutes is
 selected.
-\item The experiment is dumped onto a file in the sub-directory 'output'.
+\item The experiment will be dumped onto a file in the sub-directory
+'output', under the names 'a0806\_140.expr', 'a0806\_141.expr', and
+'a0806\_142.expr'.
 \end{itemize}
 
+The script 04/proc.py can be run in the batch mode from the unix shell
+propmt:
+
+\begin{verbatim}
+$ python proc.py
+\end{verbatim}
+
+\noindent
+The output of this command printed on the screen terminal is shown below:
+
+\begin{verbatim}
+01  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_140.CDF'
+02     [ 3236 scans, masses from 50 to 550 ]
+03  -> Reading ChemStation peak integration report
+    '/home/current/proj/PyMS/pyms-data/a0806_140.txt.a'
+04  -> nulled mass 73
+05  -> nulled mass 147
+06  [ Reference peak found: 'rf-si' @ 935.400 s ]
+07   [ Removing reference peak 'rf-si' @ 935.400 s ]
+08 	[ Designated blank peak at 438.660 s removed ]
+09 	[ Designated blank peak at 494.520 s removed ]
+10 	[ Designated blank peak at 512.880 s removed ]
+11 	[ Designated blank peak at 751.980 s removed ]
+12  Experiment a0806_140: 0 peaks purged (below threshold=0.00)
+13  -> Selecting peaks by retention time (from 6.5m to 21m): 247 peaks selected
+14  -> Experiment 'a0806_140' saved as 'output/a0806_140.expr'
+15  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_141.CDF'
+16     [ 3236 scans, masses from 50 to 550 ]
+17  -> Reading ChemStation peak integration report
+    '/home/current/proj/PyMS/pyms-data/a0806_141.txt.a'
+18  -> nulled mass 73
+19  -> nulled mass 147
+20  [ Reference peak found: 'rf-si' @ 935.280 s ]
+21   [ Removing reference peak 'rf-si' @ 935.280 s ]
+22 	[ Designated blank peak at 438.960 s removed ]
+23 	[ Designated blank peak at 514.380 s removed ]
+24 	[ Designated blank peak at 751.980 s removed ]
+25  Experiment a0806_141: 1 peaks purged (below threshold=0.00)
+26  -> Selecting peaks by retention time (from 6.5m to 21m): 245 peaks selected
+27  -> Experiment 'a0806_141' saved as 'output/a0806_141.expr'
+28  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_142.CDF'
+29     [ 3236 scans, masses from 50 to 550 ]
+30  -> Reading ChemStation peak integration report
+    '/home/current/proj/PyMS/pyms-data/a0806_142.txt.a'
+31  -> nulled mass 73
+32  -> nulled mass 147
+33  [ Reference peak found: 'rf-si' @ 935.280 s ]
+34   [ Removing reference peak 'rf-si' @ 935.280 s ]
+35 	[ Designated blank peak at 438.780 s removed ]
+36 	[ Designated blank peak at 513.000 s removed ]
+37 	[ Designated blank peak at 752.040 s removed ]
+38  Experiment a0806_142: 0 peaks purged (below threshold=0.00)
+39  -> Selecting peaks by retention time (from 6.5m to 21m): 259 peaks selected
+40  -> Experiment 'a0806_142' saved as 'output/a0806_142.expr'
+\end{verbatim}
 
