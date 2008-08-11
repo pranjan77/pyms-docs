@@ -476,14 +476,95 @@ by dynamic programming}
 \noindent
 {\em This example is in pyms-test/04}
 
-This example considers preparation of three GC-MS experiments for the
-peak alignment. The experiments are "a0806\_140", "a0806\_141",
-"a0806\_142", and the input for each experiment consists of the
-peak list exported from Agilent ChemStation (peak area report file),
-and the corresponding ANDI-MS data file. The latter is required for
-the assignment of peak mass spectra (mass spectra taken at the peak
-apex) since peak alignment by dynamic programming uses both peak
-retention times and peak mass spectra \cite{Robinson07}.
+Before aligning peak lists from multiple experiments the peak objects
+need to be created in PyMS. It is often useful to pre-process in some
+way the peaks, for example to null certain m/z channels and to select
+a certain retentiontime range.
 
+This example considers preparation of three GC-MS experiments for the
+peak alignment. The experiments are 'a0806\_140', 'a0806\_141',
+'a0806\_142', and the input for each experiment consists of two
+files: the peak list exported from Agilent ChemStation (peak area
+report file), and the corresponding ANDI-MS data file. For example,
+the input files for the experiment "a0806\_140" are:
+
+\begin{itemize}
+\item a0806\_140.txt.a -- ChemStation peak area report, manually edited
+to denote blanks peaks and the reference peak
+\item a0806\_140.CDF -- ANDI-MS file corresponding to 'a0806\_140.txt.a'
+\end{itemize}
+
+The ANDI-MS data files are required for the assignment of peak mass spectra
+(mass spectra taken at the peak apex), since peak alignment by dynamic
+programming uses both peak retention times and peak mass spectra
+\cite{Robinson07}.
+
+The listing below shows the Python code for the script pyms-test/04/proc.py:
+
+\begin{verbatim}
+01  """proc.py
+02  """
+03  
+04  import sys, os
+05  sys.path.append("/home/current/proj/PyMS/")
+06  
+07  from pyms.IO.ANDI.Class import ChemStation
+08  from pyms.Experiment.Class import Experiment
+09  from pyms.Peak.List.IO import read_chem_station_peaks
+10  from pyms.Experiment.IO import dump_expr
+11  
+12  base_path = "/home/current/proj/PyMS/pyms-data/"
+13  
+14  expr_codes = [ "a0806_140", "a0806_141", "a0806_142" ]
+15  
+16  for expr_code in expr_codes:
+17  
+18      peak_file = os.path.join(base_path, expr_code + ".txt.a")
+19      andi_file = os.path.join(base_path, expr_code + ".CDF")
+20  
+21      andi_data = ChemStation(andi_file)
+22      peaks = read_chem_station_peaks(peak_file)
+23  
+24      andi_data.null_mass(73)
+25      andi_data.null_mass(147)
+26  
+27      for peak in peaks:
+28          peak.set_mass_spectrum(andi_data)
+29          peak.crop_mass_spectrum(50,540)
+30  
+31      expr = Experiment(expr_code, peaks)
+32  
+33      expr.set_ref_peak("si")
+34      expr.remove_blank_peaks("blank")
+35      expr.raw2norm_area()
+36      expr.purge_peaks()
+37      expr.sele_rt_range(["6.5m", "21m"])
+38  
+39      dump_expr(expr, "output/" + expr_code + ".pickle")
+\end{verbatim}
+
+\noindent
+The line 14 defines three experiments, by defining only the root name
+for each experiment. In the line 16 a loop is initiated over all
+experiments defined in the list 'expr\_codes'.  The actions in the
+body of the loop are applied to each experiment in turn:
+
+\begin{itemize}
+\item Full path names of the peak file and ANDI-MS file are created (lines 18-19)
+\item ANDI-MS and peak report files are loaded (lines 21-22) 
+\item The m/z channels 73 and 147 are nulled in the raw data files (lines
+24-25). These two m/z channels contain strong trailing signals from the
+derivatizing agent across all retentiontimes, and therefore can potentially
+lower the sensitivity in mass spectra comparison
+\item For each peak in the experiment the mass spectrum is set, and the
+m/z range is restricted to 50-540 (lines 27-29)
+\item An experiment object is created from the input data (line 31)
+\item The reference peak is removed (line 33), non-informative peaks are
+removed (line 34), peak operation area is created from the raw peak area
+(line 35), peaks below the threshold are remove (here negative peaks, if
+any), and the retention time of between 6.5 minutes and 21 minutes is
+selected.
+\item The experiment is dumped onto a file in the sub-directory 'output'.
+\end{itemize}
 
 
