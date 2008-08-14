@@ -624,3 +624,59 @@ The output of this command printed on the screen terminal is shown below:
 40  -> Experiment 'a0806_142' saved as 'output/a0806_142.expr'
 \end{verbatim}
 
+\section{Example 5: Dynamic programming alignment of peak lists from multiple
+experiments}
+
+\noindent
+{\em This example is in pyms-test/05}
+
+In this example the experiments 'a0806\_140', 'a0806\_141', and 'a0806\_142'
+prepared in pyms-test/04 will be aligned, and therefore the script
+pyms-test/04/proc.py must be run first (see Example 4), to create the files
+'a0806\_140.expr', 'a0806\_141.expr', 'a0806\_142.expr' in the directory
+pyms-test/04/output/. These files contain the post-processed peak lists
+from the three experiments. 
+
+The input script required for running the dynamic programming alignment
+is given below.
+
+\begin{verbatim}
+01  """proc.py
+02  """
+03 
+04  import sys
+05  sys.path.append("/home/current/proj/PyMS/")
+06  
+07  from pyms.Experiment.IO import read_expr_list
+08  from pyms.Peak.List.DPA.Function import exprl2alignment
+09  from pyms.Peak.List.DPA.Class import PairwiseAlignment
+10  from pyms.Peak.List.DPA.Function import align_with_tree
+11  
+13  input1 = "input1"
+14  
+16  Dw = 2.5  # rt modulation [s]
+17  Gw = 0.30 # gap penalty
+18  
+20  print 'Aligning input 1'
+21  E1 = read_expr_list(input1)
+22  F1 = exprl2alignment(E1)
+23  T1 = PairwiseAlignment(F1, Dw, Gw)
+24  A1 = align_with_tree(T1, min_peaks=2)
+25  
+27  A1.write_csv('output/rt1.csv', 'output/area1.csv')
+\end{verbatim}
+
+\noindent
+This script uses another file (file named "input1" on line 13) which lists
+the location of input experiments, one experiment per line:
+
+\begin{verbatim}
+../04/output/a0806_140.expr
+../04/output/a0806_141.expr
+../04/output/a0806_142.expr
+\end{verbatim}
+
+
+
+
+
