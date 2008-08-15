@@ -158,7 +158,7 @@ $ head tic.dat
 \end{verbatim}
 
 \noindent
-Figure \ref{tic-plot} shows the plot of the file 'tic.dat' produced with the
+Figure \ref{fig:tic-plot} shows the plot of the file 'tic.dat' produced with the
 program Gnuplot. The Gnuplot script used to produce this plot is provided
 as pyms-test/01/output/plot.gnu.
 
@@ -166,7 +166,7 @@ as pyms-test/01/output/plot.gnu.
 \begin{center}
 \includegraphics{graphics/tic.eps}
 \caption{The Gnuplot plot of the file 'tic.dat'}
-\label{tic-plot}
+\label{fig:tic-plot}
 \end{center}
 \end{figure}
 
@@ -310,7 +310,7 @@ $ head output/ms.dat
   59.000        16141.000
 \end{verbatim}
 
-Figure \ref{mass-spectrum} shows the plot of ms.dat created with the
+Figure \ref{fig:mass-spectrum} shows the plot of ms.dat created with the
 program Gnuplot. The gnuplot script used to create this plot is
 provided as pyms-test/02/output/plot.gnu.
 
@@ -318,7 +318,7 @@ provided as pyms-test/02/output/plot.gnu.
 \begin{center}
 \includegraphics{graphics/ms.eps}
 \caption{The plot of the file 'ms.dat' produced with Gnuplot}
-\label{mass-spectrum}
+\label{fig:mass-spectrum}
 \end{center}
 \end{figure}
 
@@ -896,4 +896,117 @@ alignment demonstrated here.
 29   Aligning 2 items with guide tree (D=10.00, gap=0.30)
 30   -> 0 item(s) remaining
 \end{verbatim}
+
+\section{Example 11: Noise smoothing in ion chromatograms}
+
+\noindent
+{\em This example is in pyms-test/11}
+
+Noise smoothing is usually the first step in raw data pre-processing. The
+purpose of noise smoothing is to remove high-frequency noise from data, and
+thereby increase the contribution of the signal relative to the contribution
+of the noise.
+
+One simple approach to noise smoothing is moving average window smoothing.
+In this approach a window of fixed size $2N+1$ points is moved across the ion
+chromatogram, and the value at each point is replaced with the mean intensity
+over the window size. The pyms-test/11/ illustrates this. The script proc.py
+is given below:
+
+\begin{verbatim}
+01  """proc.py
+02  """
+03  
+04  import sys
+05  sys.path.append("/home/current/proj/PyMS/")
+06  
+07  from pyms.IO.ANDI.Class import ChemStation
+08  from pyms.Noise.Window import window_smooth
+09  
+10  andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
+11  andi_data = ChemStation(andi_file)
+12  
+13  tic = andi_data.get_tic()
+14  
+15  tic1 = window_smooth(tic, window=5)
+16  tic2 = window_smooth(tic, window=5, median=True)
+17  
+18  print "Now applying time-specified window of 3 seconds"
+19  tic9 = window_smooth(tic, window='3s')
+20  
+21  # save the original TIC and smoothed TICs
+22  tic.write("output/tic.dat",minutes=True)
+23  tic1.write("output/tic1.dat",minutes=True)
+24  tic2.write("output/tic2.dat",minutes=True)
+\end{verbatim}
+
+\noindent
+The lines 1-13 are the usual preparations tasks and loading the data (in this
+case the ANDI-MS file 'a0806\_140.CDF'). The TIC is calculated on line 13.
+Lines 15 and 16 show application of moving window average smoothing, where
+the mean window (line 15) and the median window (line 16) are used. Both
+smoothing windows are 5 data points wide, implying that the intensity at
+each point is replaced by the average intensity inolving the point itself,
+two points to the left, and two points to the right ($2N+1$ where $N=2$).
+The lines 18-19 show using a time string to specify a window width (in
+this case, the specified window is '3s' meaning 3 seconds wide, see
+Section \ref{sec:time-string}).  The original TIC and two smoothed TICs are
+saved as 'tic.dat', 'tic1.dat', and 'tic2.dat' in the directory
+pyms-test/11/output/.
+
+Running the above script with the command {\tt \$ python proc.py} produces
+the following output:
+
+\begin{verbatim}
+01 -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_140.CDF'
+02    [ 3236 scans, masses from 50 to 550 ]
+03 -> Window smoothing (mean): the wing is 2 point(s)
+04 -> Window smoothing (median): the wing is 2 point(s)
+05 Now applying time-specified window of 3 seconds
+06 -> Window smoothing (mean): the wing is 4 point(s)
+\end{verbatim}
+
+\noindent
+The lines 3-4 are the output of the smoothing.  The window 'wing' is reported
+to be 2 points- this is the number of points to the left and to the right of
+the central points (ie. $N$ in $2N+1$).
+
+\noindent
+The line 6 shows that the time string '3s' corresponds to the window of
+9 points ($N=4$).
+
+The effects of the moving window average smoothing are shown in Figures 
+\ref{fig:smoothed-mean} and \ref{fig:smoothed-median}. These figures are generated
+by the Gnuplot scripts plot1.gnu and plot2.gnu located in
+pyms-test/11/output/, after running the above proc.py script.
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/tic_mean_smoothed.eps}
+\caption{The effect of the 5-point mean moving window average smoothing
+on the TIC from 'a0806\_140' data set. The segment 6.3-7.0 minutes is
+shown. The original TIC is shown in full line, while the smoothed TIC
+is shown in dashed line}
+\label{fig:smoothed-mean}
+\end{center}
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/tic_median_smoothed.eps}
+\caption{The effect of the 5-point median moving window average smoothing
+on the TIC from 'a0806\_140' data set. The segment 6.3-7.0 minutes is
+shown. The original TIC is shown in full line, while the smoothed TIC
+is shown in dashed line}
+\label{fig:smoothed-median}
+\end{center}
+\end{figure}
+
+\section{Time strings}
+\label{sec:time-string}
+
+A time string is specification of time interval, that takes the format
+'NUMBERs' or 'NUMBERm' for time interval in seconds or minutes. For
+example, these are valid time strings: '10s' (10 seconds) and '0.2m'
+(0.2 minutes).
 
