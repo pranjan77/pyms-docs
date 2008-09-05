@@ -119,30 +119,32 @@ non-standard location for Python packages, before running PyMS we set the
 following in Python:
 
 \begin{verbatim}
-import sys
-sys.path.append("/home/current/proj/PyMS/")
+>>> import sys
+>>> sys.path.append("/home/current/proj/PyMS/")
 \end{verbatim}
 
-This makes Python aware that some packages may be in {\tt
-/home/current/proj/PyMS/}. Therefore to check the PyMS installation one
-might try the following:
+This makes Python aware that some packages may be in {\tt /home/current/proj/PyMS/}.
+Therefore to check the PyMS installation one might try the following:
 
 \begin{verbatim}
 $ python
-Python 2.5.1 (r251:54863, Jul 10 2007, 08:23:47)
-[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
-Type "help", "copyright", "credits" or "license" for more information.
->>> import sys
->>> sys.path.append("/home/current/proj/PyMS/")
->>> from pyms.IO.ANDI.Class import ChemStation
 >>>
 \end{verbatim}
 
-The last command has loaded the class 'ChemStation' from PyMS. Since this
-did not produce any error messages the PyMS was accessible (and moreover,
-that pycdf is properly installed, since the class 'ChemStation' uses pycdf).
+If no error message is printed the basic PyMS installation was accessible.
+Note that this did not attempted to load all PyMS subpackages, and that
+some of the PyMS subpackages depend on additional Python packages. For
+example, to use PyMS top-hat baseline corrector (see the section
+\ref{sec:baseline_correction}) one needs to have the SciPy package 'ndimage'
+installed.  Additional Python components used by PyMS are explained below.
 
-For examples on PyMS use see Chapter 2.
+\subsection{\label{subsec:scipy-ndmage}Installation of the SciPy package 'ndimage'}
+
+If the full SciPy package is installed the 'ndimage' will be available. However
+the SciPy contains large amount of functionality, and its intallation is
+somewhat involved. In some situations in may be preferable to install only
+the subpackage 'ndimage'.
+
 
 \section{Minmax peak detector}
 

@@ -900,7 +900,7 @@ alignment demonstrated here.
 30   -> 0 item(s) remaining
 \end{verbatim}
 
-\section{Example 11: Noise smoothing in ion chromatograms}
+\section{Example 7: Noise smoothing in ion chromatograms}
 
 \noindent
 {\em This example is in pyms-test/11}
@@ -1012,4 +1012,76 @@ A time string is specification of time interval, that takes the format
 'NUMBERs' or 'NUMBERm' for time interval in seconds or minutes. For
 example, these are valid time strings: '10s' (10 seconds) and '0.2m'
 (0.2 minutes).
+
+\section{\label{sec:baseline_correction}Example 8: Baseline correction}
+
+\noindent
+{\em This example is in pyms-test/12}
+
+Baseline distortion originating from instrument imperfections and experimental
+setup is often observed in mass spectrometry data, and off-line baseline correction
+is an important part of data pre-processing. There are many approaches for
+baseline correction. One advanced approach is based top-hat transform developed
+in mathematical morphology \cite{serra83}, and used extensively in digital image
+processing for tasks such as image enhancement.  Top-hat baseline correction was
+previously applied in proteomics based mass spectrometry \cite{sauve04}.
+
+PyMS currently implements only top-hat baseline corrector, using the SciPy
+package 'ndimage'. For this feature to be available either SciPy (Scientific
+Tools for Python \cite{scipy}) must be installed, or the local versions of
+scipy's ndimage must be installed. For installation instructions please see
+the section \ref{subsec:scipy-ndmage}.
+
+Application of the top-hat baseline corrector requires the size of the structural
+element to be specified. The structural element needs to be larger than the
+features one wants to retain in the spectrum after the top-hat transform.
+In the example below, the top-hat baseline corrector is applied to the TIC
+of the data set 'a0806\_140.CDF', with the structural element of 1.5 minutes:
+
+\begin{verbatim}
+from pyms.IO.ANDI.Class import ChemStation
+from pyms.Noise.Window import window_smooth
+from pyms.Baseline.TopHat import tophat
+
+andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
+andi_data = ChemStation(andi_file)
+
+# get the TIC
+tic = andi_data.get_tic()
+
+# apply 5-point moving window smoothing & baseline corrector
+tic = window_smooth(tic, window=5)
+tic_bc = tophat(tic, struct="1.5m")
+
+# save the original and baseline corrected TICs
+tic.write("output/tic.dat",minutes=True)
+tic_bc.write("output/tic_bc.dat",minutes=True)
+\end{verbatim}
+
+\noindent
+The original and baseline corrected TICs are saved as files 'tic.dat' and
+'tic\_bc.dat', in the directory 'output/'. Running this script produces the
+following output:
+
+\begin{verbatim}
+$ python proc.py
+ -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_140.CDF'
+    [ 3236 scans, masses from 50 to 550 ]
+ -> Window smoothing (mean): the wing is 2 point(s)
+ -> Top-hat: structural element is 262 point(s)
+\end{verbatim}
+
+The plot of the original TIC and baseline corrected TIC is shown in
+Figure \ref{fig:bc-tophat}.
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/pyms-test/tic_bc_tophat.eps}
+\caption{The effect of the top-hat baseline corrector with the 1.5 minute
+structural element on the TIC for the data 'a0806\_140.CDF'.  The original
+TIC is shown in dashed line, while the baseline corrected TIC is shown in
+dashed line}
+\label{fig:bc-tophat}
+\end{center}
+\end{figure}
 
