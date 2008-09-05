@@ -143,7 +143,33 @@ installed.  Additional Python components used by PyMS are explained below.
 If the full SciPy package is installed the 'ndimage' will be available. However
 the SciPy contains large amount of functionality, and its intallation is
 somewhat involved. In some situations in may be preferable to install only
-the subpackage 'ndimage'.
+the subpackage 'ndimage'. The UrbanSim web site \cite{urbansim} provides
+instructions on how to install a local copy of 'ndimage'. These instructions
+are copied here verbatim:
+
+\begin{itemize}
+\item Create a site-packages directory into which to install additional
+packages (e.g.: ~home/python24/lib/python2.4/site-packages)
+\item Add this site-packages directory to your PYTHONPATH
+\item Create a scipy directory within site-packages (e.g.
+~home/python24/lib/python2.4/site-packages/scipy).  This is needed so that
+the two scipy subpackages have a place in which to install
+\item Create a \_\_init\_\_.py file in the scipy folder (e.g.
+~/home/python24/lib/python2.4/site-packages/scipy/\_\_init\_\_.py).  Python
+needs this file to exist in order to be able to import scipy.  The file may
+be empty
+\item Download ndimage.zip
+\item Unzip ndimage.zip
+\item cd into the unzipped directory
+\item Build and install the package via a command like the following. The path
+after the --prefix parameter is the location containing your Python's lib directory:
+\begin{verbatim}
+$ python setup.py install --prefix=~/home/python24
+\end{verbatim}
+\end{itemize}
+
+\noindent
+The original instructions are here:
 
 
 \section{Minmax peak detector}
