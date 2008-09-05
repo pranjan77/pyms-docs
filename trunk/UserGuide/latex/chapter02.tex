@@ -164,7 +164,7 @@ as pyms-test/01/output/plot.gnu.
 
 \begin{figure}[htp]
 \begin{center}
-\includegraphics{graphics/tic.eps}
+\includegraphics{graphics/pyms-test/tic.eps}
 \caption{The Gnuplot plot of the file 'tic.dat'}
 \label{fig:tic-plot}
 \end{center}
@@ -283,11 +283,13 @@ themselves are in the mass list attribute:
 >>> print p.mass_list
 [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
+82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
 [--outout deleted--]
 \end{verbatim}
 
 \noindent
-The length of the two arrays must match:
+The m/z values go from 50 to 550 (a total of 501 values).  The length of
+the two arrays must match:
 
 \begin{verbatim}
 >>> print len(p.mass_spectrum)
@@ -326,7 +328,7 @@ program Gnuplot.
 
 \begin{figure}[htp]
 \begin{center}
-\includegraphics{graphics/ms.eps}
+\includegraphics{graphics/pyms-test/ms.eps}
 \caption{The mass spectrum of the peak at 7.311 min. The mass spectrum was
 saved to a file 'ms.dat', and the plot was produced with the gnuplot script
 file 'pyms-test/02/output/plot.gnu'.}
@@ -983,7 +985,7 @@ pyms-test/11/output/, after running the above proc.py script.
 
 \begin{figure}[htp]
 \begin{center}
-\includegraphics{graphics/tic_mean_smoothed.eps}
+\includegraphics{graphics/pyms-test/tic_mean_smoothed.eps}
 \caption{The effect of the 5-point mean moving window average smoothing
 on the TIC from 'a0806\_140' data set. The segment 6.3-7.0 minutes is
 shown. The original TIC is shown in full line, while the smoothed TIC
@@ -994,7 +996,7 @@ is shown in dashed line}
 
 \begin{figure}[htp]
 \begin{center}
-\includegraphics{graphics/tic_median_smoothed.eps}
+\includegraphics{graphics/pyms-test/tic_median_smoothed.eps}
 \caption{The effect of the 5-point median moving window average smoothing
 on the TIC from 'a0806\_140' data set. The segment 6.3-7.0 minutes is
 shown. The original TIC is shown in full line, while the smoothed TIC
