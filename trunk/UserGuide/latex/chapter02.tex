@@ -204,7 +204,7 @@ intensity matrix, retention time vector, and m/z vector in the CSV format.
 
 \noindent
 {\em This example is in pyms-test/02}
-G
+
 In PyMS a signal peak is represented as 'Peak' object defined in
 pyms.Peak.Class.py. A peak object is initialized with two arguments:
 peak retention time and peak raw area. The following commands create
@@ -221,6 +221,16 @@ file 'a0806\_140.txt'):
 As a matter of convention PyMS internally stores retention times in seconds,
 hence above the retention time is multiplied by 60. Peak raw area is in
 arbitrary units.
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/tic_with_peak/tic_with_peak.eps}
+\caption{The TIC calculated from the data file 'a0806\_140.CDF', plot showing the
+segment with retention times 5.5 to 8.0 minutes. The annotation shows the peak at
+7.311 minutes.}
+\label{fig:mass-spectrum}
+\end{center}
+\end{figure}
 
 Peak properties can be accessed through its attributes:
 
@@ -246,10 +256,11 @@ Peak mass spectrum is None
 
 \noindent
 The peak mass spectrum can be set by calling the method {\tt set\_mass\_spectrum()}.
-This method requires the raw data, and fetches mass spectrum at peak
-retention time:
+We first need to load the raw data,
 
 \begin{verbatim}
+>>> andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
+>>> andi_data = ChemStation(andi_file)
 >>> p.set_mass_spectrum(andi_data)
 \end{verbatim}
 
@@ -311,13 +322,14 @@ $ head output/ms.dat
 \end{verbatim}
 
 Figure \ref{fig:mass-spectrum} shows the plot of ms.dat created with the
-program Gnuplot. The gnuplot script used to create this plot is
-provided as pyms-test/02/output/plot.gnu.
+program Gnuplot.
 
 \begin{figure}[htp]
 \begin{center}
 \includegraphics{graphics/ms.eps}
-\caption{The plot of the file 'ms.dat' produced with Gnuplot}
+\caption{The mass spectrum of the peak at 7.311 min. The mass spectrum was
+saved to a file 'ms.dat', and the plot was produced with the gnuplot script
+file 'pyms-test/02/output/plot.gnu'.}
 \label{fig:mass-spectrum}
 \end{center}
 \end{figure}
