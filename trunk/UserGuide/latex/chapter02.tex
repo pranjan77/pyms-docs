@@ -208,13 +208,13 @@ G
 In PyMS a signal peak is represented as 'Peak' object defined in
 pyms.Peak.Class.py. A peak object is initialized with two arguments:
 peak retention time and peak raw area. The following commands create
-a peak named 'p' with the retention time of 5.553 min and a peak area
-of 2759280 (this is the peak no. 3 in the ChemStation peak area report
+a peak named 'p' with the retention time of 7.311 min and a peak area
+of 33768615 (this is the peak no. 36 in the ChemStation peak area report
 file 'a0806\_140.txt'):
 
 \begin{verbatim}
 >>> from pyms.Peak.Class import Peak
->>> p = Peak(5.553*60.0,2759280)
+>>> p = Peak(7.311*60.0,33768615)
 \end{verbatim}
 
 \noindent
@@ -226,9 +226,9 @@ Peak properties can be accessed through its attributes:
 
 \begin{verbatim}
 >>> print "Peak retention time is", p.rt
-Peak retention time is 333.18
+Peak retention time is 438.66
 >>> print "Peak raw area is", p.raw_area
-Peak raw area is 2759280.0
+Peak raw area is 33768615.0
 \end{verbatim}
 
 \noindent
@@ -258,9 +258,9 @@ This will set the mass spectrum attribute:
 
 \begin{verbatim}
 >>> print p.mass_spectrum
- 49976  54520 102752  15570   1872  18392   8765  14966  46136  16141
-  1635   1743    686   1019    712   1199   1641   3182   1234  30400
-  4261   3746   3348  82392   8354  24824   3797   6086  23312 140480
+[     0  28072  48376   6975   1163   3369   3569   4740  26872  16560
+   2742   5956    790    838    625    684   1144   1367   1015   8214
+   6023   1342   3325 241024  27744  56136   6238   3281  11883  67456
 [--output deleted--]
 \end{verbatim}
 
@@ -298,16 +298,16 @@ per line:
 
 \begin{verbatim}
 $ head output/ms.dat
-  50.000        49976.000
-  51.000        54520.000
-  52.000       102752.000
-  53.000        15570.000
-  54.000         1872.000
-  55.000        18392.000
-  56.000         8765.000
-  57.000        14966.000
-  58.000        46136.000
-  59.000        16141.000
+  50.000            0.000
+  51.000        28072.000
+  52.000        48376.000
+  53.000         6975.000
+  54.000         1163.000
+  55.000         3369.000
+  56.000         3569.000
+  57.000         4740.000
+  58.000        26872.000
+  59.000        16560.000
 \end{verbatim}
 
 Figure \ref{fig:mass-spectrum} shows the plot of ms.dat created with the
@@ -342,12 +342,6 @@ of the original file 'a0806\_140.txt':
  53   8.242   480  483  486 VV 4   99010   1301807   0.13%   0.051%
  54   8.285   486  490  495 VV 2  124626   2241940   0.22%   0.088%
  55   8.337   495  499  501 VV 2   44820    662145   0.06%   0.026%
- 
- 56   8.365   501  504  506 VV 2   58181    789953   0.08%   0.031%
- 57   8.399   506  510  515 VV    713172   9893695   0.97%   0.389%
- 58   8.443   515  518  521 VV 5  143812   2590885   0.25%   0.102%
- 59   8.477   521  524  526 VV 4  149127   2438042   0.24%   0.096%
- 60   8.548   526  536  558 VV 2 55398426 1025005618 100.00%  40.335%
 \end{verbatim}
 
 \noindent
@@ -358,18 +352,13 @@ and the same file in the file 'a0806\_140.txt.a'
  53   8.242   480  483  486 VV 4   99010   1301807   0.13%   0.051% BLANK
  54   8.285   486  490  495 VV 2  124626   2241940   0.22%   0.088%
  55   8.337   495  499  501 VV 2   44820    662145   0.06%   0.026%
- 
- 56   8.365   501  504  506 VV 2   58181    789953   0.08%   0.031%
- 57   8.399   506  510  515 VV    713172   9893695   0.97%   0.389%
- 58   8.443   515  518  521 VV 5  143812   2590885   0.25%   0.102%
- 59   8.477   521  524  526 VV 4  149127   2438042   0.24%   0.096%
- 60   8.548   526  536  558 VV 2 55398426 1025005618 100.00%  40.335% BLANK
 \end{verbatim}
 
 \noindent
-In the file 'a0806\_140.txt.anno' the keywork 'BLANK' was manually added to peaks
-53 and 60, which are known to originate from the derivatizing agent use in GC-MS
-data preparation.  These peaks can be excluded from the analysis later.
+In the file 'a0806\_140.txt.anno' the keywork 'BLANK' was manually added to
+the peaks 53, which is known to originate from the derivatizing agent used
+in GC-MS data preparation.  The purpose of the 'BLANK' keyword is to
+exclude this peak from the subsequent analysis.
 
 The peak eluting at 15.590 min originated from scyllo-inositol reference
 compound added during sample preparation. In the file 'a0806\_140.txt.anno'
