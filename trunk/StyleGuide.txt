@@ -32,12 +32,12 @@ Guido van Rossum and Barry Warsaw.
     i = i+1
     x = x*2 - 1
 
-  1.4 Grouping commandsa and newlines. Organise commands into logical groups,
-    and separate if necessary with newlines to improve readability.
+  1.4 Grouping commandsa and using newlines. Organise commands into logical
+    groups, and separate if necessary with newlines to improve readability.
 
     Example:
 
-        #-- snip --
+        # -- snip --
         if not is_str(file_name):
             error("'file_name' must be a string")
 
@@ -52,8 +52,33 @@ Guido van Rossum and Barry Warsaw.
 
         self.__set_min_max_mass(file)
         self.__set_intensity_list(file)
-        #-- snip --
+        # -- snip --
 
+    In block statements (such as for loops and if statements), do not use the blank
+    line in a single group of statements; use one blank line to separate if the
+    block contains more than one group of statements.
+
+    Examples:
+
+        # -- snip --
+        td_list = []
+        for ii in range(len(time_list)-1):
+            td = time_list[ii+1]-time_list[ii]
+            td_list.append(td)
+        # -- snip --
+
+        # -- snip ---
+        if len(time_list) > len(intensity_matrix):
+
+            self.set_scan_index()
+            scan_index_list = self.__scan_index_list
+
+            count = 0
+            while len(intensity_matrix) < len(time_list):
+                count = count + 1
+                scan = numpy.repeat([0], max_mass - min_mass + 1)
+                intensity_matrix.insert(0,scan)
+        # -- snip --- 
 
 2. Imports
 
