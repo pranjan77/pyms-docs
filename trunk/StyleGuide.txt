@@ -32,6 +32,29 @@ Guido van Rossum and Barry Warsaw.
     i = i+1
     x = x*2 - 1
 
+  1.4 Grouping commandsa and newlines. Organise commands into logical groups,
+    and separate if necessary with newlines to improve readability.
+
+    Example:
+
+        #-- snip --
+        if not is_str(file_name):
+            error("'file_name' must be a string")
+
+        try:
+            file = CDF(file_name)
+            self.__file_name = file_name
+            self.__file_handle = file
+        except CDFError:
+            error("Cannot open file '%s'" % file_name) 
+
+        print " -> Processing netCDF file '%s'" % (self.__file_name)
+
+        self.__set_min_max_mass(file)
+        self.__set_intensity_list(file)
+        #-- snip --
+
+
 2. Imports
 
   2.1 Grouping. Group imports as:
