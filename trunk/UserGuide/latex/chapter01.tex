@@ -186,15 +186,10 @@ $ python setup.py install
 \item Pycluster installation
 
 \begin{verbatim}
-$ tar Pycluster-1.41.tar.gz
-$ cd Pycluster-1.41
+$ tar Pycluster-1.42.tar.gz
+$ cd Pycluster-1.42
 $ python setup.py install
 \end{verbatim}
-
-\noindent
-After the above is completed, open {\tt
-/usr/local/lib/python2.5/site-packages/Pycluster/\_\_init\_\_.py} and
-replace all occurences of 'Numeric' with 'numpy'.
 
 \item ndimage installation:
 
@@ -205,8 +200,8 @@ $ python setup.py install --prefix=/usr/local
 \end{verbatim}
 
 \noindent
-Since ndimage was installed outside the scipy, this requires some manual
-correction steps:
+Since ndimage was installed outside the scipy package, this requires some manual
+correction:
 
 \begin{verbatim}
 $ cd /usr/local/lib/python2.5/site-packages
@@ -216,7 +211,6 @@ $ mv ndimage scipy
 \end{verbatim}
 
 \end{enumerate}
-
 
 \section{Algorithms}
 
