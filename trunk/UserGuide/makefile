@@ -5,7 +5,7 @@ TEXFILE	= UserGuide.tex
 CHAPTERS = latex/chapter01.tex latex/chapter02.tex
 
 pdf:	$(TEXFILE:.tex=.pdf)
-ps:		$(TEXFILE:.tex=.ps)
+ps:	$(TEXFILE:.tex=.ps)
 dvi:	$(TEXFILE:.tex=.dvi)
 aux:	$(TEXFILE:.tex=.aux)
 
