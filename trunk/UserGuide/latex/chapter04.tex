@@ -1,0 +1,501 @@
+% chapter04.tex
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %                                                                           %
+ %    PyMS documentation                                                     %
+ %    Copyright (C) 2005-8 Vladimir Likic                                    %
+ %                                                                           %
+ %    The files in this directory provided under the Creative Commons        %
+ %    Attribution-NonCommercial-NoDerivs 2.1 Australia license               %
+ %    http://creativecommons.org/licenses/by-nc-nd/2.1/au/                   %
+ %    See the file license.txt                                               %
+ %                                                                           %
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Peak alignment by dynamic programming}
+
+\section{Preparation of multiple experiments for peak alignment
+by dynamic programming}
+
+\noindent
+[ {\em This example is in pyms-test/61} ]
+
+Before aligning peak from multiple experiments the peak objects need to be
+created and encapsulated into PyMS experiment objects. During this process
+it is often useful to pre-process the peaks in some way, for example to
+null certain m/z channels and/or to select a certain retention time range.
+
+This example considers the preparation of three GC-MS experiments for
+the peak alignment, 'a0806\_140', 'a0806\_141', 'a0806\_142'. The input
+for each experiment consists of two files: the peak list file exported
+from Agilent ChemStation (peak area report file), and the corresponding
+ANDI-MS data file. For example, the input files for the experiment
+'a0806\_140' are:
+
+\begin{itemize}
+\item a0806\_140.txt.a -- ChemStation peak area report, manually edited
+to denote non-informative peaks and the reference peak
+\item a0806\_140.CDF -- ANDI-MS file corresponding to 'a0806\_140.txt.a'
+\end{itemize}
+
+The ANDI-MS data files are required for the assignment of peak mass spectra,
+since peak alignment by dynamic programming uses both peak retention times
+and peak mass spectra \cite{Robinson07}.
+
+The listing below shows the Python code for the script pyms-test/04/proc.py:
+
+\begin{verbatim}
+01  """proc.py
+02  """
+03  
+04  import sys, os
+05  sys.path.append("/home/current/proj/PyMS/")
+06  
+07  from pyms.IO.ANDI.Class import ChemStation
+08  from pyms.Experiment.Class import Experiment
+09  from pyms.Peak.List.IO import read_chem_station_peaks
+10  from pyms.Experiment.IO import dump_expr
+11  
+12  base_path = "/home/current/proj/PyMS/pyms-data/"
+13  
+14  expr_codes = [ "a0806_140", "a0806_141", "a0806_142" ]
+15  
+16  for expr_code in expr_codes:
+17  
+18      peak_file = os.path.join(base_path, expr_code + ".txt.a")
+19      andi_file = os.path.join(base_path, expr_code + ".CDF")
+20  
+21      andi_data = ChemStation(andi_file)
+22      peaks = read_chem_station_peaks(peak_file)
+23  
+24      andi_data.null_mass(73)
+25      andi_data.null_mass(147)
+26  
+27      for peak in peaks:
+28          peak.set_mass_spectrum(andi_data)
+29          peak.crop_mass_spectrum(50,540)
+30  
+31      expr = Experiment(expr_code, peaks)
+32  
+33      expr.set_ref_peak("si")
+34      expr.remove_blank_peaks("blank")
+35      expr.raw2norm_area()
+36      expr.purge_peaks()
+37      expr.sele_rt_range(["6.5m", "21m"])
+38  
+39      dump_expr(expr, "output/" + expr_code + ".expr")
+\end{verbatim}
+
+\noindent
+The line 14 defines three experiments, by defining only the root name for
+each experiment. In the line 16 a loop is initiated over all experiments
+defined in the list 'expr\_codes'.  The actions in the body of the loop
+are applied to each experiment in turn:
+
+\begin{itemize}
+\item Full path names of the peak file and ANDI-MS file are created (lines 18-19)
+\item ANDI-MS and peak report files are loaded (lines 21-22) 
+\item The m/z channels 73 and 147 are nulled in the raw data files (lines
+24-25). These two m/z channels contain strong trailing signals from the
+derivatizing agent across all retention times, and therefore can potentially
+lower the sensitivity in mass spectra comparison.
+\item For each peak in the experiment the mass spectrum is set, and the
+m/z range is restricted to 50-540 (lines 27-29)
+\item An experiment object is created from the input data (line 31)
+\item The reference peak is removed (line 33), non-informative peaks are
+removed (line 34), peak operation area is created from the raw peak area
+(line 35), peaks below the threshold are remove (here negative peaks, if
+any), and the retention time of between 6.5 minutes and 21 minutes is
+selected.
+\item The experiment will be dumped onto a file in the sub-directory
+'output', under the names 'a0806\_140.expr', 'a0806\_141.expr', and
+'a0806\_142.expr'.
+\end{itemize}
+
+The script 04/proc.py can be run in the batch mode from the unix shell
+prompt:
+
+\begin{verbatim}
+$ python proc.py
+\end{verbatim}
+
+\noindent
+The output of this command printed on the screen terminal is shown below:
+
+\begin{verbatim}
+01  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_140.CDF'
+02     [ 3236 scans, masses from 50 to 550 ]
+03  -> Reading ChemStation peak integration report
+    '/home/current/proj/PyMS/pyms-data/a0806_140.txt.a'
+04  -> nulled mass 73
+05  -> nulled mass 147
+06  [ Reference peak found: 'rf-si' @ 935.400 s ]
+07   [ Removing reference peak 'rf-si' @ 935.400 s ]
+08 	[ Designated blank peak at 438.660 s removed ]
+09 	[ Designated blank peak at 494.520 s removed ]
+10 	[ Designated blank peak at 512.880 s removed ]
+11 	[ Designated blank peak at 751.980 s removed ]
+12  Experiment a0806_140: 0 peaks purged (below threshold=0.00)
+13  -> Selecting peaks by retention time (from 6.5m to 21m): 247 peaks selected
+14  -> Experiment 'a0806_140' saved as 'output/a0806_140.expr'
+15  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_141.CDF'
+16     [ 3236 scans, masses from 50 to 550 ]
+17  -> Reading ChemStation peak integration report
+    '/home/current/proj/PyMS/pyms-data/a0806_141.txt.a'
+18  -> nulled mass 73
+19  -> nulled mass 147
+20  [ Reference peak found: 'rf-si' @ 935.280 s ]
+21   [ Removing reference peak 'rf-si' @ 935.280 s ]
+22 	[ Designated blank peak at 438.960 s removed ]
+23 	[ Designated blank peak at 514.380 s removed ]
+24 	[ Designated blank peak at 751.980 s removed ]
+25  Experiment a0806_141: 1 peaks purged (below threshold=0.00)
+26  -> Selecting peaks by retention time (from 6.5m to 21m): 245 peaks selected
+27  -> Experiment 'a0806_141' saved as 'output/a0806_141.expr'
+28  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_142.CDF'
+29     [ 3236 scans, masses from 50 to 550 ]
+30  -> Reading ChemStation peak integration report
+    '/home/current/proj/PyMS/pyms-data/a0806_142.txt.a'
+31  -> nulled mass 73
+32  -> nulled mass 147
+33  [ Reference peak found: 'rf-si' @ 935.280 s ]
+34   [ Removing reference peak 'rf-si' @ 935.280 s ]
+35 	[ Designated blank peak at 438.780 s removed ]
+36 	[ Designated blank peak at 513.000 s removed ]
+37 	[ Designated blank peak at 752.040 s removed ]
+38  Experiment a0806_142: 0 peaks purged (below threshold=0.00)
+39  -> Selecting peaks by retention time (from 6.5m to 21m): 259 peaks selected
+40  -> Experiment 'a0806_142' saved as 'output/a0806_142.expr'
+\end{verbatim}
+
+\section{Dynamic programming alignment of peak lists from multiple experiments}
+
+\noindent
+\begin{itemize}
+\item {\em This example is in pyms-test/62}
+\item {\em This example uses the subpackage pyms.Peak.List.DPA, which in turn uses
+the Python package 'Pycluster'.  For 'Pycluster' installation instructions see the
+Section \ref{subsec:pycluster}.}
+\end{itemize}
+
+In this example the experiments 'a0806\_140', 'a0806\_141', and 'a0806\_142'
+prepared in pyms-test/04 will be aligned, and therefore the script
+pyms-test/04/proc.py must be run first (see Example 4), to create the files
+'a0806\_140.expr', 'a0806\_141.expr', 'a0806\_142.expr' in the directory
+pyms-test/04/output/. These files contain the post-processed peak lists
+from the three experiments. 
+
+The input script required for running the dynamic programming alignment
+is given below.
+
+\begin{verbatim}
+01  """proc.py
+02  """
+03 
+04  import sys
+05  sys.path.append("/home/current/proj/PyMS/")
+06  
+07  from pyms.Experiment.IO import read_expr_list
+08  from pyms.Peak.List.DPA.Function import exprl2alignment
+09  from pyms.Peak.List.DPA.Class import PairwiseAlignment
+10  from pyms.Peak.List.DPA.Function import align_with_tree
+11  
+13  input1 = "input1"
+14  
+16  Dw = 2.5  # rt modulation [s]
+17  Gw = 0.30 # gap penalty
+18  
+20  print 'Aligning input 1'
+21  E1 = read_expr_list(input1)
+22  F1 = exprl2alignment(E1)
+23  T1 = PairwiseAlignment(F1, Dw, Gw)
+24  A1 = align_with_tree(T1, min_peaks=2)
+25  
+27  A1.write_csv('output/rt1.csv', 'output/area1.csv')
+\end{verbatim}
+
+\noindent
+This script uses another file (file named "input1" on line 13) which lists
+the location of input experiments, one experiment per line:
+
+\begin{verbatim}
+../04/output/a0806_140.expr
+../04/output/a0806_141.expr
+../04/output/a0806_142.expr
+\end{verbatim}
+
+The explanation of the task performed by the input script is given below:
+
+\begin{itemize}
+\item Lines 16 and 17: input parameters for the alignment by dynamic
+programming are defined. Dw is the retention time moduleation in seconds,
+while Gw is the gap penalty.  These parameters are explained in detail
+in \cite{Robinson07}
+\item line 21: The list of experiments is loaded into the variable
+named E1.  E1 is simply a Python list containing three expaeriment
+objects as elements.
+\item Line 22: The list of experiments is converted into the list of
+alignments. Each experiment object is converted into the "alignment"
+object. In this case the alignment object contains only a single
+experiment, and is not really an alignment at all (this special case
+is called 1-alignment). The variable F1 is simply a Python list
+containing three alignment objects.
+\item Line 23: all possible pairwise alignments (2-alignments) are
+calculated from the list of 1-alignments. PairwiseAlignment() is
+a class, and T1 is an object which contains the dendrogram tree that
+maps the similarity relationship between the input 1-alignments,
+and also 1-alignments themselves. 
+\item Line 24: The function align\_with\_tree() takes the object
+T1 and aligns the individual alignment supplied with it according
+the guide tree.  In this case, the individual alignment are
+three 1-alignments, and the function align\_with\_tree() first
+creates a 2-alignment from the two most similar 1-alignments
+and then adds the third 1-alignment to this to create a
+3-alignment. The parameter 'min\_peaks=2' specifies that any peak
+column of the data matrix which has less than two peaks in the final
+alignment will be dropped.  This is useful to clean up the data
+matrix of accidental peaks that are not truly observed over the
+set of replicates. 
+\item Line 27: the resulting 3-alignment is stored on disk, converted
+into the alignment tables containing peak retention times ('rt1.csv')
+and the corresponding peak areas ('area1.csv'). These two files are
+plain ASCII files is CSV format, and are saved in the directory
+05/output/.
+\end{itemize}
+
+\noindent
+In general one is interested in the file 'area1.csv' which contains
+the data matrix where the corresponding peaks are aligned in the
+columns and each row corresponds to an experiment. The file 'rt1.csv'
+is useful for manually inspecting the alignment in some GUI driven
+program.
+
+Running the above script with {\tt \$ python proc.py} produces the
+following output:
+
+\begin{verbatim}
+01  Aligning input 1
+02   -> Loading experiment from the binary file '../04/output/a0806_140.expr'
+03   -> Loading experiment from the binary file '../04/output/a0806_141.expr'
+04   -> Loading experiment from the binary file '../04/output/a0806_142.expr'
+05   Calculating pairwise alignments for 3 alignments (D=2.50, gap=0.30)
+06   -> 2 pairs remaining
+07   -> 1 pairs remaining
+08   -> 0 pairs remaining
+09   -> Clustering 6 pairwise alignments. Done
+10   Aligning 3 items with guide tree (D=2.50, gap=0.30)
+11   -> 1 item(s) remaining
+12   -> 0 item(s) remaining
+\end{verbatim}
+
+\section{Between-state alignment of peak lists from multiple experiments}
+
+\noindent
+[ {\em This example is in pyms-test/63 and pyms-test/61a} ]
+
+The Example 5 demonstrates how the peaks lists are aligned within a single
+experiment with multiple replicates (called "within-state alignment"). For
+example, if there are 8 experimental replicates performed on wild-type
+cells, Example 05 gives a recipe how to align such a set of experiments.
+In practice one is often interested in comparing two experimental states,
+ie. wild-type and mutant cells. In a typical experimental setup one would
+collect multiple replicate experiments on each state (for example, 8
+experimental replicates on wild-type cells and 8 on the mutant cells).
+To analyze the results of such an experiment statistically one needs
+to align the peak lists within each experimental state (wild-type and
+mutant) and also between the two states. The result of such an alignment
+would be the data matrix of integrated peak areas. In the example above
+the data matrix would contain 16 rows (corresponding to 8 wild type and
+8 mutant experiments), while the number of columns would be determined by
+the number of unique peaks (metabolites) detected in the two experiments.
+
+In principle, the method shown in the Example 5 could be used to align
+experiments from the two or more experimental states each containing
+multiple replicate experiments.  However, a more careful analysis of
+the problem shows that the optimal approach to alignment is first
+to align experiments within each set of replicates (within-state
+alignment), and then to align the resulting alignments (between-state
+alignment) \cite{Robinson07}. Within each state the experiments are
+true replicates, and we expect, at least in theory, that all compounds
+are observed in all experiments.  This is however not true between
+the states,  for example in metabolites observed in wild-type versus
+mutant cells, and this makes the alignment problem harder.
+
+This example demonstrates how the peak lists from two cell states are
+aligned, the cell state A consisting of three experiments aligned in
+the Example 04 ('a0806\_140', 'a0806\_141', and 'a0806\_142'), and
+the cell state B consisting of three experiments aligned in the
+Example 04a ('a0806\_077', 'a0806\_078', 'a0806\_079'). The example
+in pyms-text/04a/ is a simple repetition of the example in
+pyms-text/04/ as explained in the Example 04 above only with
+different experiments.
+
+The alignment script used to align the two states A and B is given below:
+
+\begin{verbatim}
+01  """proc.py
+02  """
+03  
+04  import sys
+05  sys.path.append("/home/current/proj/PyMS/")
+06  
+07  from pyms.Experiment.IO import read_expr_list
+08  from pyms.Peak.List.DPA.Function import exprl2alignment
+09  from pyms.Peak.List.DPA.Class import PairwiseAlignment
+10  from pyms.Peak.List.DPA.Function import align_with_tree
+11  
+13  input1 = "input1"
+14  input2 = "input2"
+15  
+17  Dw = 2.5  # rt modulation [s]
+18  Gw = 0.30 # gap penalty
+19  
+21  print 'Aligning input 1'
+22  E1 = read_expr_list(input1)
+23  F1 = exprl2alignment(E1)
+24  T1 = PairwiseAlignment(F1, Dw, Gw)
+25  A1 = align_with_tree(T1, min_peaks=2)
+26  
+27  print 'Aligning input 1'
+28  E2 = read_expr_list(input2)
+29  F2 = exprl2alignment(E2)
+30  T2 = PairwiseAlignment(F2, Dw, Gw)
+31  A2 = align_with_tree(T2, min_peaks=2)
+32  
+34  Db = 10.0 # rt modulation
+35  Gb = 0.30 # gap penalty
+36  
+37  print 'Aligning input {1,2}'
+38  T9 = PairwiseAlignment([A1,A2], Db, Gb)
+39  A9 = align_with_tree(T9)
+40  
+41  A9.write_csv('output/rt.csv', 'output/area.csv')
+\end{verbatim}
+ 
+\noindent
+There are two external input files used in this script ('input1' and
+'input2'), listing the experiments from the state A and state B. The 
+ifile 'input1' is identical as given in Example 5, while the listing
+of input file 'input2' defines where are the experiment dumps for
+the state B:
+
+\begin{verbatim}
+../04a/output/a0806_077.expr
+../04a/output/a0806_078.expr
+../04a/output/a0806_079.expr
+\end{verbatim}
+
+The explanations of the alignment script are given below:
+
+\begin{itemize}
+\item Lines 21-25 run the within-state experiment of the state A, and are
+explained in the Example 5. Lines 27-31 are identical, and run the
+within-state alignment of the state B. The within-state alignment of
+experiments A is encapsulated in the variable A1, while the within-state
+alignment of the experiments B is encapsulated in the variable A2.
+\item Lines 34 and 34 specify the alignment parameters for between-state
+alignment of A and B. In the example the retention time tolerance for
+between-state alignment is greater compared to the retention time tolerance
+for the within-state alignment as the two sets of replicates were
+recorded on different days and we expect less fidelity in retention times
+between them.
+\item Lines 37-39 execute the alignment of two alignments. Exactly the
+same functions are used as in the within-state alignment (at this point
+the purpose of converting experiments to 1-alignments becomes apparent:
+this allows a generalization of functions PairwiseAlignment() and
+align\_with\_tree(), which always operate on the alignment objects.
+\item Line 41: the resulting alignment is saved to a file.
+\end{itemize}
+
+Running the above script with the command {\tt \$ python proc.py} produces
+the following output. Both pyms-text/04/proc.py and pyms-text/04a/proc.py
+need to be run to create the experiment dumps that are input for the
+alignment demonstrated here.
+
+\begin{verbatim}
+01  Aligning input 1
+02   -> Loading experiment from the binary file '../04/output/a0806_140.expr'
+03   -> Loading experiment from the binary file '../04/output/a0806_141.expr'
+04   -> Loading experiment from the binary file '../04/output/a0806_142.expr'
+05   Calculating pairwise alignments for 3 alignments (D=2.50, gap=0.30)
+06   -> 2 pairs remaining
+07   -> 1 pairs remaining
+08   -> 0 pairs remaining
+09   -> Clustering 6 pairwise alignments. Done
+10   Aligning 3 items with guide tree (D=2.50, gap=0.30)
+11   -> 1 item(s) remaining
+12   -> 0 item(s) remaining
+13  Aligning input 1
+14   -> Loading experiment from the binary file '../04a/output/a0806_077.expr'
+15   -> Loading experiment from the binary file '../04a/output/a0806_078.expr'
+16   -> Loading experiment from the binary file '../04a/output/a0806_079.expr'
+17   Calculating pairwise alignments for 3 alignments (D=2.50, gap=0.30)
+18   -> 2 pairs remaining
+19   -> 1 pairs remaining
+20   -> 0 pairs remaining
+21   -> Clustering 6 pairwise alignments. Done
+22   Aligning 3 items with guide tree (D=2.50, gap=0.30)
+23   -> 1 item(s) remaining
+24   -> 0 item(s) remaining
+25  Aligning input {1,2}
+26   Calculating pairwise alignments for 2 alignments (D=10.00, gap=0.30)
+27   -> 0 pairs remaining
+28   -> Clustering 2 pairwise alignments. Done
+29   Aligning 2 items with guide tree (D=10.00, gap=0.30)
+30   -> 0 item(s) remaining
+\end{verbatim}
+
+\section{Comparing two peak lists by using dynamic programming alignment}
+
+\noindent
+[ {\em This example is in pyms-test/68} ]
+
+The PyMS package pyms.Peak.List.Metric provides a function to compare two peak lists.
+This allows peak detection methods from different programs to be evaulated or a peak
+detection method to be compared to a 'known' or expert evaluated result. The following
+example compares Xcalibur peak detection and AMDIS peak detection.
+
+\begin{verbatim}
+>>> from from pyms.Experiment.IO import load_amdis_expr,load_xcalibur_expr
+>>> from pyms.Peak.List.Metric import metric
+>>> andi_file = "pyms-data/121107B_10.CDF"
+>>> xcalibur_peaks_file = "pyms-data/121107B_10_xcalibur_peaks.txt"
+>>> amdis_peaks_file = "pyms-data/121107B_10.ELU"
+>>> amdis_expr = load_amdis_expr(amdis_peaks_file)
+ -> Processing AMDIS experiment
+ -> Reading AMDIS ELU file 'pyms-data/121107B_10.ELU'
+>>> xcalibur_expr = load_xcalibur_expr(xcalibur_peaks_file,andi_file)
+ -> Processing Xcalibur experiment
+ -> Reading Xcalibur peak file 'pyms-data/121107B_10_xcalibur_peaks.txt'
+ -> Processing netCDF file 'pyms-data/121107B_10.CDF'
+    [ 7038 scans, masses from 70 to 600 ]
+>>> metric_result = metric(amdis_expr.peaks, xcalibur_expr.peaks)
+>>> print "Metric distance is ",metric_result
+Metric distance is  0.89724073048
+\end{verbatim}
+
+The full list of matching peaks and distances between individual peaks can be displayed
+by setting the verbose flag:
+
+\begin{verbatim}
+>>> metric_result = metric(amdis_expr.peaks, xcalibur_expr.peaks, verbose=True)
+[-- output deleted --]
+33.71	-
+33.71	-
+33.98	33.98	0.43
+34.50	34.50	0.03
+-	35.01
+35.08	-
+-	35.77
+35.92	-
+36.32	-
+36.60	-
+36.65	-
+37.14	-
+37.44	37.44	0.31
+-	39.60
+40.99	40.99	0.43
+41.59	-
+-	42.93
+Metric distance is  0.89724073048
+\end{verbatim}

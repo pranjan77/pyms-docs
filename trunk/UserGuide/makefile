@@ -2,7 +2,8 @@
 # Copyright (c) 2006, Vladimir Likic <vlikic@unimelb.edu.au>
 
 TEXFILE	= UserGuide.tex
-CHAPTERS = latex/chapter01.tex latex/chapter02.tex
+CHAPTERS = latex/chapter01.tex latex/chapter02.tex latex/chapter03.tex \
+    latex/chapter04.tex
 
 pdf:	$(TEXFILE:.tex=.pdf)
 ps:	$(TEXFILE:.tex=.ps)
