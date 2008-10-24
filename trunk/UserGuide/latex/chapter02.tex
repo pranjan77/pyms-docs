@@ -56,7 +56,7 @@ data}
 \subsection{Reading ChemStation GC-MS data into PyMS}
 
 \noindent
-{\em This example is in pyms-test/01}
+[ {\em This example is in pyms-test/01} ]
 
 The PyMS package pyms.IO provides capabilities to read the raw GC-MS
 data stored in the ANDI-MS format. The function IO.ANDI.ChemStation()
@@ -202,10 +202,38 @@ The entire data (ie. ChemStation object) can be saved as CSV with the method
 will create 'data.im.csv, data.mz.csv, and data.rt.csv where these are the
 intensity matrix, retention time vector, and m/z vector in the CSV format.
 
+\subsection{Reading Xcalibur GC-MS data into PyMS}
+
+\noindent
+[ {\em This example is in pyms-test/01a} ]
+
+The function IO.ANDI.Xcalibur() provides the interface to ANDI-MS data files
+exported from Thermo Scientific Xcalibur software.\footnote{Due to differences
+in the interpretation of the ANDI-MS format PyMS implements separate parsers
+for different software packages}
+
+The file '121107B\_10.CDF' is a GC-MS experiment exported from Xcalibur (located
+in 'pyms-data'). This file can be loaded as follows:
+
+\begin{verbatim}
+>>> from pyms.IO.ANDI.Class import Xcalibur
+>>> andi_file = "/home/current/proj/PyMS/pyms-data/121107B_10.CDF"
+>>> andi_data = Xcalibur(andi_file)
+ -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/121107B_10.CDF'
+    [ 7038 scans, masses from 70 to 600 ]
+>>>
+\end{verbatim}
+
+\noindent
+The above command creates the object 'andi\_data' which is an {\em instance}
+of the class IO.ANDI.Xcalibur. IO.ANDI.ChemStation and IO.ANDI.Xcalibur 
+inherit attributes and methods from the class IO.ANDI.ANDIMS\_reader
+(a generic ANDI-MS parser) and thus provide the same functionality.
+
 \section{Example 2: Creating signal peaks}
 
 \noindent
-{\em This example is in pyms-test/02}
+[ {\em This example is in pyms-test/02} ]
 
 In PyMS a signal peak is represented as 'Peak' object defined in
 pyms.Peak.Class.py. A peak object is initialized with two arguments:
@@ -341,7 +369,7 @@ file 'pyms-test/02/output/plot.gnu'.}
 \section{Example 3: Creating an experiment from ChemStation data}
 
 \noindent
-{\em This example is in pyms-test/03}
+[ {\em This example is in pyms-test/03} ]
 
 The input files used in this example are 'a0806\_140.CDF' (ANDI-MS data
 file exported from Agilent ChemStation) and 'a0806\_140.txt.a' (the 
@@ -474,11 +502,97 @@ pyms-test/04):
  -> Experiment 'a0806_140' saved as 'output/a0806_140.pickle'
 \end{verbatim}
 
+\section{Example 3a: Loading Xcalibur peak list or creating an experiment from Xcalibur data}
+
+\noindent
+[ {\em This example is in pyms-test/03a} ]
+
+The Xcalibur peak list can be loaded into PyMS with the function 'read\_xcalibur\_peaks()':
+
+\begin{verbatim}
+>>> from pyms.Peak.List.IO import read_xcalibur_peaks
+>>> peak_file = "/home/current/proj/PyMS/pyms-data/121107B_10_xcalibur_peaks.txt"
+>>> peaks = read_xcalibur_peaks(peak_file)
+ -> Reading Xcalibur peak file '/home/current/proj/PyMS/pyms-data/121107B_10_xcalibur_peaks.txt'
+\end{verbatim}
+
+\noindent
+The variable 'peaks' now contains a list of peak objects from the file
+'121107B\_10\_xcalibur\_peaks.txt'. The mass spectrum can be set for each peak in a 
+similar way to the above ChemStation example, or alternatively the peaks together
+with their mass spectra can be loaded as an experiment object using the function 
+'load\_xcalibur\_expr()':
+
+\begin{verbatim}
+>>> from pyms.Experiment.IO import load_xcalibur_expr
+>>> peak_file = "/home/current/proj/PyMS/pyms-data/121107B_10_xcalibur_peaks.txt"
+>>> andi_data = "/home/current/proj/PyMS/pyms-data/121107B_10.CDF"
+>>> expr = load_xcalibur_expr(peak_file,andi_data)
+ -> Processing Xcalibur experiment
+ -> Reading Xcalibur peak file '/home/current/proj/PyMS/pyms-data/121107B_10_xcalibur_peaks.txt'
+ -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/121107B_10.CDF'
+    [ 7038 scans, masses from 70 to 600 ]
+\end{verbatim}
+
+\section{Example 3b: AMDIS Peak Parser}
+
+\noindent
+[ {\em This example is in pyms-test/03b} ]
+
+The AMDIS peak list can be loaded into PyMS with the function 'read\_amdis\_peaks()'.
+In the example below, the AMDIS ELU file '121107B\_10.ELU' was derived from the
+Xcalibur raw data '121107B\_10.CDF'. 
+
+\begin{verbatim}
+>>> from pyms.Peak.List.IO import read_amdis_peaks
+>>> amdis_file = "/home/current/proj/PyMS/pyms-data/121107B_10.ELU"
+>>> peaks = read_amdis_peaks(amdis_file)
+ -> Reading AMDIS ELU file '/home/current/proj/PyMS/pyms-data/121107B_10.ELU'
+\end{verbatim}
+
+\noindent
+The variable 'peaks' now contains the list of peaks as detected by AMDIS.  The mass
+spectrum for each peak is set from the AMDIS ELU data which contains extracted masses
+for each peak. The AMDIS data also contains uncertain masses for each peak which are
+not used by default but con be included by setting the the flag 'uncertain\_masses'
+to True:
+
+\begin{verbatim}
+>>> peaks = read_amdis_peaks(amdis_file, uncertain_masses=True)
+\end{verbatim}
+
+The peaks along with the mass spectrum data can be loaded as an experiment 
+object using the function 'load\_amdis\_expr()':
+
+\begin{verbatim}
+>>> from pyms.Experiment.IO import load_amdis_expr
+>>> amdis_data = "/home/current/proj/PyMS/pyms-data/121107B_10.ELU"
+>>> expr = load_amdis_expr(amdis_data)
+ -> Processing AMDIS experiment
+ -> Reading AMDIS ELU file '/home/current/proj/PyMS/pyms-data/121107B_10.ELU'
+\end{verbatim}
+
+The full mass spectrum can also be used for each peak instead of the AMDIS extracted masses
+by passing the corresponding ANDI-MS data:
+
+\begin{verbatim}
+>>> from pyms.Experiment.IO import load_amdis_expr
+>>> from pyms.IO.ANDI.Class import Xcalibur
+>>> amdis_data = "/home/current/proj/PyMS/pyms-data/121107B_10.ELU"
+>>> andi_file = "/home/current/proj/PyMS/pyms-data/121107B_10.CDF"
+>>> andi_data = Xcalibur(andi_file)
+ -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/121107B_10.CDF'
+    [ 7038 scans, masses from 70 to 600 ]
+>>> expr = load_amdis_expr(amdis_data,andi_data)
+ -> Processing AMDIS experiment
+ -> Reading AMDIS ELU file '/home/current/proj/PyMS/pyms-data/121107B_10.ELU'
+\end{verbatim}
+
 \section{Example 4: Preparation of multiple experiments for peak alignment
 by dynamic programming}
 
 \noindent
-{\em This example is in pyms-test/04}
+[ {\em This example is in pyms-test/04} ]
 
 Before aligning peak from multiple experiments the peak objects need to be
 created and encapsulated into PyMS experiment objects. During this process
@@ -633,10 +747,10 @@ experiments}
 
 \noindent
 \begin{itemize}
-\item {\em This example is in pyms-test/05}
-\item {\em This example uses the subpackage pyms.Peak.List.DPA, which in turn uses
+\item [ {\em This example is in pyms-test/05} ]
+\item [ {\em This example uses the subpackage pyms.Peak.List.DPA, which in turn uses
 the Python package 'Pycluster'.  For 'Pycluster' installation instructions see the
-Section \ref{subsec:pycluster}.}
+Section \ref{subsec:pycluster}.} ]
 \end{itemize}
 
 In this example the experiments 'a0806\_140', 'a0806\_141', and 'a0806\_142'
@@ -753,7 +867,7 @@ following output:
 experiments}
 
 \noindent
-{\em This example is in pyms-test/06 and pyms-test/04a}
+[ {\em This example is in pyms-test/06 and pyms-test/04a} ]
 
 The Example 5 demonstrates how the peaks lists are aligned within a single
 experiment with multiple replicates (called "within-state alignment"). For
@@ -910,7 +1024,7 @@ alignment demonstrated here.
 \section{Example 7: Noise smoothing in ion chromatograms}
 
 \noindent
-{\em This example is in pyms-test/11}
+[ {\em This example is in pyms-test/11} ]
 
 Noise smoothing is usually the first step in raw data pre-processing. The
 purpose of noise smoothing is to remove high-frequency noise from data, and
@@ -1023,7 +1137,7 @@ example, these are valid time strings: '10s' (10 seconds) and '0.2m'
 \section{\label{sec:baseline_correction}Example 8: Baseline correction}
 
 \noindent
-{\em This example is in pyms-test/21}
+[ {\em This example is in pyms-test/21} ]
 
 Baseline distortion originating from instrument imperfections and experimental
 setup is often observed in mass spectrometry data, and off-line baseline correction
