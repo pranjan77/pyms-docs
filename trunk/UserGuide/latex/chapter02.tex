@@ -50,8 +50,7 @@ All data files (raw data files, peak lists etc) used in the example below
 can be found in 'pyms-data'.
 
 
-\section{Example 1: Reading of GC-MS data and basic manipulation of
-data}
+\section{Reading of GC-MS data and basic manipulation of data}
 
 \subsection{Reading ChemStation GC-MS data into PyMS}
 
@@ -230,7 +229,7 @@ of the class IO.ANDI.Xcalibur. IO.ANDI.ChemStation and IO.ANDI.Xcalibur
 inherit attributes and methods from the class IO.ANDI.ANDIMS\_reader
 (a generic ANDI-MS parser) and thus provide the same functionality.
 
-\section{Example 2: Creating signal peaks}
+\section{Creating signal peaks}
 
 \noindent
 [ {\em This example is in pyms-test/02} ]
@@ -366,7 +365,7 @@ file 'pyms-test/02/output/plot.gnu'.}
 \end{center}
 \end{figure}
 
-\section{Example 3: Creating an experiment from ChemStation data}
+\section{Creating an experiment from ChemStation data}
 
 \noindent
 [ {\em This example is in pyms-test/03} ]
@@ -502,7 +501,7 @@ pyms-test/04):
  -> Experiment 'a0806_140' saved as 'output/a0806_140.pickle'
 \end{verbatim}
 
-\section{Example 3a: Loading Xcalibur peak list or creating an experiment from Xcalibur data}
+\section{Loading Xcalibur peak list or creating an experiment from Xcalibur data}
 
 \noindent
 [ {\em This example is in pyms-test/03a} ]
@@ -534,7 +533,7 @@ with their mass spectra can be loaded as an experiment object using the function
     [ 7038 scans, masses from 70 to 600 ]
 \end{verbatim}
 
-\section{Example 3b: AMDIS Peak Parser}
+\section{AMDIS Peak Parser}
 
 \noindent
 [ {\em This example is in pyms-test/03b} ]
@@ -588,11 +587,11 @@ by passing the corresponding ANDI-MS data:
  -> Reading AMDIS ELU file '/home/current/proj/PyMS/pyms-data/121107B_10.ELU'
 \end{verbatim}
 
-\section{Example 4: Preparation of multiple experiments for peak alignment
+\section{Preparation of multiple experiments for peak alignment
 by dynamic programming}
 
 \noindent
-[ {\em This example is in pyms-test/04} ]
+[ {\em This example is in pyms-test/61} ]
 
 Before aligning peak from multiple experiments the peak objects need to be
 created and encapsulated into PyMS experiment objects. During this process
@@ -742,15 +741,14 @@ The output of this command printed on the screen terminal is shown below:
 40  -> Experiment 'a0806_142' saved as 'output/a0806_142.expr'
 \end{verbatim}
 
-\section{Example 5: Dynamic programming alignment of peak lists from multiple
-experiments}
+\section{Dynamic programming alignment of peak lists from multiple experiments}
 
 \noindent
 \begin{itemize}
-\item [ {\em This example is in pyms-test/05} ]
-\item [ {\em This example uses the subpackage pyms.Peak.List.DPA, which in turn uses
+\item {\em This example is in pyms-test/62}
+\item {\em This example uses the subpackage pyms.Peak.List.DPA, which in turn uses
 the Python package 'Pycluster'.  For 'Pycluster' installation instructions see the
-Section \ref{subsec:pycluster}.} ]
+Section \ref{subsec:pycluster}.}
 \end{itemize}
 
 In this example the experiments 'a0806\_140', 'a0806\_141', and 'a0806\_142'
@@ -863,11 +861,10 @@ following output:
 12   -> 0 item(s) remaining
 \end{verbatim}
 
-\section{Example 6: Between-state alignment of peak lists from multiple
-experiments}
+\section{Between-state alignment of peak lists from multiple experiments}
 
 \noindent
-[ {\em This example is in pyms-test/06 and pyms-test/04a} ]
+[ {\em This example is in pyms-test/63 and pyms-test/61a} ]
 
 The Example 5 demonstrates how the peaks lists are aligned within a single
 experiment with multiple replicates (called "within-state alignment"). For
@@ -1021,7 +1018,7 @@ alignment demonstrated here.
 30   -> 0 item(s) remaining
 \end{verbatim}
 
-\section{Example 7: Noise smoothing in ion chromatograms}
+\section{Noise smoothing in ion chromatograms}
 
 \noindent
 [ {\em This example is in pyms-test/11} ]
