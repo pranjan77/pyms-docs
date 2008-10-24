@@ -445,3 +445,65 @@ alignment demonstrated here.
 30   -> 0 item(s) remaining
 \end{verbatim}
 
+\section{Comparing two peak lists by using dynamic programming alignment}
+
+\noindent
+[ {\em This example is in pyms-test/68} ]
+
+The PyMS package pyms.Peak.List.Metric provides a function to compare two peak lists.
+This allows peak detection methods from different programs to be evaulated or a peak
+detection method to be compared to a 'known' or expert evaluated result. The following
+example compares Xcalibur peak detection and AMDIS peak detection.
+
+\begin{verbatim}
+>>> from from pyms.Experiment.IO import load_amdis_expr,load_xcalibur_expr
+>>> from pyms.Peak.List.Metric import metric
+>>> andi_file = "pyms-data/121107B_10.CDF"
+>>> xcalibur_peaks_file = "pyms-data/121107B_10_xcalibur_peaks.txt"
+>>> amdis_peaks_file = "pyms-data/121107B_10.ELU"
+>>> amdis_expr = load_amdis_expr(amdis_peaks_file)
+ -> Processing AMDIS experiment
+ -> Reading AMDIS ELU file 'pyms-data/121107B_10.ELU'
+>>> xcalibur_expr = load_xcalibur_expr(xcalibur_peaks_file,andi_file)
+ -> Processing Xcalibur experiment
+ -> Reading Xcalibur peak file 'pyms-data/121107B_10_xcalibur_peaks.txt'
+ -> Processing netCDF file 'pyms-data/121107B_10.CDF'
+    [ 7038 scans, masses from 70 to 600 ]
+>>> metric_result = metric(amdis_expr.peaks, xcalibur_expr.peaks)
+>>> print "Metric distance is ",metric_result
+Metric distance is  0.89724073048
+\end{verbatim}
+
+A full list of matching peaks and distances between individual peaks can be displayed
+by setting the verbose flag:
+
+\begin{verbatim}
+>>> metric_result = metric(amdis_expr.peaks, xcalibur_expr.peaks, verbose=True)
+8.55	-
+8.77	-
+9.27	-
+9.75	-
+11.43	-
+11.89	-
+-	13.05
+-	13.72
+14.34	14.34	0.54
+15.47	-
+15.65	-
+16.17	-
+18.02	-
+18.69	18.69	0.48
+-	18.83
+19.13	-
+20.90	-
+21.44	21.45	0.03
+21.68	-
+22.07	-
+-	22.10
+22.32	-
+22.39	-
+22.39	-
+[--output deleted--]
+Metric distance is  0.89724073048
+\end{verbatim}
+
