@@ -34,18 +34,21 @@ There are four parts of the pyms project:
   \item pyms -- The PyMS code
   \item pyms-docs -- The PyMS documentation
   \item pyms-test -- Examples of PyMS use
-  \item pyms-data -- Data used in pyms-test 
 \end{itemize}
 
 Each part is a separate project on Google Code that can be downloaded
-separately.
+separately. The data used in PyMS documentation and examples is available
+from the Bio21 Institute server:\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms-data/}\\
+In addition, the current PyMS API documentation is available from here:\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms.api/index.html}
 
 \section{PyMS installation}
 
-There are many ways to install PyMS depending your computer configuration
+There are several ways to install PyMS depending your computer configuration
 and preferences. The recommended way install PyMS is to compile Python
 from sources and install PyMS within the local Python installation. This
-procedure is described in detail below.
+procedure is described below.
 
 PyMS has been developed on Linux, and a detailed installation instructions
 for Linux are given below. Installation on any Unix-like system should be
@@ -62,7 +65,7 @@ one to browse the source code on the server without actually downloading
 it.
 
 Google Code maintains the source code by the program called 'subversion'
-(an open-source version control system).  To download the source code
+(an open-source version control system). To download the source code
 one needs to use the subversion client program called 'svn'. The 'svn'
 client exists for all mainstream operating systems\footnote{For example,
 on Linux CentOS 4 we have installed the RPM package
@@ -145,6 +148,7 @@ PyMS is currently being developed with the following packages:
 \begin{verbatim}
 Python-2.5.2
 numpy-1.1.1
+netcdf-4.0
 pycdf-0.6-3b
 Pycluster-1.41
 \end{verbatim}
@@ -176,6 +180,22 @@ $ python setup.py install
 \end{verbatim}
 
 \item pycdf installation
+
+Pycdf has two dependencies: the Unidata netcdf library and NumPy. The NumPy
+installation is described above. To install pycdf, the netcdf library must
+be downloaded ({\tt http://www.unidata.ucar.edu/software/netcdf/index.html}),
+compiled and istalled first:
+
+\begin{verbatim}
+$ tar xvfz netcdf.tar.gz
+$ cd netcdf-4.0
+$ ./configure
+$ make
+$ make install
+\end{verbatim}
+
+The last step will create several binary 'libnetcdf*' files in /usr/local/lib.
+pycdf can be installed as follows:
 
 \begin{verbatim}
 $ tar xvfz pycdf-0.6-3b
@@ -211,6 +231,43 @@ $ mv ndimage scipy
 \end{verbatim}
 
 \end{enumerate}
+
+\section{Troubleshootings}
+
+The PyMS is essentially a python library (a 'package' in python parlance, which
+consists of several 'sub-packages'), which for some functionality depends on
+other python libraries, such as NumPy, pycdf, and Pycluster. The most likely
+problem with PyMS installation is a problem with installing one of the PyMS
+dependencies.
+
+\subsection{Pycdf import error}
+
+On Red Hat Linux 5 the SELinux is enabled by default, and this causes the
+following error while trying to import properly installed pycdf: 
+
+\begin{verbatim}
+$ python
+Python 2.5.2 (r252:60911, Nov  5 2008, 16:25:39)
+[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pycdf
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python2.5/site-packages/pycdf/__init__.py", line 22, in <module>
+    from pycdf import *
+  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdf.py", line 1096, in <module>
+    import pycdfext as _C
+  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdfext.py", line 5, in <module>
+    import _pycdfext
+ImportError: /usr/local/lib/python2.5/site-packages/pycdf/_pycdfext.so:
+    cannot restore segment prot after reloc: Permission denied
+\end{verbatim}
+
+This problem is removed simply by disabling SELinux (login as 'root', open the menu
+Administration $\rightarrow$ Security Level and Firewall, tab SELinux, change settings
+from 'Enforcing' to 'Disabled').
+
+This problem is likely to occur on Red Hat Linux derivative distributions such as CentOS.
 
 \section{Algorithms}
 
