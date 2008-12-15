@@ -41,9 +41,9 @@ is given below:
 08  from pyms.Noise.Window import window_smooth
 09  
 10  andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
-11  andi_data = ChemStation(andi_file)
+11  data = ChemStation(andi_file)
 12  
-13  tic = andi_data.get_tic()
+13  tic = data.get_tic()
 14  
 15  tic1 = window_smooth(tic, window=5)
 16  tic2 = window_smooth(tic, window=5, median=True)
@@ -158,10 +158,10 @@ from pyms.Noise.Window import window_smooth
 from pyms.Baseline.TopHat import tophat
 
 andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
-andi_data = ChemStation(andi_file)
+data = ChemStation(andi_file)
 
 # get the TIC
-tic = andi_data.get_tic()
+tic = data.get_tic()
 
 # apply 5-point moving window smoothing & baseline corrector
 tic = window_smooth(tic, window=5)

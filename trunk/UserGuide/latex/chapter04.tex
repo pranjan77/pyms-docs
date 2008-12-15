@@ -65,14 +65,14 @@ The listing below shows the Python code for the script pyms-test/04/proc.py:
 18      peak_file = os.path.join(base_path, expr_code + ".txt.a")
 19      andi_file = os.path.join(base_path, expr_code + ".CDF")
 20  
-21      andi_data = ChemStation(andi_file)
+21      data = ChemStation(andi_file)
 22      peaks = read_chem_station_peaks(peak_file)
 23  
-24      andi_data.null_mass(73)
-25      andi_data.null_mass(147)
+24      data.null_mass(73)
+25      data.null_mass(147)
 26  
 27      for peak in peaks:
-28          peak.set_mass_spectrum(andi_data)
+28          peak.set_mass_spectrum(data)
 29          peak.crop_mass_spectrum(50,540)
 30  
 31      expr = Experiment(expr_code, peaks)

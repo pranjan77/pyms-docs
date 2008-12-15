@@ -74,22 +74,22 @@ memory as follows:
 \begin{verbatim}
 >>> from pyms.IO.ANDI.Class import ChemStation
 >>> andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
->>> andi_data = ChemStation(andi_file)
+>>> data = ChemStation(andi_file)
  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_140.CDF'
     [ 3236 scans, masses from 50 to 550 ]
 >>>
 \end{verbatim}
 
 \noindent
-The above command creates the object 'andi\_data' which is an {\em instance}
+The above command creates the object 'data' which is an {\em instance}
 of the class IO.ANDI.ChemStation.
 
 \subsection{Exploring an ANDI-MS data object}
 
-The object 'andi\_data' has several attributes and methods associated with it.
+The object 'data' has several attributes and methods associated with it.
 
 \begin{verbatim}
->>> print "ANDI-MS data filename:", andi_data.get_filename()
+>>> print "ANDI-MS data filename:", data.get_filename()
 ANDI-MS data filename: /home/current/proj/PyMS/pyms-data/a0806_140.CDF
 \end{verbatim}
 
@@ -97,7 +97,7 @@ The method {\tt get\_tic()} return total ion chromatogram (TIC) of the data
 as an IonChromatogram object:
 
 \begin{verbatim}
-tic = andi_data.get_tic()
+tic = data.get_tic()
 \end{verbatim}
 
 \noindent
@@ -111,7 +111,7 @@ an IonChromatogram object. For example, to get the first ion chromatogram
 from the data:
 
 \begin{verbatim}
-ic = andi_data.get_ic_at_index(1)
+ic = data.get_ic_at_index(1)
 \end{verbatim}
 
 The method {\tt get\_ic\_at\_mass(MZ)} returns the ion chromatogram for
@@ -175,7 +175,7 @@ The method {\tt get\_intensity\_matrix()} of ChemStation object returns
 the entire matrix of intensities:
 
 \begin{verbatim}
->>> im = andi_data.get_intensity_matrix()
+>>> im = data.get_intensity_matrix()
 >>> print "Dimensions of the intensity matrix are:",len(im),"x",len(im[0])
 Dimensions of the intensity matrix are: 3236 x 501
 \end{verbatim}
@@ -194,7 +194,7 @@ The entire data (ie. ChemStation object) can be saved as CSV with the method
 {\tt export\_csv()}. For example,
 
 \begin{verbatim}
->>> andi_data.export_csv("output/data")
+>>> data.export_csv("output/data")
 \end{verbatim}
 
 \noindent
@@ -217,14 +217,14 @@ in 'pyms-data'). This file can be loaded as follows:
 \begin{verbatim}
 >>> from pyms.IO.ANDI.Class import Xcalibur
 >>> andi_file = "/home/current/proj/PyMS/pyms-data/121107B_10.CDF"
->>> andi_data = Xcalibur(andi_file)
+>>> data = Xcalibur(andi_file)
  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/121107B_10.CDF'
     [ 7038 scans, masses from 70 to 600 ]
 >>>
 \end{verbatim}
 
 \noindent
-The above command creates the object 'andi\_data' which is an {\em instance}
+The above command creates the object 'data' which is an {\em instance}
 of the class IO.ANDI.Xcalibur. IO.ANDI.ChemStation and IO.ANDI.Xcalibur 
 inherit attributes and methods from the class IO.ANDI.ANDIMS\_reader
 (a generic ANDI-MS parser) and thus provide the same functionality.
@@ -289,8 +289,8 @@ We first need to load the raw data,
 
 \begin{verbatim}
 >>> andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
->>> andi_data = ChemStation(andi_file)
->>> p.set_mass_spectrum(andi_data)
+>>> data = ChemStation(andi_file)
+>>> p.set_mass_spectrum(data)
 \end{verbatim}
 
 \noindent
@@ -447,7 +447,7 @@ first to load the raw data:
 >>> sys.path.append("/home/current/proj/PyMS/")
 >>> from pyms.IO.ANDI.Class import ChemStation
 >>> andi_file = "/home/current/proj/PyMS/pyms-data/a0806_140.CDF"
->>> andi_data = ChemStation(andi_file)
+>>> data = ChemStation(andi_file)
  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/a0806_140.CDF'
     [ 3236 scans, masses from 50 to 550 ]
 \end{verbatim}
@@ -457,7 +457,7 @@ The following command sets the mass spectrum for each peak,
 
 \begin{verbatim}
 >>> for peak in peaks:
-...     peak.set_mass_spectrum(andi_data)
+...     peak.set_mass_spectrum(data)
 \end{verbatim}
 
 The experiment object is initiated with the list of peaks and the experiment
@@ -525,8 +525,8 @@ with their mass spectra can be loaded as an experiment object using the function
 \begin{verbatim}
 >>> from pyms.Experiment.IO import load_xcalibur_expr
 >>> peak_file = "/home/current/proj/PyMS/pyms-data/121107B_10_xcalibur_peaks.txt"
->>> andi_data = "/home/current/proj/PyMS/pyms-data/121107B_10.CDF"
->>> expr = load_xcalibur_expr(peak_file,andi_data)
+>>> data = "/home/current/proj/PyMS/pyms-data/121107B_10.CDF"
+>>> expr = load_xcalibur_expr(peak_file,data)
  -> Processing Xcalibur experiment
  -> Reading Xcalibur peak file '/home/current/proj/PyMS/pyms-data/121107B_10_xcalibur_peaks.txt'
  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/121107B_10.CDF'
@@ -579,10 +579,10 @@ by passing the corresponding ANDI-MS data:
 >>> from pyms.IO.ANDI.Class import Xcalibur
 >>> amdis_data = "/home/current/proj/PyMS/pyms-data/121107B_10.ELU"
 >>> andi_file = "/home/current/proj/PyMS/pyms-data/121107B_10.CDF"
->>> andi_data = Xcalibur(andi_file)
+>>> data = Xcalibur(andi_file)
  -> Processing netCDF file '/home/current/proj/PyMS/pyms-data/121107B_10.CDF'
     [ 7038 scans, masses from 70 to 600 ]
->>> expr = load_amdis_expr(amdis_data,andi_data)
+>>> expr = load_amdis_expr(amdis_data,data)
  -> Processing AMDIS experiment
  -> Reading AMDIS ELU file '/home/current/proj/PyMS/pyms-data/121107B_10.ELU'
 \end{verbatim}
