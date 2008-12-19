@@ -200,7 +200,7 @@
 
     - All docstrings must start with a single summary sentence conciely
       describing the function, and this sentence must not be terminated
-      by a period.  Additional description may follow in the form of
+      by a period. Additional description may follow in the form of
       multi-senteced paragraphs, separated by a blank line from the
       summary sentence
 
