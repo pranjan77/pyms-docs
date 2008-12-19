@@ -2,10 +2,10 @@
  PyMS coding Style Guide
  =======================
 
-The basis for this document was PEP-8 "Style Guide for Python Code", by
-Guido van Rossum and Barry Warsaw.
+ [The basis for this document was PEP-8 "Style Guide for Python Code", by
+ Guido van Rossum and Barry Warsaw]
 
-1. General style
+1. General
 
   1.1 Indentation. Use 4 spaces per indentation level. Do not use tabs.
 
@@ -196,15 +196,18 @@ Guido van Rossum and Barry Warsaw.
       epydoc docstrings
 
     - When designating types for @type and @rtype, use the official names
-      from the 'types' package i.e. BooleanType, StringType, FileType etc
+      from the 'types' package i.e. BooleanType, StringType, FileType etc.
 
     - All docstrings must start with a single summary sentence conciely
       describing the function, and this sentence must not be terminated
       by a period.  Additional description may follow in the form of
       multi-senteced paragraphs, separated by a blank line from the
-      summary sentence.
+      summary sentence
 
     - Leave one blank line above and below the docstring
+
+    - Separate @summary, @param/@type, @return/@rtype, @author strings
+      with one blank line (see the example in 5.4)
 
   5.2 Packages
 
@@ -213,9 +216,9 @@ Guido van Rossum and Barry Warsaw.
 
     Examples:
 
-        """
-        The root of the package pyms
-        """
+      """
+      The root of the package pyms
+      """
 
   5.3 Modules
 
@@ -223,7 +226,6 @@ Guido van Rossum and Barry Warsaw.
       sentence, enclosed above and below with lines containint only """
 
     Examples:
-
 
       """
       Provides general I/O functions
@@ -258,7 +260,8 @@ Guido van Rossum and Barry Warsaw.
 
     - The root class docstring must contain @summary and @author fields
 
-    - The __init__ method must contain @param and @type fields
+    - The __init__ method must contain @param and @type fields. Other
+      fields are optional.
 
     - Methods docstrings adhere to rules 5.4 for Functions. Except for
       special methods (i.e. __len__(), __del__(), etc) which should
