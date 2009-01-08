@@ -80,6 +80,14 @@
                 intensity_matrix.insert(0,scan)
         # -- snip --- 
 
+  1.5 File pointers. Use 'fp' for file pointer variables. If simultaneous
+    use of two or more file pointers is required, use 'fp1', 'fp2', etc.
+
+    Example:
+
+        fp1 = open('some_file.txt','w')
+        fp2 = open('another.txt','w')
+
 2. Imports
 
   2.1 Grouping. Group imports as:
