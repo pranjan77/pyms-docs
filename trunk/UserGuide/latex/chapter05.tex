@@ -34,7 +34,7 @@ M $+$ 2 and M $+$ 3, are entered.
 
 Determine the number of C, O, N, H, Si, and S atoms in the fragment,
 noting that the number of C atoms excludes C atoms which may contain
-exogenous $^{\text{13}}$C atoms. For the alanine (M$-$57)$+$ fragment
+exogenous $^{13}C$ atoms. For the alanine (M$-$57)$+$ fragment
 these numbers are C $=$ 8, O $=$ 2, N $=$ 1, H $=$ 26, Si $=$
 2, and S $=$ 0.
 
@@ -86,7 +86,7 @@ Calculate the exclusive mass isotope distribution of the carbon skeleton:
 \end{verbatim}
 
 Correct for unlabelled biomass. This example accounts for the contribution
-of 1\% unlabelled biomass.
+of 1\%\ unlabelled biomass.
 
 \begin{verbatim}
 >>> f_unlablelled = 0.01 
@@ -103,5 +103,3 @@ Calculate the fractional labelling:
 >>> fl = pyms.Isotope.MFRA.Function.fract_labelling(n, mdv_aa) 
 Fractional labelling FL: 0.197983278219
 \end{verbatim}
-
-
