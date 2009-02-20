@@ -190,16 +190,29 @@ The intensity matrix can be saved to a file with the function 'save\_data()':
 save_data("output/im.dat", im)
 \end{verbatim}
 
-The entire data (ie. ChemStation object) can be saved as CSV with the method
-{\tt export\_csv()}. For example,
+The entire data (ie. ChemStation object) can be saved as CSV by
+calling the function {\tt export\_csv()}:
 
 \begin{verbatim}
->>> data.export_csv("output/data")
+>>> from pyms.IO.Function import export_csv
+>>> export_csv(data, "output/data")
 \end{verbatim}
 
 \noindent
-will create 'data.im.csv, data.mz.csv, and data.rt.csv where these are the
-intensity matrix, retention time vector, and m/z vector in the CSV format.
+will create 'data.im.csv', 'data.mz.csv', and 'data.rt.csv' where these
+are the intensity matrix, retention time vector, and m/z vector in the
+CSV format, respectively.
+There is also a function {\tt export\_leco\_csv()} which exports data
+into the LECO CSV format (this format is useful for import into
+AnalyzerPro):
+
+\begin{verbatim}
+>>> from pyms.IO.Function import export_csv_leco
+>>> export_leco_csv(data, "output/data_leco.csv")
+\end{verbatim}
+
+\noindent
+This will create a single file, 'data\_leco.csv'.
 
 \subsection{Reading Xcalibur GC-MS data into PyMS}
 
