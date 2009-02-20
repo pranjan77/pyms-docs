@@ -15,17 +15,17 @@
 \chapter{Isotopes related calculations}
 
 \section
-{Mass Isotope Distribution in $^{13}C$ Experiments}
+{Mass Isotope Distribution in $^{13}$C Experiments}
 
 \noindent
 [ \emph{This example is in pyms-test/09} ]
 
 Enter experimental data using the 'mdv' variable. In the example of
-alanine fragment (M-57)$+$ there are n $=$ 3 exogenous (non-natural
+alanine fragment (M-57)+ there are n = 3 exogenous (non-natural
 abundance) C atoms, and the length of the mass distribution vector
-is chosen to be n $+$ 1 $=$ 4. Hence only first four intensities
-(ion counts) from the mass spectrum, corresponding to M, M $+$ 1,
-M $+$ 2 and M $+$ 3, are entered.
+is chosen to be n+1=4. Hence only first four intensities (ion counts)
+from the mass spectrum, corresponding to M, M+1, M+2 and M+3,
+are entered.
 
 \begin{verbatim}
 >>> mdv = [737537, 179694, 88657, 178433] 
@@ -34,9 +34,8 @@ M $+$ 2 and M $+$ 3, are entered.
 
 Determine the number of C, O, N, H, Si, and S atoms in the fragment,
 noting that the number of C atoms excludes C atoms which may contain
-exogenous $^{13}C$ atoms. For the alanine (M$-$57)$+$ fragment
-these numbers are C $=$ 8, O $=$ 2, N $=$ 1, H $=$ 26, Si $=$
-2, and S $=$ 0.
+exogenous $^{13}$C atoms. For the alanine (M-57)+ fragment these
+numbers are C=8, O=2, N=1, H=26, Si=2, and S=0.
 
 \begin{verbatim} 
 >>> atoms = { 'c':8, 'o':2, 'n':1, 'h':26, 'si':2, 's':0}
