@@ -28,17 +28,16 @@ function takes in the experimental ion intensities, which are obtained prior via
 integration of individual ion chromatograms, calculates the corresponding mass
 distribution vector and performs the correction  for natural isotope abundances
 of C, O, N, H, Si, and S atoms, as well as any unlabelled biomass (this corrects
-for the fact that in practice substrate is never 100% labelled). The result is a
-corrected mass distribution vector. Fractional labelling value is also provided
-as a check, and it should be equal to the fractional labelling of the input
-substrate.
+for the fact that in practice substrate is never 100\%\ labelled). The result is
+a corrected mass distribution vector. Fractional labelling value is also
+provided as a check, and it should be equal to the fractional labelling of the
+input substrate.
 
-Enter experimental data using the 'mdv' variable. In the example of
-alanine fragment (M-57)+ there are n = 3 exogenous (non-natural
+Experimental data is entered using the 'mdv' variable. In the example of
+alanine fragment (M-57)+ \cite{nanchen09} there are n = 3 exogenous (non-natural
 abundance) C atoms, and the length of the mass distribution vector
 is chosen to be n+1=4. Hence only first four intensities (ion counts)
-from the mass spectrum, corresponding to M, M+1, M+2 and M+3,
-are entered.
+from the mass spectrum, corresponding to M, M+1, M+2 and M+3, are entered.
 
 \begin{verbatim}
 >>> mdv = [737537, 179694, 88657, 178433]
