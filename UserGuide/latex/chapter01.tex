@@ -1,0 +1,271 @@
+% chapter01.tex
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %                                                                           %
+ %    PyMS2 documentation                                                     %
+ %    Copyright (C) 2005-8 Vladimir Likic                                    %
+ %                                                                           %
+ %    The files in this directory provided under the Creative Commons        %
+ %    Attribution-NonCommercial-NoDerivs 2.1 Australia license               %
+ %    http://creativecommons.org/licenses/by-nc-nd/2.1/au/                   %
+ %    See the file license.txt                                               %
+ %                                                                           %
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Introduction}
+
+\section{About PyMS2}
+
+PyMS2 is a Python toolkit for processing of chromatography--mass spectrometry
+data. The main idea behind PyMS2 is to provde a framework and a set of
+components for rapid development and testing of methods for processing of
+chromatography--mass spectrometry data. An important objective of PyMS2 is
+to decouple processing methods form visualization and the concept of
+interactive processing. This is useful for high-throughput processing tasks
+and when there is a need to run calculations in the batch mode.
+
+PyMS2 is modular and consists of several sub-packages written in Python
+programming language \cite{python}. PyMS2 is released as open source,
+under the GNU Public License version 2.
+
+There are four parts of the pyms project:
+
+\begin{itemize}
+  \item pyms2 -- The PyMS2 code
+  \item pyms2-docs -- The PyMS2 documentation
+  \item pyms2-test -- Examples of PyMS2 use
+\end{itemize}
+
+Each part is a separate project on Google Code that can be downloaded
+separately. The data used in PyMS2 documentation and examples is available
+from the Bio21 Institute server:\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms-data/}\\
+In addition, the current PyMS2 API documentation is available from here:\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms.api/index.html}
+
+\section{PyMS2 installation}
+
+There are several ways to install PyMS2 depending your computer configuration
+and preferences. The recommended way install PyMS2 is to compile Python
+from sources and install PyMS2 within the local Python installation. This
+procedure is described below.
+
+PyMS2 has been developed on Linux, and a detailed installation instructions
+for Linux are given below. Installation on any Unix-like system should be
+similar. We have not tested PyMS2 under Microsoft Windows.
+
+\subsection{Downloading PyMS2 source code}
+
+PyMS2 source code resides on Google Code servers, and can be accessed
+from the following URL: http://code.google.com/p/pyms/. Under the
+section "Source" one can find the instructions for downloading the
+source code. The same page provides the link under "This project's
+Subversion repository can be viewed in your web browser" which allows
+one to browse the source code on the server without actually downloading
+it.
+
+Google Code maintains the source code with the program 'subversion'
+(an open-source version control system). To download the source code
+one needs to use the subversion client program called 'svn'. The 'svn'
+client exists for all mainstream operating systems\footnote{For example,
+on Linux CentOS 4 we have installed the RPM package
+'subversion-1.3.2-1.rhel4.i386.rpm' to provide us with the subversion
+client 'svn'.}, for more information see http://subversion.tigris.org/.
+The book about subversion is freely available on-line at
+http://svnbook.red-bean.com/. Subversion has extensive functionality.
+However only the very basic functionality is needed to download PyMS2
+source code.
+
+If the computer is connected to the internet and the subversion client
+is installed, the following command will download the latest PyMS2 source
+code:
+
+\begin{verbatim}
+$ svn checkout http://pyms.googlecode.com/svn/trunk/ pyms
+A    pyms/Peak
+A    pyms/Peak/__init__.py
+A    pyms/Peak/List
+A    pyms/Peak/List/__init__.py
+.....
+Checked out revision 71.
+\end{verbatim}
+
+\subsection{PyMS2 installation}
+
+PyMS2 installation consists of placing the PyMS2 code directory (pyms/) in
+place visible to Python interpreter.  This can be in the standard place
+for 3rd party software (the directory site-packages/). If PyMS2 code is
+placed in a non-standard place the Python interpreter needs to be made
+aware of it before before it is possible to import PyMS2 modules (see the
+Python sys.path.append() command).
+
+We recommend compiling your own Python installation for PyMS2.
+
+In addtion to the PyMS2 core source code, a number of external packages
+is used to provide additional functionality. These are explained below.
+
+\subsection{\label{subsec:numpy}Package 'NumPy'}
+
+The package NumPy is provides numerical capabilities to Python. This
+package is used throughout PyMS2 (and also required for some external
+packages used in PyMS2), to its installation is mandatory. 
+
+The NumPy web site {\tt http://numpy.scipy.org/} provides the installation
+instructions and the link to the source code.
+
+\subsection{\label{subsec:pycdf}Package 'pycdf' (required for reading
+ANDI-MS files)}
+
+The pycdf (a python interface to Unidata netCDF library) source and
+installation instructions can be downloaded from
+{\tt http://pysclint.sourceforge.net/pycdf/}. Follow the installation
+instructions to install pycdf. 
+
+\subsection{\label{subsec:pycluster}Package 'Pycluster' (required for peak
+alignment by dynamic programming)}
+
+The peak alignment by dynamic programming is located in the subpackage
+pyms.Peak.List.DPA. This subpackage used the Python package 'Pycluster'
+as the clustering engine. Pycluster with its installation instructions
+can be found here:
+{\tt http://bonsai.ims.u-tokyo.ac.jp/~mdehoon/software/cluster/index.html}.
+
+\subsection{\label{subsec:scipy-ndmage}Package 'scipy.ndimage' (required
+for TopHat baseline correction)}
+
+If the full SciPy package is installed the 'ndimage' will be available. However
+the SciPy contains large amount of functionality, and its intallation is
+somewhat involved. In some situations in may be preferable to install only
+the subpackage 'ndimage'. The UrbanSim web site \cite{urbansim} provides
+instructions how to install a local copy of 'ndimage'. These instructions
+and the link to the file 'ndimage.zip' are here:\\
+{\tt http://www.urbansim.org/opus/releases/opus-4-1-1/docs/installation/scipy.html}
+
+\section{Current PyMS2 development environment}
+
+PyMS2 is currently being developed with the following packages:
+
+\begin{verbatim}
+Python-2.5.2
+numpy-1.1.1
+netcdf-4.0
+pycdf-0.6-3b
+Pycluster-1.41
+\end{verbatim}
+
+A quick installation guide for packages required by PyMS2 is given below.
+
+\begin{enumerate}
+
+\item Python installation:
+
+\begin{verbatim}
+$ tar xvfz Python-2.5.2.tgz
+$ cd Python-2.5.2
+$ ./configure
+$ make
+$ make install
+\end{verbatim}
+
+\noindent
+This installs python in /usr/local/lib/python2.5.  Make sure that python called
+from the command line is the one just compiled and installed.
+
+\item NumPy installation:
+
+\begin{verbatim}
+$ tar xvfz numpy-1.1.1.tar.gz
+$ cd numpy-1.1.1
+$ python setup.py install
+\end{verbatim}
+
+\item pycdf installation
+
+Pycdf has two dependencies: the Unidata netcdf library and NumPy. The NumPy
+installation is described above. To install pycdf, the netcdf library must
+be downloaded ({\tt http://www.unidata.ucar.edu/software/netcdf/index.html}),
+compiled and istalled first:
+
+\begin{verbatim}
+$ tar xvfz netcdf.tar.gz
+$ cd netcdf-4.0
+$ ./configure
+$ make
+$ make install
+\end{verbatim}
+
+The last step will create several binary 'libnetcdf*' files in /usr/local/lib.
+pycdf can be installed as follows:
+
+\begin{verbatim}
+$ tar xvfz pycdf-0.6-3b
+$ cd pycdf-0.6-3b
+$ python setup.py install
+\end{verbatim}
+
+\item Pycluster installation
+
+\begin{verbatim}
+$ tar xvfz Pycluster-1.42.tar.gz
+$ cd Pycluster-1.42
+$ python setup.py install
+\end{verbatim}
+
+\item ndimage installation:
+
+\begin{verbatim}
+$ unzip ndimage.zip
+$ cd ndimage
+$ python setup.py install --prefix=/usr/local
+\end{verbatim}
+
+\noindent
+Since ndimage was installed outside the scipy package, this requires some manual
+correction:
+
+\begin{verbatim}
+$ cd /usr/local/lib/python2.5/site-packages
+$ mkdir scipy
+$ touch scipy/__init__.py
+$ mv ndimage scipy
+\end{verbatim}
+
+\end{enumerate}
+
+\section{Troubleshootings}
+
+The PyMS2 is essentially a python library (a 'package' in python parlance, which
+consists of several 'sub-packages'), which for some functionality depends on
+other python libraries, such as NumPy, pycdf, and Pycluster. The most likely
+problem with PyMS2 installation is a problem with installing one of the PyMS2
+dependencies.
+
+\subsection{Pycdf import error}
+
+On Red Hat Linux 5 the SELinux is enabled by default, and this causes the
+following error while trying to import properly installed pycdf: 
+
+\begin{verbatim}
+$ python
+Python 2.5.2 (r252:60911, Nov  5 2008, 16:25:39)
+[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import pycdf
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python2.5/site-packages/pycdf/__init__.py", line 22, in <module>
+    from pycdf import *
+  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdf.py", line 1096, in <module>
+    import pycdfext as _C
+  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdfext.py", line 5, in <module>
+    import _pycdfext
+ImportError: /usr/local/lib/python2.5/site-packages/pycdf/_pycdfext.so:
+    cannot restore segment prot after reloc: Permission denied
+\end{verbatim}
+
+This problem is removed simply by disabling SELinux (login as 'root', open the menu
+Administration $\rightarrow$ Security Level and Firewall, tab SELinux, change settings
+from 'Enforcing' to 'Disabled').
+
+This problem is likely to occur on Red Hat Linux derivative distributions such as CentOS.
+
