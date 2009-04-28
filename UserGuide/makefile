@@ -37,6 +37,6 @@ clean:
 	if [ -e $(TEXFILE:.tex=.ind) ]; then rm $(TEXFILE:.tex=.ind); fi
 	if [ -e $(TEXFILE:.tex=.ps) ]; then rm $(TEXFILE:.tex=.ps); fi
 
-cleanup:
+c:
 	if [ -e $(TEXFILE:.tex=.pdf) ]; then rm $(TEXFILE:.tex=.pdf); fi
 
