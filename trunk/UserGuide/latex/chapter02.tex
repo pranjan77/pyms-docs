@@ -43,7 +43,7 @@ following sections.
 This section demonstrates the GCMS data reading functions of PyMS in a tutorial
 like manner. The data files used in the examples are provided in the project
 `pyms-data'. The commands executed interactively are grouped together by
-example, and provided as Python scripts in the project `pyms2-test'.
+example, and provided as Python scripts in the project `pyms-test'.
 
 The setup used in the examples below is as follows. The projects `pyms',
 `pyms-test', `pyms-docs', and `data' are all in the same directory,
@@ -83,14 +83,15 @@ The PyMS package pyms.GCMS.IO.JCAMP provides capabilities to read the raw
 GC-MS data stored in the JCAMP-DX format.
 
 The file `gc01\_0812\_066.jdx' (located in `data') is a GC-MS experiment
-converted from Agilent ChemStation format to JCAMP format using File Translator
-Pro.\footnote{ChemSW, Inc.} This file can be loaded in Python as follows:
+converted from Agilent ChemStation format to JCAMP format using File
+Translator Pro.\footnote{ChemSW, Inc.} This file can be loaded in Python
+as follows:
 
 \begin{verbatim}
 >>> from pyms.GCMS.IO.JCAMP.Function import JCAMP_reader
 >>> jcamp_file = "/x/PyMS/data/gc01_0812_066.jdx"
 >>> data = JCAMP_reader(jcamp_file)
- -> Reading JCAMP file '/x/PyMS/pyms2-data/gc01_0812_066.jdx'
+ -> Reading JCAMP file '/x/PyMS/pyms-data/gc01_0812_066.jdx'
 >>>
 \end{verbatim}
 
@@ -120,7 +121,7 @@ example 01a above). This file can be loaded as follows:
 
 \noindent
 The above command creates the object `data' which is an {\em instance}
-of the class GCMS_data.
+of the class GCMS\_data.
 
 \subsection{Exploring a GCMS data object}
 
