@@ -36,25 +36,21 @@ data file are:
 \end{itemize}
 
 Internally, PyMS stores the raw data from ANDI files or JCAMP files as a
-GCMS\_data object. Once a GCMS\_data object has been created, the raw data can
-not be modified. The operations (methods) available are illustrated in the
-following sections.
+GCMS\_data object. Once a GCMS\_data object has been created, the raw data
+can not be modified.
 
-\section{Reading GCMS data}
-
-This section demonstrates the GCMS data reading functions of PyMS in a tutorial
-like manner. The data files used in the examples are provided in the project
-`pyms-data'. The commands executed interactively are grouped together by
-example, and provided as Python scripts in the project `pyms-test'.
+The operations (methods) available are illustrated in the following sections
+in a tutorial like manner.  The commands executed interactively are grouped
+together by example, and provided as Python scripts in the project `pyms-test'.
 
 The setup used in the examples below is as follows. The projects `pyms',
 `pyms-test', `pyms-docs', and `data' are all in the same directory,
 `/x/PyMS'. In the project `pyms-test' there is a directory corresponding to
-each example coded with the example number (ie. {\tt pyms-test/01a/}
-corresponds to Example 1a). In each example directory, there is a script named
-`proc.py' which contains the commands given in the example. Provided that the
-paths to `pyms' and `pyms-data' are set properly, these scripts could be run
-with the following command:
+each example coded with the example number (ie. {\tt pyms-test/21a/}
+corresponds to Example 1a in Chapter 2). In each example directory, there
+is a script named `proc.py' which contains the commands given in the example.
+Provided that the paths to `pyms' and `pyms-data' are set properly, these
+scripts could be run with the following command:
 
 \begin{verbatim}
 $ python proc.py
@@ -181,7 +177,7 @@ A list of all the raw Scan objects can be returned by:
 The Scan object has methods relating to an individual scan. This is covered in
 the next section.
 
-\subsection {Exploring a Scan data object}
+\subsection{Exploring a Scan data object}
 
 \noindent
 [ {\em The following examples are the same in pyms-test/01a and pyms-test/01b} ]
