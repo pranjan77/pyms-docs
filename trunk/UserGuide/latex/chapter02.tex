@@ -39,7 +39,7 @@ Internally, PyMS stores the raw data from ANDI files or JCAMP files as a
 GCMS\_data object. Once a GCMS\_data object has been created, the raw data
 can not be modified.
 
-\subsection{Reading JCAMP GC-MS data into PyMS}
+\subsection{Reading JCAMP GC-MS data}
 
 \noindent
 [ {\em This example is in pyms-test/20a} ]
@@ -64,7 +64,7 @@ as follows:
 The above command creates the object `data' which is an {\em instance}
 of the class GCMS\_data.
 
-\subsection{Reading ANDI GC-MS data into PyMS}
+\subsection{Reading ANDI GC-MS data}
 
 \noindent
 [ {\em This example is in pyms-test/20b} ]
@@ -88,7 +88,7 @@ example 01a above). This file can be loaded as follows:
 The above command creates the object `data' which is an {\em instance}
 of the class GCMS\_data.
 
-\subsection{Exploring a GCMS data object}
+\subsection{A GCMS data object}
 
 \noindent
 [ {\em The following examples are the same in pyms-test/20a and pyms-test/20b} ]
@@ -132,7 +132,7 @@ tic = data.get_tic()
 \end{verbatim}
 
 \noindent
-The IonChromatogram object is covered in a later section.
+The IonChromatogram object is explained in a later section.
 
 A list of all the raw Scan objects can be returned by:
 
@@ -171,4 +171,7 @@ returned by:
 >>> scans[0].get_min_mass()
 >>> scans[0].get_max_mass()
 \end{verbatim}
+
+\subsection{An IonChromatogram object}
+
 
