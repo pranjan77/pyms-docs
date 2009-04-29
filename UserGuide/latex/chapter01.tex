@@ -269,3 +269,43 @@ from 'Enforcing' to 'Disabled').
 
 This problem is likely to occur on Red Hat Linux derivative distributions such as CentOS.
 
+\section{PyMS tutorial and examples}
+
+A tutorial illustrating various PyMS features in provided in subsequent chapter
+of this User Guide. The commands executed interactively are grouped together
+by example, and provided as Python scripts in the project `pyms-test' (this is
+a Google code project, similar to the project `pyms' which contains the PyMS
+source code).
+
+The setup used in the examples below is as follows. The projects `pyms',
+`pyms-test', `pyms-docs', and `data' are all in the same directory,
+`/x/PyMS'. In the project `pyms-test' there is a directory corresponding to
+each example coded with the example number (ie. {\tt pyms-test/21a/}
+corresponds to Example 1a in Chapter 2).
+
+In each example directory, there is a script named `proc.py' which contains
+the commands given in the example.  Provided that the paths to `pyms' and
+`pyms-data' are set properly, these scripts could be run with the following
+command:
+
+\begin{verbatim}
+$ python proc.py
+\end{verbatim}
+
+Before running each example the Python interpreter was made aware of the
+PyMS location with the following commands:
+
+\begin{verbatim}
+import sys
+sys.path.append("/x/PyMS/pyms")
+\end{verbatim}
+
+For brevity these commands will not be shown in the examples below, but
+they are included in `pyms-test' example scripts.  The above path may need
+to be adjusted to match your own directory structure.
+
+All data files (raw data files, peak lists etc.) used in the example below
+can be found at {\tt http://bioinformatics.bio21.unimelb.edu.au/pyms/data/} and
+are assumed to be located in the `data' directory.
+
+
