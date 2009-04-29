@@ -12,9 +12,9 @@
  %                                                                           %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Fundamental data structures}
+\chapter{GC-MS Raw Data Model}
 
-\section{GC-MS Data Model}
+\section{Introduction}
 
 PyMS can read gas chromatography-mass spectrometry (GC-MS) data stored in
 Analytical Data Interchange for Mass Spectrometry (ANDI-MS),\footnote{ANDI-MS
@@ -38,6 +38,8 @@ data file are:
 Internally, PyMS stores the raw data from ANDI files or JCAMP files as a
 GCMS\_data object. Once a GCMS\_data object has been created, the raw data
 can not be modified.
+
+\section{Reading the raw GC-MS data}
 
 \subsection{Reading JCAMP GC-MS data}
 
@@ -88,7 +90,9 @@ example 01a above). This file can be loaded as follows:
 The above command creates the object `data' which is an {\em instance}
 of the class GCMS\_data.
 
-\subsection{A GCMS data object}
+\section{A GCMS\_data object}
+
+\subsection{Methods}
 
 \noindent
 [ {\em The following examples are the same in pyms-test/20a and pyms-test/20b} ]
@@ -132,7 +136,7 @@ tic = data.get_tic()
 \end{verbatim}
 
 \noindent
-The IonChromatogram object is explained in a later section.
+The IonChromatogram object is explained in later sections.
 
 A list of all the raw Scan objects can be returned by:
 
@@ -141,10 +145,10 @@ A list of all the raw Scan objects can be returned by:
 \end{verbatim}
 
 \noindent
-The Scan object has methods relating to an individual scan. This is covered in
-the next section.
+The Scan object has methods relating to an individual scan, as explained
+in the next section.
 
-\subsection{Exploring a Scan data object}
+\subsection{A Scan data object}
 
 \noindent
 [ {\em The following examples are the same in pyms-test/01a and pyms-test/01b} ]
@@ -171,7 +175,4 @@ returned by:
 >>> scans[0].get_min_mass()
 >>> scans[0].get_max_mass()
 \end{verbatim}
-
-\subsection{An IonChromatogram object}
-
 
