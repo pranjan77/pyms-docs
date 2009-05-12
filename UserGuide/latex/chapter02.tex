@@ -76,10 +76,10 @@ GC-MS data stored in the ANDI-MS format.
 
 The file `gc01\_0812\_066.cdf' (located in `data') is a GC-MS experiment
 converted to ANDI-MS format from Agilent ChemStation (from the same data as in
-example 01a above). This file can be loaded as follows:
+example 20a above). This file can be loaded as follows:
 
 \begin{verbatim}
->>> from pyms.GCMS.IO.ANDI.Functions import ANDI_reader
+>>> from pyms.GCMS.IO.ANDI.Function import ANDI_reader
 >>> ANDI_file = "/x/PyMS/data/gc01_0812_066.cdf"
 >>> data = ANDI_reader(ANDI_file)
  -> Reading netCDF file '/x/PyMS/pyms-data/gc01_0812_066.cdf'
@@ -118,7 +118,7 @@ A list of all retention times can be returned by:
 >>> time = data.get_time_list()
 \end{verbatim}
 
-The index of a specific retention time (in seconds) can returned by:
+The index of a specific retention time (in seconds) can be returned by:
 
 \begin{verbatim}
 >>> data.get_index_at_time(400.0)
@@ -126,17 +126,27 @@ The index of a specific retention time (in seconds) can returned by:
 
 \noindent
 Note that this returns the index of the retention time in the
-data closest to the given retention time (400.0 seconds).
+data closest to the given retention time of 400.0 seconds.
 
 The method {\tt get\_tic()} returns a total ion chromatogram (TIC) of the data
 as an IonChromatogram object:
 
 \begin{verbatim}
-tic = data.get_tic()
+>>> tic = data.get_tic()
 \end{verbatim}
 
 \noindent
-The IonChromatogram object is explained in later sections.
+The IonChromatogram object is explained in a later chapter.
+
+\subsection{Exploring a Scan data object}
+
+A Scan object contains a list of masses and a corresponding list of intensity
+values from a single mass-spectrum scan in the raw data. Typically only
+non-zero (or non-threshold) intensities and corresponding masses are stored in
+the raw data.
+
+\noindent
+[ {\em The following examples are the same in pyms-test/20a and pyms-test/20b} ]
 
 A list of all the raw Scan objects can be returned by:
 
@@ -144,14 +154,12 @@ A list of all the raw Scan objects can be returned by:
 >>> scans = data.get_scan_list()
 \end{verbatim}
 
-\noindent
-The Scan object has methods relating to an individual scan, as explained
-in the next section.
+A list of all masses in a scan (i.e. the 1st scan) is returned by:
 
 \subsection{A Scan data object}
 
 \noindent
-[ {\em The following examples are the same in pyms-test/01a and pyms-test/01b} ]
+[ {\em The following examples are the same in pyms-test/20a and pyms-test/20b} ]
 
 A Scan object contains a list of masses and a corresponding list of intensity
 values from a single mass-spectrum scan.
@@ -168,11 +176,10 @@ A list of all corresponding intensities in a scan is returned by:
 >>> scans[0].get_intensity_list()
 \end{verbatim}
 
-The maximum and minimum mass in an individual scan (e.g. the 1st scan) are
+The minimum and maximum mass in an individual scan (i.e. the 1st scan) are
 returned by:
 
 \begin{verbatim}
 >>> scans[0].get_min_mass()
 >>> scans[0].get_max_mass()
 \end{verbatim}
-

@@ -17,7 +17,7 @@
 \section{About PyMS}
 
 PyMS is a Python toolkit for processing of chromatography--mass spectrometry
-data. The main idea behind PyMS is to provde a framework and a set of
+data. The main idea behind PyMS is to provide a framework and a set of
 components for rapid development and testing of methods for processing of
 chromatography--mass spectrometry data. An important objective of PyMS is
 to decouple processing methods form visualization and the concept of
@@ -101,14 +101,14 @@ Python sys.path.append() command).
 
 We recommend compiling your own Python installation for PyMS.
 
-In addtion to the PyMS core source code, a number of external packages
+In addition to the PyMS core source code, a number of external packages
 is used to provide additional functionality. These are explained below.
 
 \subsection{\label{subsec:numpy}Package 'NumPy'}
 
 The package NumPy is provides numerical capabilities to Python. This
 package is used throughout PyMS (and also required for some external
-packages used in PyMS), to its installation is mandatory. 
+packages used in PyMS), to its installation is mandatory.
 
 The NumPy web site {\tt http://numpy.scipy.org/} provides the installation
 instructions and the link to the source code.
@@ -119,7 +119,7 @@ ANDI-MS files)}
 The pycdf (a python interface to Unidata netCDF library) source and
 installation instructions can be downloaded from
 {\tt http://pysclint.sourceforge.net/pycdf/}. Follow the installation
-instructions to install pycdf. 
+instructions to install pycdf.
 
 \subsection{\label{subsec:pycluster}Package 'Pycluster' (required for peak
 alignment by dynamic programming)}
@@ -134,7 +134,7 @@ can be found here:
 for TopHat baseline correction)}
 
 If the full SciPy package is installed the 'ndimage' will be available. However
-the SciPy contains large amount of functionality, and its intallation is
+the SciPy contains large amount of functionality, and its installation is
 somewhat involved. In some situations in may be preferable to install only
 the subpackage 'ndimage'. The UrbanSim web site \cite{urbansim} provides
 instructions how to install a local copy of 'ndimage'. These instructions
@@ -184,7 +184,7 @@ $ python setup.py install
 Pycdf has two dependencies: the Unidata netcdf library and NumPy. The NumPy
 installation is described above. To install pycdf, the netcdf library must
 be downloaded ({\tt http://www.unidata.ucar.edu/software/netcdf/index.html}),
-compiled and istalled first:
+compiled and installed first:
 
 \begin{verbatim}
 $ tar xvfz netcdf.tar.gz
@@ -243,7 +243,7 @@ dependencies.
 \subsection{Pycdf import error}
 
 On Red Hat Linux 5 the SELinux is enabled by default, and this causes the
-following error while trying to import properly installed pycdf: 
+following error while trying to import properly installed pycdf:
 
 \begin{verbatim}
 $ python
@@ -297,7 +297,7 @@ PyMS location with the following commands:
 
 \begin{verbatim}
 import sys
-sys.path.append("/x/PyMS/pyms")
+sys.path.append("/x/PyMS")
 \end{verbatim}
 
 For brevity these commands will not be shown in the examples below, but
@@ -305,7 +305,8 @@ they are included in `pyms-test' example scripts.  The above path may need
 to be adjusted to match your own directory structure.
 
 All data files (raw data files, peak lists etc.) used in the example below
-can be found at {\tt http://bioinformatics.bio21.unimelb.edu.au/pyms/data/} and
-are assumed to be located in the `data' directory.
+can be found at \\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms/data/} \\
+and are assumed to be located in the `data' directory.
 
 
