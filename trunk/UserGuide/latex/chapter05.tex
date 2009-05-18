@@ -64,30 +64,6 @@ a time string (in this example, 7 seconds):
 \end{verbatim}
 
 Time strings are explained in the Section \ref{sec:time-string}.
-The effects of the moving window average smoothing are shown in
-Figures \ref{fig:smoothed-mean} and \ref{fig:smoothed-median}.
-
-\begin{figure}[htp]
-\begin{center}
-\includegraphics{graphics/50/tic_mean_smoothed.eps}
-\caption{The effect of the 5-point mean moving window average smoothing
-on the TIC from 'gc01\_0812\_066' data set. The segment 7.0--8.0
-minutes is shown. The original TIC is shown in full line, the smoothed
-TIC is shown in dashed line.}
-\label{fig:smoothed-mean}
-\end{center}
-\end{figure}
-
-\begin{figure}[htp]
-\begin{center}
-\includegraphics{graphics/50/tic_median_smoothed.eps}
-\caption{The effect of the 5-point median moving window average smoothing
-on the TIC from 'gc01\_0812\_066' data set. The segment 7.0--8.0
-minutes is shown. The original TIC is shown in full line, the smoothed
-TIC is shown in dashed line.}
-\label{fig:smoothed-median}
-\end{center}
-\end{figure}
 
 \subsection{Savitzky--Golay noise filter}
 
@@ -115,5 +91,4 @@ A time string is specification of time interval, that takes the format
 'NUMBERs' or 'NUMBERm' for time interval in seconds or minutes. For
 example, these are valid time strings: '10s' (10 seconds) and '0.2m'
 (0.2 minutes).
-
 
