@@ -20,6 +20,7 @@ The purpose of noise smoothing is to remove high-frequency noise from
 data, and thereby increase the contribution of the signal relative to
 the contribution of the noise.
 
+
 \subsection{Window averaging}
 
 \noindent
@@ -61,4 +62,29 @@ a time string (in this example, 7 seconds):
 >>> tic3 = window_smooth(tic, window='7s')
  -> Window smoothing (mean): the wing is 9 point(s)
 \end{verbatim}
+
+The effects of the moving window average smoothing are shown in Figures
+\ref{fig:smoothed-mean} and \ref{fig:smoothed-median}.
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/50/tic_mean_smoothed.eps}
+\caption{The effect of the 5-point mean moving window average smoothing
+on the TIC from 'gc01\_0812\_066' data set. The segment 7.0--8.0
+minutes is shown. The original TIC is shown in full line, the smoothed
+TIC is shown in dashed line.}
+\label{fig:smoothed-mean}
+\end{center}
+\end{figure}
+
+\begin{figure}[htp]
+\begin{center}
+\includegraphics{graphics/50/tic_median_smoothed.eps}
+\caption{The effect of the 5-point median moving window average smoothing
+on the TIC from 'gc01\_0812\_066' data set. The segment 7.0--8.0
+minutes is shown. The original TIC is shown in full line, the smoothed
+TIC is shown in dashed line.}
+\label{fig:smoothed-median}
+\end{center}
+\end{figure}
 
