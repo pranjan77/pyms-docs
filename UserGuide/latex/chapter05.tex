@@ -20,7 +20,10 @@ The purpose of noise smoothing is to remove high-frequency noise from
 data, and thereby increase the contribution of the signal relative to
 the contribution of the noise.
 
-\section{Window averaging}
+\subsection{Window averaging}
+
+\noindent
+[ {\em This example is in pyms-test/50} ]
 
 A simple approach to noise smoothing is moving average window smoothing.
 In this approach the window of a fixed size ($2N+1$ points) is moved
@@ -55,7 +58,7 @@ Apply the mean windows smoothing, but specify the window as
 a time string (in this example, 7 seconds):
 
 \begin{verbatim}
->>> tic9 = window_smooth(tic, window='7s')
+>>> tic3 = window_smooth(tic, window='7s')
  -> Window smoothing (mean): the wing is 9 point(s)
 \end{verbatim}
 
