@@ -20,7 +20,6 @@ The purpose of noise smoothing is to remove high-frequency noise from
 data, and thereby increase the contribution of the signal relative to
 the contribution of the noise.
 
-
 \subsection{Window averaging}
 
 \noindent
@@ -63,8 +62,9 @@ a time string (in this example, 7 seconds):
  -> Window smoothing (mean): the wing is 9 point(s)
 \end{verbatim}
 
-The effects of the moving window average smoothing are shown in Figures
-\ref{fig:smoothed-mean} and \ref{fig:smoothed-median}.
+Time strings are explained in the Section \ref{sec:time-string}.
+The effects of the moving window average smoothing are shown in
+Figures \ref{fig:smoothed-mean} and \ref{fig:smoothed-median}.
 
 \begin{figure}[htp]
 \begin{center}
@@ -87,4 +87,13 @@ TIC is shown in dashed line.}
 \label{fig:smoothed-median}
 \end{center}
 \end{figure}
+
+\section{Time strings}
+\label{sec:time-string}
+
+A time string is specification of time interval, that takes the format
+'NUMBERs' or 'NUMBERm' for time interval in seconds or minutes. For
+example, these are valid time strings: '10s' (10 seconds) and '0.2m'
+(0.2 minutes).
+
 
