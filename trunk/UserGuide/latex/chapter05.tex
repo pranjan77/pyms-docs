@@ -16,6 +16,46 @@
 
 \section{Noise smoothing}
 
+The purpose of noise smoothing is to remove high-frequency noise from
+data, and thereby increase the contribution of the signal relative to
+the contribution of the noise.
+
 \section{Window averaging}
 
+A simple approach to noise smoothing is moving average window smoothing.
+In this approach the window of a fixed size ($2N+1$ points) is moved
+across the ion chromatogram, and the intensity value at each point is
+replaced with the mean intensity calculated over the window size.
+The example below illustrates smoothing of TIC by window averaging.
+
+Load the data and get the TIC:
+
+\begin{verbatim}
+>>> andi_file = "/x/PyMS/data/gc01_0812_066.cdf"
+>>> data = ANDI_reader(andi_file)
+ -> Reading netCDF file '/x/PyMS/data/gc01_0812_066.cdf'
+>>> tic = data.get_tic()
+\end{verbatim}
+
+Apply the mean window smooting with the 5-point window:
+
+\begin{verbatim}
+tic1 = window_smooth(tic, window=5)
+ -> Window smoothing (mean): the wing is 2 point(s)
+\end{verbatim}
+
+Apply the median window smooting with the 5-point window:
+
+\begin{verbatim}
+>>> tic2 = window_smooth(tic, window=5, median=True)
+ -> Window smoothing (median): the wing is 2 point(s)
+\end{verbatim}
+
+Apply the mean windows smoothing, but specify the window as
+a time string (in this example, 7 seconds):
+
+\begin{verbatim}
+>>> tic9 = window_smooth(tic, window='7s')
+ -> Window smoothing (mean): the wing is 9 point(s)
+\end{verbatim}
 
