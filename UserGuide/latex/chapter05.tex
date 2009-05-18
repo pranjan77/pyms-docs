@@ -43,6 +43,7 @@ Load the data and get the TIC:
 Apply the mean window smooting with the 5-point window:
 
 \begin{verbatim}
+from pyms.Noise.SavitzkyGolay import window_smooth
 tic1 = window_smooth(tic, window=5)
  -> Window smoothing (mean): the wing is 2 point(s)
 \end{verbatim}
@@ -87,6 +88,25 @@ TIC is shown in dashed line.}
 \label{fig:smoothed-median}
 \end{center}
 \end{figure}
+
+\subsection{Savitzky--Golay noise filter}
+
+\noindent
+[ {\em This example is in pyms-test/51} ]
+
+A more sophisticated noise filter is the Savitzky-Golay filter.
+Given the data loaded as above, this filter can be applied as
+follows:
+
+\begin{verbatim}
+>>> from pyms.Noise.SavitzkyGolay import savitzky_golay
+>>> tic1 = savitzky_golay(tic)
+ -> Applying Savitzky-Golay filter
+      Window width (points): 7
+      Polynomial degree: 2
+\end{verbatim}
+
+In this example the default parameters were used.
 
 \section{Time strings}
 \label{sec:time-string}
