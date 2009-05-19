@@ -184,6 +184,49 @@ returned by:
 >>> scans[0].get_max_mass()
 \end{verbatim}
 
+\subsection{Exporting data and printing information about a data set}
+
+\noindent
+[ {\em This example is in pyms-test/20w} ]
+
+Often it is of interest to find out some basic information about the
+data set, ie. the number of scans, the retention time range, and
+m/z range and so on. The GCMS\_data class provides a method info()
+that can be used for this purpose.
+
+\begin{verbatim}
+>>> from pyms.GCMS.IO.ANDI.Function import ANDI_reader
+>>> andi_file = "/x/PyMS/data/gc01_0812_066.cdf"
+>>> data = ANDI_reader(andi_file)
+ -> Reading netCDF file '/x/PyMS/data/gc01_0812_066.cdf'
+>>> data.info()
+ Data retention time range: 5.093 min -- 66.795 min
+ Time step: 0.375 s (std=0.000 s)
+ Number of scans: 9865
+ Minimum m/z measured: 50.000
+ Maximum m/z measured: 599.900
+ Mean number of m/z values per scan: 56
+ Median number of m/z values per scan: 40
+>>>
+\end{verbatim}
+
+To export the entire raw data to a file, use the method write():
+
+\begin{verbatim}
+>>> data.write("output/data")
+ -> Writing intensities to 'output/data.I.csv'
+ -> Writing m/z values to 'output/data.mz.csv'
+\end{verbatim}
+
+This method takes the string ("output/data", in this example)
+and writes two CSV files. One has extention ".I.csv" and
+contains the intensities ('output/data.I.csv" in this example), 
+andd the other has the extension ".mz" and contains the
+corresponding table of m/z value ("output/data.mz.csv" in
+this example). In general these are not two-dimensional matrices,
+because different scans may have different number of m/z
+values recorded. 
+
 \subsection{Comparing two GC-MS data sets}
 
 \noindent
