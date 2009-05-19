@@ -183,3 +183,55 @@ returned by:
 >>> scans[0].get_min_mass()
 >>> scans[0].get_max_mass()
 \end{verbatim}
+
+\subsection{Comparing two GC-MS data sets}
+
+\noindent
+[ {\em This example is in pyms-test/20x} ]
+
+Occassionally it is useful to compare two data sets. For example,
+one may want to check the consistency between the data set
+exported in netCDF format from the manufacturer's software, and
+the JCAMP format exported from a third party software.
+
+For example:
+
+\begin{verbatim}
+>>> from pyms.GCMS.IO.JCAMP.Function import JCAMP_reader
+>>> from pyms.GCMS.IO.ANDI.Function import ANDI_reader
+>>> andi_file = "/x/PyMS/data/gc01_0812_066.cdf"
+>>> jcamp_file = "/x/PyMS/data/gc01_0812_066.jdx"
+>>> data1 = ANDI_reader(andi_file)
+ -> Reading netCDF file '/x/PyMS/data/gc01_0812_066.cdf'
+>>> data2 = JCAMP_reader(jcamp_file)
+ -> Reading JCAMP file '/x/PyMS/data/gc01_0812_066.jdx'
+\end{verbatim}
+
+To compare the two data sets:
+
+\begin{verbatim}
+>>> from pyms.GCMS.Function import diff
+>>> diff(data1,data2)
+ Data sets have the same number of time points.
+   Time RMSD: 1.80e-13
+ Checking for consistency in scan lengths ... OK
+ Calculating maximum RMSD for m/z values and intensities ... 
+   Max m/z RMSD: 1.03e-05
+   Max intensity RMSD: 0.00e+00
+\end{verbatim}
+
+If the data is not possible to compare, for example because of
+different number of scans, or inconsistent number of m/z values
+in between two scans, diff() will report the difference.
+For example:
+
+\begin{verbatim}
+>>> data2.trim(begin=1000,end=2000)
+Trimming data to between 1000 and 2000 scans
+>>> diff(data1,data2)
+ -> The number of retention time points different.
+ First data set: 9865 time points
+ Second data set: 1001 time points
+ Data sets are different.
+\end{verbatim}
+
