@@ -36,8 +36,7 @@ data file are:
 \end{itemize}
 
 Internally, PyMS stores the raw data from ANDI files or JCAMP files as a
-GCMS\_data object. Once a GCMS\_data object has been created, the raw data
-can not be modified.
+GCMS\_data object.
 
 \section{Reading the raw GC-MS data}
 
@@ -138,7 +137,7 @@ as an IonChromatogram object:
 \noindent
 The IonChromatogram object is explained in a later chapter.
 
-\subsection{Exploring a Scan data object}
+\subsection{A Scan data object}
 
 A Scan object contains a list of masses and a corresponding list of intensity
 values from a single mass-spectrum scan in the raw data. Typically only
@@ -155,16 +154,6 @@ A list of all the raw Scan objects can be returned by:
 \end{verbatim}
 
 A list of all masses in a scan (i.e. the 1st scan) is returned by:
-
-\subsection{A Scan data object}
-
-\noindent
-[ {\em The following examples are the same in pyms-test/20a and pyms-test/20b} ]
-
-A Scan object contains a list of masses and a corresponding list of intensity
-values from a single mass-spectrum scan.
-
-A list of all masses in a scan (e.g. the 1st scan) is returned by:
 
 \begin{verbatim}
 >>> scans[0].get_mass_list()
@@ -220,12 +209,12 @@ To export the entire raw data to a file, use the method write():
 
 This method takes the string ("output/data", in this example)
 and writes two CSV files. One has extention ".I.csv" and
-contains the intensities ('output/data.I.csv" in this example), 
+contains the intensities ('output/data.I.csv" in this example),
 andd the other has the extension ".mz" and contains the
 corresponding table of m/z value ("output/data.mz.csv" in
 this example). In general these are not two-dimensional matrices,
 because different scans may have different number of m/z
-values recorded. 
+values recorded.
 
 \subsection{Comparing two GC-MS data sets}
 
@@ -258,7 +247,7 @@ To compare the two data sets:
  Data sets have the same number of time points.
    Time RMSD: 1.80e-13
  Checking for consistency in scan lengths ... OK
- Calculating maximum RMSD for m/z values and intensities ... 
+ Calculating maximum RMSD for m/z values and intensities ...
    Max m/z RMSD: 1.03e-05
    Max intensity RMSD: 0.00e+00
 \end{verbatim}
