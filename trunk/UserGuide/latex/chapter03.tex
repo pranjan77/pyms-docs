@@ -42,20 +42,22 @@ the width of the bin.
 
 A function to bin masses to the nearest integer is also available.
 
-Figure~\ref{fig:binning} illustrates the process of assigning bins to the mass
-axis and summing all intensities in a given bin. The result is a new mass axis
-with mass values corresponding to the centre of each bin.
+% Figure~\ref{fig:binning} illustrates the process of assigning bins to the mass
+% axis and summing all intensities in a given bin. The result is a new mass axis
+% with mass values corresponding to the centre of each bin.
 
-\begin{figure}[htp]
-\begin{center}
-%\includegraphics{graphics/binning/binning.eps}
-\caption{Mass intensity values are added to bins based on a pre-set bin size and
-the minimum mass of all the scan data. All intensities in a given bin width
-(top) are added and given a mass of the centre of the bin (bottom). For integer
-binning, each bin has a width of one and is centred at integer values.}
-\label{fig:binning}
-\end{center}
-\end{figure}
+% \begin{figure}[htp]
+% \begin{center}
+% %\includegraphics{graphics/binning/binning.eps}
+% \caption{Mass intensity values are added to bins based on a pre-set bin size
+%and
+% the minimum mass of all the scan data. All intensities in a given bin width
+% (top) are added and given a mass of the centre of the bin (bottom). For
+%integer
+% binning, each bin has a width of one and is centred at integer values.}
+% \label{fig:binning}
+% \end{center}
+% \end{figure}
 
 \noindent
 [ {\em This example is in pyms-test/30} ]
@@ -157,6 +159,11 @@ A mass of 73 is returned in this example.
 
 \section{MassSpectrum Object}
 
+\noindent
+A MassSpectrum object contains two attributes, {\tt mass\_list} and
+{\tt mass\_spec}, a list of the mass values and corresponding intensities,
+respectively. MassSpectrum is returned by the IntensityMatrix method of {\tt
+get\_ms\_at\_index(index)}.
 
 \section{IonChromatogram Object}
 
@@ -190,69 +197,62 @@ the ion chromatogram object to a file:
 The flag minutes=True indicates that retention time will be saved in minutes.
 The ion chromatogram object saved with with the {\tt write{}} method is a
 plain ASCII file which contains a pair of (retention time, intensity) per
-line:
+line.
 
 \begin{verbatim}
 $ head tic.dat
-  5.0944      745997.0000
-  5.1002      726566.0000
-  5.1059      717704.0000
-  5.1116      684214.0000
-  5.1173      701866.0000
-  5.1230      893306.0000
-  5.1287     1278099.0000
-  5.1345     1290984.0000
-  5.1402      925558.0000
-  5.1459      644122.0000
+  5.0930 2.222021e+07
+  5.0993 2.212489e+07
+  5.1056 2.208650e+07
+  5.1118 2.208815e+07
+  5.1181 2.200635e+07
+  5.1243 2.200326e+07
+  5.1306 2.202363e+07
+  5.1368 2.198357e+07
+  5.1431 2.197408e+07
+  5.1493 2.193351e+07
 \end{verbatim}
 
-\noindent
-Figure \ref{fig:tic-plot} shows the plot of the file 'tic.dat' produced with
-the
-program Gnuplot. The Gnuplot script used to produce this plot is provided
-as pyms-test/01/output/plot.gnu.
-
-\begin{figure}[htp]
-\begin{center}
-%x\includegraphics{graphics/pyms-test/tic.eps}
-\caption{The Gnuplot plot of the file 'tic.dat'}
-\label{fig:tic-plot}
-\end{center}
-\end{figure}
-
-% # TIC from raw data
-% tic = data.get_tic()
-% # save TIC to a file
-% tic.write("output/tic.dat",minutes=True)
+% \noindent
+% Figure \ref{fig:tic-plot} shows the plot of the file 'tic.dat' produced with
+% the program Gnuplot.
 %
-% # get the first ion chromatogram of the IntensityMatrix
-% ic = im.get_ic_at_index(0)
-% ic.write("output/ic_index_1.dat",minutes=True)
-% # get the ion chromatogram for m/z = 73
-% ic = im.get_ic_at_mass(73)
-% ic.write("output/ic_mass_73.dat",minutes=True)
-%
-% # some tests on ion chromatogram objects
-% print "'tic' is a TIC:", tic.is_tic()
-% print "'ic' is a TIC:", ic.is_tic()
-% print
+% \begin{figure}[htp]
+% \begin{center}
+% %x\includegraphics{graphics/pyms-test/tic.eps}
+% \caption{The Gnuplot plot of the file 'tic.dat'}
+% \label{fig:tic-plot}
+% \end{center}
+% \end{figure}
 
 \section{Saving data}
 
+\noindent
+A matrix of intensity values can be saved to a file with the function
+{\tt save\_data()} from {\tt pyms.Utils.IO}. A matrix of intensity values can
+be returned from an IntensityMatrix with the method {\tt get\_matrix\_list()}.
+For example,
 
-% # save the intensity matrix values to a file
-% mat = im.get_matrix_list()
-% print "saving intensity matrix intensity values..."
-% save_data("output/im.dat", mat)
-%
-% # Export the entire IntensityMatrix as CSV. This will create
-% # data.im.csv, data.mz.csv, and data.rt.csv where
-% # these are the intensity matrix, retention time
-% # vector, and m/z vector in the CSV format
-% print "exporting intensity matrix data..."
-% export_csv("output/data", im)
-%
-% # Export the entire IntensityMatrix as LECO CSV. This is
-% # useful for import into AnalyzerPro
-% print "exporting intensity matrix data to LECO CSV format..."
-% export_leco_csv("output/data_leco.csv", im)
+\begin{verbatim}
+>>> from pyms.Utils.IO import save_data
+>>> mat = im.get_matrix_list()
+>>> save_data("output/im.dat", mat)
+\end{verbatim}
+
+The entire IntensityMatrix can be saved as CSV with the method
+{\tt export\_csv()}. For example,
+
+\begin{verbatim}
+>>> im.export_csv("output/data")
+\end{verbatim}
+
+\noindent
+will create 'data.im.csv, data.mz.csv, and data.rt.csv where these are the
+intensity matrix, retention time vector, and m/z vector in the CSV format.
+
+Additionally, the entire IntensityMatrix can be exported as LECO CSV. This is
+ useful for import into other analytical software packages.
+
+\begin{verbatim}
+>>> im.export_leco_csv("output/data_leco.csv")
+\end{verbatim}
