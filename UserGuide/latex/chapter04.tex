@@ -1,4 +1,4 @@
-% chapter05.tex
+% chapter04.tex
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %                                                                           %
@@ -12,7 +12,24 @@
  %                                                                           %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Data pre-processing}
+\chapter{Data filtering}
+
+\section{Introduction}
+In this chapter filtering techniques that alow the pre-processing of the
+GC-MS data for analysis and comparision to other pre-processed GC-MS data are
+covered.
+
+\section{Intensity Matrix resizing}
+
+\subsection{Retention time range}
+
+\noindent
+[ {\em This example is in pyms-test/40} ]
+
+\subsection{Mass spectrum range and entries}
+
+\noindent
+[ {\em This example is in pyms-test/40} ]
 
 \section{Noise smoothing}
 
@@ -23,7 +40,7 @@ the contribution of the noise.
 \subsection{Window averaging}
 
 \noindent
-[ {\em This example is in pyms-test/51a} ]
+[ {\em This example is in pyms-test/41a} ]
 
 A simple approach to noise smoothing is moving average window smoothing.
 In this approach the window of a fixed size ($2N+1$ points) is moved
@@ -68,7 +85,7 @@ Time strings are explained in the Section \ref{sec:time-string}.
 \subsection{Savitzky--Golay noise filter}
 
 \noindent
-[ {\em This example is in pyms-test/51b} ]
+[ {\em This example is in pyms-test/41b} ]
 
 A more sophisticated noise filter is the Savitzky-Golay filter.
 Given the data loaded as above, this filter can be applied as
@@ -95,7 +112,7 @@ example, these are valid time strings: '10s' (10 seconds) and '0.2m'
 \section{Baseline correction}
 
 \noindent
-[ {\em This example is in pyms-test/52} ]
+[ {\em This example is in pyms-test/42} ]
 
 Baseline distortion originating from instrument imperfections and
 experimental setup is often observed in mass spectrometry data,
@@ -145,4 +162,10 @@ In the interactive session shown above, the data set if first loaded,
 Savitzky-Golay smoothing was applied, followed by baseline correction.
 Finally the original, smoothed, and smoothed and baseline corrected
 TIC were saved in the directory 'output/'.
+
+\section{Pre-processing the IntensityMatrix}
+
+\noindent
+[ {\em This example is in pyms-test/43} ]
+
 
