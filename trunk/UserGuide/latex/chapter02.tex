@@ -31,7 +31,7 @@ conversion utility.
 For PyMS, the minimum set of assumptions about the information contained in the
 data file are:
 \begin{itemize}
-    \item The data contain the mz and intensity value pairs across a scan.
+    \item The data contain the m/z and intensity value pairs across a scan.
     \item Each scan has a retention time.
 \end{itemize}
 
@@ -153,7 +153,7 @@ A list of all the raw Scan objects can be returned by:
 >>> scans = data.get_scan_list()
 \end{verbatim}
 
-A list of all masses in a scan (i.e. the 1st scan) is returned by:
+A list of all masses in a scan (e.g. the 1st scan) is returned by:
 
 \begin{verbatim}
 >>> scans[0].get_mass_list()
@@ -165,7 +165,7 @@ A list of all corresponding intensities in a scan is returned by:
 >>> scans[0].get_intensity_list()
 \end{verbatim}
 
-The minimum and maximum mass in an individual scan (i.e. the 1st scan) are
+The minimum and maximum mass in an individual scan (e.g. the 1st scan) are
 returned by:
 
 \begin{verbatim}
@@ -176,10 +176,10 @@ returned by:
 \subsection{Exporting data and printing information about a data set}
 
 \noindent
-[ {\em This example is in pyms-test/20w} ]
+[ {\em This example is in pyms-test/20c} ]
 
 Often it is of interest to find out some basic information about the
-data set, ie. the number of scans, the retention time range, and
+data set, e.g. the number of scans, the retention time range, and
 m/z range and so on. The GCMS\_data class provides a method info()
 that can be used for this purpose.
 
@@ -207,11 +207,11 @@ To export the entire raw data to a file, use the method write():
  -> Writing m/z values to 'output/data.mz.csv'
 \end{verbatim}
 
-This method takes the string ("output/data", in this example)
-and writes two CSV files. One has extention ".I.csv" and
-contains the intensities ('output/data.I.csv" in this example),
-andd the other has the extension ".mz" and contains the
-corresponding table of m/z value ("output/data.mz.csv" in
+This method takes the string (``output/data'', in this example)
+and writes two CSV files. One has extention ``.I.csv'' and
+contains the intensities (``output/data.I.csv'' in this example),
+and the other has the extension ``.mz'' and contains the
+corresponding table of m/z value (``output/data.mz.csv'' in
 this example). In general these are not two-dimensional matrices,
 because different scans may have different number of m/z
 values recorded.
@@ -219,9 +219,9 @@ values recorded.
 \subsection{Comparing two GC-MS data sets}
 
 \noindent
-[ {\em This example is in pyms-test/20x} ]
+[ {\em This example is in pyms-test/20d} ]
 
-Occassionally it is useful to compare two data sets. For example,
+Occasionally it is useful to compare two data sets. For example,
 one may want to check the consistency between the data set
 exported in netCDF format from the manufacturer's software, and
 the JCAMP format exported from a third party software.

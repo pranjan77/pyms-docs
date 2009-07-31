@@ -29,18 +29,21 @@ The general scheme for converting raw mass values is to bin intensity values
 based on the interval the corresponding mass belongs to. The general procedure
 is as follows:
 \begin{itemize}
-    \item for a given bin size
-    \item calculate the number of bins to cover the range of all masses.
-    \item centre the first bin at the minimum mass found for all the raw data.
-    \item sum intensities whose masses are in a given bin.
+    \item Set the interval between bins, lower and upper bin boundaries
+    \item Calculate the number of bins to cover the range of all masses.
+    \item Centre the first bin at the minimum mass found for all the raw data.
+    \item Sum intensities whose masses are in a given bin.
 \end{itemize}
 
 A mass, $m$, is considered to belong to a bin when
-$c - w/2 \le m < c + w/2$
-, where $c$ is the centre of the bin, and $w$ is
-the width of the bin.
+$c - l \le m < c + u$
+, where $c$ is the centre of the bin, $l$ is the lower boundary and $u$ is
+the upper boundary of the bin. The default bin interval is one with a lower and
+upper boundary of $\pm0.5$.
 
-A function to bin masses to the nearest integer is also available.
+A function to bin masses to the nearest integer is also available. The default
+bin interval is one with a lower boundary of -0.3 and upper boundary of +0.7 (as
+per the NIST library).
 
 % Figure~\ref{fig:binning} illustrates the process of assigning bins to the mass
 % axis and summing all intensities in a given bin. The result is a new mass axis
@@ -62,7 +65,7 @@ A function to bin masses to the nearest integer is also available.
 \noindent
 [ {\em This example is in pyms-test/30} ]
 
-An intensity matrix on the raw GCMS data can be built using the following
+An intensity matrix on the raw GC-MS data can be built using the following
 functions. First the raw data is imported as before.
 
 \begin{verbatim}
@@ -78,9 +81,9 @@ Then the data can be converted to an intensity matrix using the functions
 available in ``pyms.GCMS.Functions'', namely {\tt build\_intensity\_matrix()}
 and {\tt build\_intensity\_matrix\_i()}.
 
-The default operation of {\tt build\_intensity\_matrix()} is to use a bin size
-of one and treat the masses as floating point numbers. The default intensity
-matrix can be built as follows:
+The default operation of {\tt build\_intensity\_matrix()} is to use a bin
+interval of one and treat the masses as floating point numbers. The default
+intensity matrix can be built as follows:
 
 \begin{verbatim}
 >>> from pyms.GCMS.Function import build_intensity_matrix
@@ -92,7 +95,7 @@ The size as the number of scans and the number of bins is returned by:
 >>> im.get_size()
 \end{verbatim}
 
-There are 9865 scans, 551 bins in this example.
+There are 9865 scans and 551 bins in this example.
 
 The raw masses have been binned into new mass units based on the minimum mass
 in the raw data and the bin size. A list of the new masses are returned by:
@@ -116,11 +119,13 @@ The value of the closest mass can be returned by indexing into the mass list:
 
 A mass of 73.0 is returned in this example.
 
-The bin size can be set values other than one. For example, the bin size can be
-set to 0.5.
+The bin interval can be set to values other than one. For example, the bin
+interval can be set to 0.5. The boundaries can also be adjusted. In this
+example, to fit the 0.5 bin interval, the upper and lower boundaries are set to
+$\pm$0.25.
 
 \begin{verbatim}
-im = build_intensity_matrix(data, 0.5)
+im = build_intensity_matrix(data, 0.5, 0.25, 0.25)
 \end{verbatim}
 
 The size of the intensity matrix will reflect the change in the number of bins.
@@ -140,9 +145,9 @@ different binning.
 
 A mass of 73.5 is returned in this example.
 
-It is also possible to build an intensity matrix with masses rounded to the
-nearest integer using a bin size of one. The function is imported from
-``pyms.GCMS.Functions''.
+It is also possible to build an intensity matrix with integer masses and a bin
+interval of one. The default range for the binning is -0.3 and +0.7 mass
+units. The function is imported from ``pyms.GCMS.Functions''.
 \begin{verbatim}
 >>> from pyms.GCMS.Function import build_intensity_matrix_i
 >>> im = build_intensity_matrix_i(data)
@@ -156,6 +161,9 @@ The masses are now all integers.
 \end{verbatim}
 
 A mass of 73 is returned in this example.
+
+The lower and upper bounds can be adjusted by {\tt
+build\_intensity\_matrix\_i(data, lower, upper)}.
 
 \section{MassSpectrum Object}
 
@@ -183,7 +191,7 @@ True is the ion chromatogram is TIC, False otherwise:
 'ic' is a TIC: False
 \end{verbatim}
 
-\subsection{Writing data to a file}
+\subsection{Writing IonChromatogram data to a file}
 
 The method {\tt write()} of IonChromatogram object allows one to save
 the ion chromatogram object to a file:
@@ -239,19 +247,27 @@ For example,
 >>> save_data("output/im.dat", mat)
 \end{verbatim}
 
-The entire IntensityMatrix can be saved as CSV with the method
-{\tt export\_csv()}. For example,
+It is also possible to save the list of masses (from {\tt im.get\_mass\_list()})
+and the list of retention times ({\tt from im.get\_time\_list()}) using the
+{\tt save\_data()} function. For convenience, the entire IntensityMatrix can be
+saved with the method {\tt export\_csv()}. For example,
 
 \begin{verbatim}
->>> im.export_csv("output/data")
+>>> im.export_ascii("output/data")
 \end{verbatim}
 
 \noindent
-will create 'data.im.csv, data.mz.csv, and data.rt.csv where these are the
-intensity matrix, retention time vector, and m/z vector in the CSV format.
+will create ``data.im.dat'', ``data.mz.dat'', and ``data.rt.dat'' where these
+ are the intensity matrix, retention time vector, and m/z vector.
+By default the data is saved as space separated data with a ``.dat'' extension.
+It is also possible to save the data as comma separated data with a ``.csv''
+extension by the command ``{\tt im.export\_ascii("output/data", "csv")}''.
 
 Additionally, the entire IntensityMatrix can be exported as LECO CSV. This is
  useful for import into other analytical software packages.
+The format is a header line specifying the column heading information as:
+``scan, retention time, mass1, mass2, $\vdots$'', and then each row as the
+intensity data.
 
 \begin{verbatim}
 >>> im.export_leco_csv("output/data_leco.csv")
