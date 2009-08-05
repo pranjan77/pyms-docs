@@ -15,21 +15,68 @@
 \chapter{Data filtering}
 
 \section{Introduction}
-In this chapter filtering techniques that alow the pre-processing of the
-GC-MS data for analysis and comparision to other pre-processed GC-MS data are
+In this chapter filtering techniques that allow pre-processing of
+GC-MS data for analysis and comparison to other pre-processed GC-MS data are
 covered.
 
 \section{Intensity Matrix resizing}
 
+Once an IntensityMatrix has been constructed from the raw GC-MS data, the
+entries of the matrix can be modified. These modifications can operate on the
+entire matrix, or individual masses or scans.
+
 \subsection{Retention time range}
 
 \noindent
-[ {\em This example is in pyms-test/40} ]
+[ {\em This example is in pyms-test/40a} ]
+
+A basic operation on the GC-MS data is to select a specific time range for
+processing. In PyMS, any data outside the chosen time range is discarded. The
+{\tt trim()} method operates on the raw data, so any subsequent processing only
+refers to the trimmed data.
+
+Given a previously loaded raw GC-MS data file, {\em data}, the data can be
+trimmed to specific scans;
+
+\begin{verbatim}
+>>> data.trim(1000, 2000)
+>>> print data.info()
+\end{verbatim}
+
+\noindent
+or specific retention times (in ``seconds'' or ``minutes'');
+\begin{verbatim}
+>>> data.trim("6.5m", "21m")
+>>> print data.info()
+\end{verbatim}
 
 \subsection{Mass spectrum range and entries}
 
+
 \noindent
-[ {\em This example is in pyms-test/40} ]
+[ {\em This example is in pyms-test/40b} ]
+
+An IntensityMatrix object has a set mass range and interval that is derived
+from the data at the time of building the intensity matrix. The range of mass
+values can be modified. This is done, primarily, to ensure that the range of
+masses used are consistent when commparing samples.
+
+Given a previously loaded raw GC-MS data file that has been converted into an
+IntensityMatrix, the mass range can be ``cropped'' to a new (smaller) range;
+
+\begin{verbatim}
+>>> data.crop_mass(60, 400)
+>>> print im.get_min_mass(), im.get_max_mass()
+\end{verbatim}
+
+It is also possible to set all intensities for a given mass to zero. This is
+useful for ignoring masses associated with sample preparation. The mass can be
+``nulled'' via;
+
+\begin{verbatim}
+>>> data.null_mass(73)
+>>> print sum(im.get_ic_at_mass(73).get_intensity_array())
+\end{verbatim}
 
 \section{Noise smoothing}
 
@@ -57,7 +104,7 @@ Load the data and get the TIC:
 >>> tic = data.get_tic()
 \end{verbatim}
 
-Apply the mean window smooting with the 5-point window:
+Apply the mean window smoothing with the 5-point window:
 
 \begin{verbatim}
 from pyms.Noise.SavitzkyGolay import window_smooth
@@ -65,7 +112,7 @@ tic1 = window_smooth(tic, window=5)
  -> Window smoothing (mean): the wing is 2 point(s)
 \end{verbatim}
 
-Apply the median window smooting with the 5-point window:
+Apply the median window smoothing with the 5-point window:
 
 \begin{verbatim}
 >>> tic2 = window_smooth(tic, window=5, median=True)

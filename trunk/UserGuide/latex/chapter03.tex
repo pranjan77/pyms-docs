@@ -78,7 +78,7 @@ functions. First the raw data is imported as before.
 
 \noindent
 Then the data can be converted to an intensity matrix using the functions
-available in ``pyms.GCMS.Functions'', namely {\tt build\_intensity\_matrix()}
+available in ``pyms.GCMS.Function'', namely {\tt build\_intensity\_matrix()}
 and {\tt build\_intensity\_matrix\_i()}.
 
 The default operation of {\tt build\_intensity\_matrix()} is to use a bin
@@ -147,7 +147,7 @@ A mass of 73.5 is returned in this example.
 
 It is also possible to build an intensity matrix with integer masses and a bin
 interval of one. The default range for the binning is -0.3 and +0.7 mass
-units. The function is imported from ``pyms.GCMS.Functions''.
+units. The function is imported from ``pyms.GCMS.Function''.
 \begin{verbatim}
 >>> from pyms.GCMS.Function import build_intensity_matrix_i
 >>> im = build_intensity_matrix_i(data)
