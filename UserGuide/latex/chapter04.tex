@@ -19,6 +19,17 @@ In this chapter filtering techniques that allow pre-processing of
 GC-MS data for analysis and comparison to other pre-processed GC-MS data are
 covered.
 
+\section{Time strings}
+\label{sec:time-string}
+
+Before considering the filtering techniques, the mechanism for representing
+retention times is outlined here.
+
+A time string is the specification of a time interval, that takes the format
+'NUMBERs' or 'NUMBERm' for time interval in seconds or minutes. For
+example, these are valid time strings: '10s' (10 seconds) and '0.2m'
+(0.2 minutes).
+
 \section{Intensity Matrix resizing}
 
 Once an IntensityMatrix has been constructed from the raw GC-MS data, the
@@ -52,20 +63,20 @@ or specific retention times (in ``seconds'' or ``minutes'');
 
 \subsection{Mass spectrum range and entries}
 
-
 \noindent
 [ {\em This example is in pyms-test/40b} ]
 
 An IntensityMatrix object has a set mass range and interval that is derived
 from the data at the time of building the intensity matrix. The range of mass
 values can be modified. This is done, primarily, to ensure that the range of
-masses used are consistent when commparing samples.
+masses used are consistent when comparing samples.
 
 Given a previously loaded raw GC-MS data file that has been converted into an
-IntensityMatrix, the mass range can be ``cropped'' to a new (smaller) range;
+IntensityMatrix, {\em im}, the mass range can be ``cropped'' to a new (smaller)
+range;
 
 \begin{verbatim}
->>> data.crop_mass(60, 400)
+>>> im.crop_mass(60, 400)
 >>> print im.get_min_mass(), im.get_max_mass()
 \end{verbatim}
 
@@ -148,14 +159,6 @@ follows:
 
 In this example the default parameters were used.
 
-\section{Time strings}
-\label{sec:time-string}
-
-A time string is specification of time interval, that takes the format
-'NUMBERs' or 'NUMBERm' for time interval in seconds or minutes. For
-example, these are valid time strings: '10s' (10 seconds) and '0.2m'
-(0.2 minutes).
-
 \section{Baseline correction}
 
 \noindent
@@ -215,4 +218,28 @@ TIC were saved in the directory 'output/'.
 \noindent
 [ {\em This example is in pyms-test/43} ]
 
+The entire noise smoothing and baseline correction can be applied to each ion
+chromatogram in the intensity matrix;
 
+\begin{verbatim}
+>>> jcamp_file = "/x/PyMS/data/gc01_0812_066.jdx"
+>>> data = JCAMP_reader(jcamp_file)
+>>> im = build_intensity_matrix(data)
+>>> n_scan, n_mz = im.get_size()
+>>> for ii in range(n_mz):
+...     print "Working on IC#", ii+1
+...     ic = im.get_ic_at_index(ii)
+...     ic_smooth = savitzky_golay(ic)
+...     ic_bc = tophat(ic_smooth, struct="1.5m")
+...     im.set_ic_at_index(ii, ic_bc)
+...
+\end{verbatim}
+
+The resulting IntensityMatrix object can be ``dumped'' to a file for later
+retrieval. There are general perpose object file handling methods in {\tt
+pyms.Utils.IO}. For example;
+
+\begin{verbatim}
+>>> from pyms.Utils.IO import dump_object
+>>> dump_object(im, "output/im-proc.dump")
+\end{verbatim}
