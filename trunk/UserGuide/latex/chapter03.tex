@@ -62,11 +62,13 @@ per the NIST library).
 % \end{center}
 % \end{figure}
 
+\subsection{Build intensity matrix}
+
 \noindent
-[ {\em This example is in pyms-test/30} ]
+[ {\em This example is in pyms-test/30a} ]
 
 An intensity matrix on the raw GC-MS data can be built using the following
-functions. First the raw data is imported as before.
+function. First the raw data is imported as before.
 
 \begin{verbatim}
 >>> from pyms.GCMS.IO.JCAMP.Function import JCAMP_reader
@@ -112,12 +114,18 @@ binned mass to a mass of 73.3 m/z is returned by:
 >>> index = im.get_index_of_mass(73.3)
 \end{verbatim}
 
-The value of the closest mass can be returned by indexing into the mass list:
+The value of the closest mass can be returned by:
+
 \begin{verbatim}
->>> print masses[index]
+>>> print im.get_mass_at_index(index)
 \end{verbatim}
 
 A mass of 73.0 is returned in this example.
+
+\subsection{Build intensity matrix parameters}
+
+\noindent
+[ {\em This example is in pyms-test/30b} ]
 
 The bin interval can be set to values other than one. For example, the bin
 interval can be set to 0.5. The boundaries can also be adjusted. In this
@@ -138,26 +146,31 @@ There are 9865 scans (as before) and 1101 bins in this example.
 The index and binned mass of the mass closest to 73.3 should also reflect the
 different binning.
 \begin{verbatim}
->>> masses = im.get_mass_list()
 >>> index = im.get_index_of_mass(73.3)
->>> print masses[index]
+>>> print im.get_mass_at_index(index)
 \end{verbatim}
 
 A mass of 73.5 is returned in this example.
 
+\subsection{Build integer mass intensity matrix}
+
+\noindent
+[ {\em This example is in pyms-test/30c} ]
+
 It is also possible to build an intensity matrix with integer masses and a bin
 interval of one. The default range for the binning is -0.3 and +0.7 mass
 units. The function is imported from ``pyms.GCMS.Function''.
+
 \begin{verbatim}
 >>> from pyms.GCMS.Function import build_intensity_matrix_i
 >>> im = build_intensity_matrix_i(data)
 \end{verbatim}
 
 The masses are now all integers.
+
 \begin{verbatim}
->>> masses = im.get_mass_list()
 >>> index = im.get_index_of_mass(73.3)
->>> print masses[index]
+>>> print im.get_mass_at_index(index)
 \end{verbatim}
 
 A mass of 73 is returned in this example.
@@ -168,21 +181,52 @@ build\_intensity\_matrix\_i(data, lower, upper)}.
 \section{MassSpectrum Object}
 
 \noindent
+[ {\em This example is in pyms-test/31} ]
+
+\noindent
 A MassSpectrum object contains two attributes, {\tt mass\_list} and
 {\tt mass\_spec}, a list of the mass values and corresponding intensities,
 respectively. MassSpectrum is returned by the IntensityMatrix method of {\tt
 get\_ms\_at\_index(index)}.
 
+For example, the properties of the first MassSpectrum object of an
+IntensityMatrix, {\em im}, can be investigated by;
+
+\begin{verbatim}
+>>> ms = im.get_ms_at_index(0)
+>>> print len(ms)
+>>> print len(ms.mass_list)
+>>> print len(ms.mass_spec)
+\end{verbatim}
+
+\noindent
+The length of all attributes should be the same.
+
 \section{IonChromatogram Object}
+
+\noindent
+[ {\em This example is in pyms-test/31} ]
 
 \noindent
 An IonChromatogram object is a one dimensional vector containing
 mass intensities as a function of retention time. This can can be either
-m/z channel intensities (for example, ion chromatograms at m/z = 65),
+m/z channel intensities (for example, the ion chromatogram at m/z = 73),
 or cumulative intensities over all measured m/z (TIC).
 
+An IonChromatogram for the TIC and a given mass or index can be obtained by;
+
+\begin{verbatim}
+>>> tic = data.get_tic()
+>>> ic = im.get_ic_at_index(0)
+>>> ic = im.get_ic_at_mass(73)
+\end{verbatim}
+
+\noindent
+This will return, respectively: the TIC; the ion chromatogram of the first mass;
+and the ion chromatogram of the mass closest to 73.
+
 An ion chromatogram object has a method {\tt is\_tic()} which returns
-True is the ion chromatogram is TIC, False otherwise:
+True if the ion chromatogram is a TIC, False otherwise:
 
 \begin{verbatim}
 >>> print "'tic' is a TIC:", tic.is_tic()
@@ -192,6 +236,9 @@ True is the ion chromatogram is TIC, False otherwise:
 \end{verbatim}
 
 \subsection{Writing IonChromatogram data to a file}
+
+\noindent
+[ {\em This example is in pyms-test/31} ]
 
 The method {\tt write()} of IonChromatogram object allows one to save
 the ion chromatogram object to a file:
@@ -236,6 +283,9 @@ $ head tic.dat
 \section{Saving data}
 
 \noindent
+[ {\em This example is in pyms-test/32} ]
+
+\noindent
 A matrix of intensity values can be saved to a file with the function
 {\tt save\_data()} from {\tt pyms.Utils.IO}. A matrix of intensity values can
 be returned from an IntensityMatrix with the method {\tt get\_matrix\_list()}.
@@ -248,9 +298,9 @@ For example,
 \end{verbatim}
 
 It is also possible to save the list of masses (from {\tt im.get\_mass\_list()})
-and the list of retention times ({\tt from im.get\_time\_list()}) using the
-{\tt save\_data()} function. For convenience, the entire IntensityMatrix can be
-saved with the method {\tt export\_csv()}. For example,
+and the list of retention times (from {\tt im.get\_time\_list()}) using the
+{\tt save\_data()} function. For convenience, the intensity values, mass list
+ and time list, can be saved with the method {\tt export\_ascii()}. For example,
 
 \begin{verbatim}
 >>> im.export_ascii("output/data")
