@@ -216,3 +216,32 @@ list has been constructed, the filters can be applied by;
 
 The number of detected peaks is now more realistic of what would be expected in
 the test sample.
+
+\section{Peak area estimation}
+
+\noindent
+[ {\em This example is in pyms-test/54} ]
+
+The Peak object does not contain any information about the width or area of the
+peak when it is created. This information can be added after the instantiation
+of a Peak object. The area of the peak can be set by the {\tt set\_area()}
+method of the peak object.
+
+The peak area can by obtained by the {\tt peak\_sum\_area()} function in {\tt
+pyms.Peak.Function}. The function determines the total
+area as the sum of the ion intensities for all masses that apex at the given
+peak. To calculate the peak area of a single mass, the intensities are added
+from the apex of the mass peak outwards. Edge values are added until the
+following conditions are met: the added intensity adds less than 0.5\% to the
+accumulated area; or the added intensity starts increasing (i.e. when the ion is
+common to co-eluting compounds). To avoid noise effects, the edge value is taken
+at the midpoint of three consecutive edge values.
+
+Given a list of peaks, areas can be determined and added as follows:
+\begin{verbatim}
+>>> from pyms.Peak.Function import peak_sum_area
+>>> for peak in peak_list:
+...     area = peak_sum_area(intensity_matrix, peak)
+...     peak.set_area(area)
+...
+\end{verbatim}
