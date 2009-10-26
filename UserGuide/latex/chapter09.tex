@@ -16,7 +16,7 @@
 
 
 \section
-{Mass Isotope Distribution Extraction in $^{13}$C Experiments}
+{Mass Isotopomer Distribution Extraction in $^{13}$C Experiments}
 
 \noindent
 [ \emph{This example is in pyms-test/91} ]
@@ -56,18 +56,20 @@ a non-labelled ion, M+1 represents the ion incorporating a single labelled atom,
 M+2 ion is the one with two labelled atoms, etc.
 
 In the example, experimental data are saved as a series of .CDF files, and the base 
-file name is '/home/projects/PyMS/data-0903/a0903_' with the extension file numbers
-'297, 298, 299, 301, 302, 303, 304, 306, 307, 308, 253, 255, 256, 257, 258, 260, 261, 
-262, 263, 265, 266, 267, 268, 270, 271, 272, 273'. The compound is Alanine, the
-retention time is 411 seconds and the diagnostic ion is 190 with MID size of 6 (i.e.
-ions to be extracted are 190, 191, 192, 193, 194, and 195). Window size used is 4 
-seconds.
+file name is:
+\begin{verbatim}
+ '/home/projects/PyMS/data-0903/a0903_'
+\end{verbatim}
+ with the extension file numbers '297, 298, 299'. The compound is Alanine, the 
+retention time is 411 seconds and the diagnostic ion is 190 with MID size of 6 
+(i.e. ions to be extracted are 190, 191, 192, 193, 194, and 195). Window size 
+used is 4 seconds.
 
 To enter the above input data:
 
 \begin{verbatim}
 >>> file_base = '/home/projects/PyMS/data-0903/a0903_'
->>> file_numbers = (297, 298, 299, 301, 302, 303, 304, 306, 307, 308, 253, 255, 256, 257, 258, 260, 261, 262, 263, 265, 266, 267, 268, 270, 271, 272, 273)
+>>> file_numbers = (297, 298, 299)
 >>> compound = 'Alanine'
 >>> ion = 190
 >>> rt = 411 
@@ -97,22 +99,11 @@ Mass Isotopomer Distribution (MID): 738048.0 155456.0 68656.0 9833.0 1859.0 0.0
 
  -> Reading netCDF file '/home/projects/PyMS/data-0903/a0903_299.CDF'
 Mass Isotopomer Distribution (MID): 982400.0 207456.0 85200.0 12021.0 3368.0 908.0 
-
- -> Reading netCDF file '/home/projects/PyMS/data-0903/a0903_301.CDF'
-Mass Isotopomer Distribution (MID): 94344.0 37677.0 235352.0 43420.0 19734.0 2594.0 
-
- -> Reading netCDF file '/home/projects/PyMS/data-0903/a0903_302.CDF'
-Mass Isotopomer Distribution (MID): 119834.0 48036.0 317048.0 59465.0 26006.0 3586.0 
-
- -> Reading netCDF file '/home/projects/PyMS/data-0903/a0903_303.CDF'
-Mass Isotopomer Distribution (MID): 98707.0 40209.0 276352.0 55036.0 23910.0 3328.0
-
-...
 \end{verbatim}
 
 
 \section
-{Mass Isotope Distribution Correction in $^{13}$C Experiments}
+{Mass Isotopomer Distribution Correction in $^{13}$C Experiments}
 
 \noindent
 [ \emph{This example is in pyms-test/92} ]
