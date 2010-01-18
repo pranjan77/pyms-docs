@@ -311,14 +311,38 @@ will create ``data.im.dat'', ``data.mz.dat'', and ``data.rt.dat'' where these
  are the intensity matrix, retention time vector, and m/z vector.
 By default the data is saved as space separated data with a ``.dat'' extension.
 It is also possible to save the data as comma separated data with a ``.csv''
-extension by the command ``{\tt im.export\_ascii("output/data", "csv")}''.
+extension by the command\\
+``{\tt im.export\_ascii("output/data", "csv")}''.
 
 Additionally, the entire IntensityMatrix can be exported as LECO CSV. This is
  useful for import into other analytical software packages.
 The format is a header line specifying the column heading information as:
-``scan, retention time, mass1, mass2, $\vdots$'', and then each row as the
+``scan, retention time, mass1, mass2, $\dots$'', and then each row as the
 intensity data.
 
 \begin{verbatim}
 >>> im.export_leco_csv("output/data_leco.csv")
 \end{verbatim}
+
+\section{Importing ASCII data}
+
+\noindent
+[ {\em This example is in pyms-test/32} ]
+
+The LECO CSV data format can be used to import ASCII data directly into an
+IntensityMatrix object.  The data must follow the format outlined above.  For
+example, the file saved above can be read and compared to the original:
+
+\begin{verbatim}
+>>> from pyms.GCMS.Class import IntensityMatrix
+>>>
+>>> iim = IntensityMatrix([0],[0],[[0]])
+>>>
+>>> iim.import_leco_csv("output/data_leco.csv")
+>>>
+>>> print im.get_size()
+>>> print iim.get_size()
+\end{verbatim}
+
+The line ``IntensityMatrix([0],[0],[[0]])'' is required to create an empty
+IntensityMatrix object.
