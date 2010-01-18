@@ -21,7 +21,7 @@ aux:	$(TEXFILE:.tex=.aux)
 	\dvips -q -t a4 $<
 
 %.pdf: %.ps
-	\ps2pdf -dPDFSETTINGS=/prepress $<
+	\ps2pdf -sPAPERSIZE=a4 -dPDFSETTINGS=/prepress $<
 	make clean
 	\/usr/bin/evince $(TEXFILE:.tex=.pdf)
 	if [ -e $(TEXFILE:.tex=.ps) ]; then rm $(TEXFILE:.tex=.ps); fi

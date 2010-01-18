@@ -1,6 +1,10 @@
 % LaTeX source for PyMS User Guide
 
 \documentclass[twoside,a4paper]{book}
+\special{papersize=210mm,297mm}
+\pdfpagewidth 210mm
+\pdfpageheight 297mm
+
 
 \usepackage{epsfig}
 \usepackage{graphicx}
@@ -11,13 +15,15 @@
 \setlength{\topmargin}{0.0cm}
 \setlength{\evensidemargin}{0.0cm}
 \setlength{\oddsidemargin}{0.0cm}
-\setlength{\textwidth}{16.0cm}
-\setlength{\textheight}{23.0cm}
+%\setlength{\textwidth}{16.0cm}
+%\setlength{\textheight}{23.0cm}
 %\setlength{\footskip}{0.0cm}
 
 \parskip 0.2cm
 \parindent 0cm
 \makeindex
+
+\input epsf
 
 \begin{document}
 
@@ -39,43 +45,42 @@ data}
 \maketitle
 \tableofcontents
 
-\input epsf
+%\newpage
+\mainmatter
+%\pagenumbering{arabic}
 
-\newpage
-
-\setcounter{chapter}{1}
-\setcounter{section}{0}
-\pagenumbering{arabic}
+%\setcounter{chapter}{1}
+%\setcounter{section}{0}
 \input{latex/chapter01.tex}
 
-\setcounter{chapter}{2}
-\setcounter{section}{0}
-\pagenumbering{arabic}
+%\setcounter{chapter}{2}
+%\setcounter{section}{0}
+%\pagenumbering{arabic}
 \input{latex/chapter02.tex}
 
-\setcounter{chapter}{3}
-\setcounter{section}{0}
-\pagenumbering{arabic}
+%\setcounter{chapter}{3}
+%\setcounter{section}{0}
+%\pagenumbering{arabic}
 \input{latex/chapter03.tex}
 
-\setcounter{chapter}{4}
-\setcounter{section}{0}
-\pagenumbering{arabic}
+%\setcounter{chapter}{4}
+%\setcounter{section}{0}
+%\pagenumbering{arabic}
 \input{latex/chapter04.tex}
 
-\setcounter{chapter}{5}
-\setcounter{section}{0}
-\pagenumbering{arabic}
+%\setcounter{chapter}{5}
+%\setcounter{section}{0}
+%\pagenumbering{arabic}
 \input{latex/chapter05.tex}
 
-\setcounter{chapter}{6}
-\setcounter{section}{0}
-\pagenumbering{arabic}
+%\setcounter{chapter}{6}
+%\setcounter{section}{0}
+%\pagenumbering{arabic}
 \input{latex/chapter06.tex}
 
-\setcounter{chapter}{9}
-\setcounter{section}{0}
-\pagenumbering{arabic}
+%\setcounter{chapter}{9}
+%\setcounter{section}{0}
+%\pagenumbering{arabic}
 \input{latex/chapter09.tex}
 
 \bibliography{bibtex/refbase}
