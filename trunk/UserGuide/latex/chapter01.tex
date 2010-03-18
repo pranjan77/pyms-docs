@@ -141,6 +141,14 @@ instructions how to install a local copy of `ndimage'. These instructions
 and the link to the file `ndimage.zip' are here:\\
 {\tt http://www.urbansim.org/opus/releases/opus-4-1-1/docs/installation/scipy.html}
 
+\subsection{\label{subsec:matplotlib}Package 'matplotlib' (required 
+for plotting information in Display module)}
+
+The displaying of information such as Ion Chromatograms and detected peaks
+is done using the package matplotlib. The matplotlib package and user information
+can be accessed at:\\
+{\tt http://matplotlib.sourceforge.net/}
+
 \section{Current PyMS development environment}
 
 PyMS is currently being developed with the following packages:
@@ -151,6 +159,7 @@ numpy-1.1.1
 netcdf-4.0
 pycdf-0.6-3b
 Pycluster-1.41
+matplotlib-0.99.1.2
 \end{verbatim}
 
 A quick installation guide for packages required by PyMS is given below.
@@ -230,6 +239,29 @@ $ mkdir scipy
 $ touch scipy/__init__.py
 $ mv ndimage scipy
 \end{verbatim}
+
+\item matplotlib installation:
+
+\begin{verbatim}
+$ tar xvfz matplotlib-0.99.1.2
+$ cd matplotlib-0.99.1.1
+$ python setup.py build
+$ python setup.py install
+\end{verbatim}
+
+\noindent
+The pyms.Display package uses the TKAgg backend for matplotlib. As this is
+not the default backend, the matplotlibrc file must be edited. To locate the
+matplotlibrc file, in a python interactive session:
+
+\begin{verbatim}
+>>> import matplotlib
+>>> matplotlib.matplotlib_fname()
+\end{verbatim}
+
+\noindent
+Open the matplotlibrc file in a text editor and adjust the 'backend'
+parameter to 'TKAgg'.
 
 \end{enumerate}
 
