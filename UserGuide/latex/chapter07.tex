@@ -12,61 +12,58 @@
  %                                                                           %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Displaying information using the Display Module}
+\chapter{The Display module}
 
-PyMS can be used to display information such as Ion Chromatograms (ICs), 
-Total Ion Chromatogram (TIC) and detected lists of peaks. This functionality
-is provided by the package matplotlib, which must be installed in order 
-to use the Display module and to run the scripts referred to in this chapter
+PyMS has graphical capabilities to display information such as ion chromatogram
+objects (ICs), total ion chromatogram (TIC), and detected lists of peaks.
+This functionality is provided by the package matplotlib, which must be installed
+in order to use the Display module and to run the scripts referred to in this
+chapter. The instructions for this are provided in \ref{subsec:matplotlib}.
 
-
-
-\section{Displaying the Total Ion Chromatogram (TIC) of a data object}
-\label{sec:DisplayTic}
+\section{Displaying the TIC}
+\label{sec:display-tic}
 \noindent
 [ {\em This example is in pyms-test/70a} ]
 
-To display the TIC, it must first be extracted from the data. This is done as 
-in section \ref{sec:IonChromatogramObject}. Having found
-and stored the TIC object, a simple call to the function {\tt plot\_ics()} displays
-the TIC in a new window. In addition to the TIC, two strings may be passed to plot\_ics()
-which label the data (in this case 'TIC'), and the overall plot ('TIC for gc01\_0812\_066').
+TIC must first be extracted from the data (see section
+\ref{sec:ion-chromatogram-object}).  Once the TIC object is created,
+a simple call to the function {\tt plot\_ics()} displays the TIC in a
+graphical window. In addition to the TIC, two strings may be passed
+to plot\_ics() which label the data (in this case 'TIC'), and the
+overall plot ('TIC for gc01\_0812\_066').
 
 \begin{verbatim}
 >>> plot_ics(tic, 'TIC','TIC for gc01_0812_066')
 \end{verbatim}
 
-The window in figure \ref{70a} should now be displayed:
+The window in figure \ref{fig:70a} should now be displayed:
 
 \begin{figure}
   \begin{center}
     \includegraphics[scale=0.33]{graphics/chapter07/test-70a.eps}
   \end{center}
-  \caption{Figure displayed by test script 70a.}
-  \label{70a}
+  \caption{Graphics window displayed by the script 70a/proc.py}
+  \label{fig:70a}
 \end{figure}
 
 To zoom in on a portion of the plot, select the
 \includegraphics[scale=0.5]{graphics/chapter07/magnifier_button.eps}
-button, then hold down the 
-left mouse button while dragging a rectangle over the area of interest. To return
-to the original view, simply click on the
-\includegraphics[scale=0.5]{graphics/chapter07/home_button.eps}
-button.
+button, hold down the left mouse button while dragging a rectangle over
+the area of interest. To return to the original view, click on the
+\includegraphics[scale=0.5]{graphics/chapter07/home_button.eps} button.
 
 The 
 \includegraphics[scale=0.5]{graphics/chapter07/cross_button.eps}
 button allows panning across the zoomed plot. 
 
-
-\section{Displaying multiple Ion Chromatograms and the TIC}
+\section{Displaying multiple ion chromatogram objects}
 
 \noindent
 [ {\em This example is in pyms-test/70b} ]
 
-
-The Display module can plot multiple ICs and the TIC on the same figure, 
-To do this, a list of Ion Chromatogram objects is created:
+The Display module can plot multiple ICs and the TIC on the same figure,
+as shown in the following example. First, a list of ion chromatogram
+objects is created:
 
 \begin{verbatim}
 >>> tic = data.get_tic()
@@ -75,22 +72,21 @@ To do this, a list of Ion Chromatogram objects is created:
 >>> ics = [tic, ic, ic1]
 \end{verbatim}
 
-This list is passed to the 
-function {\tt plot\_ics()}, along with a list of strings to label each 
-Ion Chromatogram:
+This list is passed to the function {\tt plot\_ics()}, along with a list
+of strings to label each ion chromatogram:
 
 \begin{verbatim}
 >>> plot_ics(ics, ['TIC', '73','147'], 'TIC and ICs for m/z = 73 & 147')
 \end{verbatim}
 
-This should result in the window in figure \ref{70b} being displayed:
+This results in figure \ref{fig:70b} being displayed:
 
 \begin{figure}
   \begin{center}
     \includegraphics[scale=0.33]{graphics/chapter07/test-70b.eps}
   \end{center}
-  \caption{Figure displayed by test script 70b.}
-  \label{70b}
+  \caption{Graphics window displayed by the script 70b/proc.py}
+  \label{fig:70b}
 \end{figure}
 
 \section{Displaying detected peaks on the TIC plot}
@@ -99,68 +95,68 @@ This should result in the window in figure \ref{70b} being displayed:
 [ {\em This example is in pyms-test/71} ]
 
 The Display class is a more powerful implementation of plotting which 
-allows plotting of detected peaks and user interaction with the plot figure.
+allows plotting of detected peaks and user interaction with the plot
+figure.
 
-
-
-In order to plot a list of peaks, the list must first be populated.
-The script {\tt proc\_save\_peaks.py} produces such a peak list. For more information
-on detecting peaks see section \ref{sec:PeakDetection}. The function 
-{\tt store\_peaks()} in {\tt proc\_save\_peaks.py} stores the peaks, while
-{\tt load\_peaks()} in {\tt proc.py} loads them for the Display class to use.
+In order to plot a list of peaks, the peaks must be created first.
+The example pyms-test/71 contains the script {\tt proc\_save\_peaks.py}
+which produces such a peak list. For more information on detecting peaks
+see section \ref{sec:peak-detection}. The function {\tt store\_peaks()}
+in {\tt proc\_save\_peaks.py} stores the peaks, while {\tt load\_peaks()}
+in {\tt proc.py} loads them for the Display class to use.
 
 When using the Display Class, a series of plots is added to the figure
-one at a time before the final plot is displayed.
-
-To begin, an instance of the Display class is created:
+one at a time before the final plot is displayed. The first step is
+always creating an instance of the Display class:
 
 \begin{verbatim}
 >>>display = Display()
 \end{verbatim}
 
-Next some ics and the TIC are plotted. Unlike earlier examples, the TIC is
-plotted using a separate function. This function ensures that the TIC is always
-plotted in blue for easy reference. The legend for each IC is supplied to the
-functions, but the overall figure label is not supplied at this time.
+Next some ics and the TIC are plotted. Unlike in simple plotting, the
+TIC is plotted using a separate function. This function ensures that
+the TIC is always plotted in blue for easy reference. The legend for
+each IC is supplied to the functions, but the overall figure label
+is not supplied at this time.
 
 \begin{verbatim}
 >>> display.plot_ics(ics, ['73','147'])
 >>> displat.plot_tic(tic, 'TIC')
 \end{verbatim}
 
-The function {\tt plot\_peaks()} then adds the PyMS detected peaks to the figure.
+The function {\tt plot\_peaks()} adds the PyMS detected peaks to the
+figure.
 
 \begin{verbatim}
 >>>display.plot_peaks(peak_list, 'Peaks')
 \end{verbatim}
 
-Finally the function {\tt do\_plotting()} is called to draw the figure with 
-label and display the plot.
+Finally, the function {\tt do\_plotting()} is called to draw the figure with 
+labels and display the plot.
 
 \begin{verbatim}
 >>> display.do_plotting('TIC, ICs, and PyMS Detected Peaks')
 \end{verbatim}
 
-This should result in figure \ref{71-ics} being displayed:
+This should result in figure \ref{fig:71-ics} being displayed:
 
 \begin{figure}
   \begin{center}
     \includegraphics[scale=0.33]{graphics/chapter07/test-71-ICs.eps}
   \end{center}
-  \caption{Figure displayed by test script 71.}
-  \label{71-ics}
+  \caption{Graphics window displayed by the script 71/proc.py}
+  \label{fig:71-ics}
 \end{figure}
 
-
-\subsection{User interaction with plot window}
+\subsection{User interaction with the plot window}
 
 When using the Display class, the resulting figure window can be used to
 access data about the displayed peaks.
 
-Clicking on a peak causes a list of the 5 highest intensity eluting ions at that
-peak to be written to the screen in order.
-Clicking a mouse button over one of the 
-peaks should result in output similar to the following:
+Clicking on a peak causes a list of the 5 highest intensity eluting ions
+at that peak to be written to the screen in order.  Clicking a mousex
+ button over one of the peaks should result in output similar to the
+following:
 
 \begin{verbatim}
 >>> mass     intensity
@@ -171,17 +167,18 @@ peaks should result in output similar to the following:
 >>> 347     241031.333333
 \end{verbatim}
 
-In addition, clicking a mouse button other than the left button on a peak displays the 
-mass spectrum at the peak in a new window (figure \ref{71-spec}):
+In addition, clicking a mouse button other than the left button on a peak
+displays the mass spectrum at the peak in a new window (figure \ref{fig:71-spec}):
 
 \begin{figure}
   \begin{center}
     \includegraphics[scale=0.33]{graphics/chapter07/test-71-spec.eps}
   \end{center}
-  \caption{Figure displayed by clicking on a peak.}
-  \label{71-spec}
+  \caption{The mass spectrum displayed by PyMS when a peak in the
+  graphics window of Figure \ref{fig:71-ics} is clicked on}
+  \label{fig:71-spec}
 \end{figure}
 
+Clicking on other peaks will display further mass spectrums for those peaks
+in new windows.
 
-
-Clicking on other peaks will display further mass spectrums for those peaks in new windows.

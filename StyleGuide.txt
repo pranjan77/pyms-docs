@@ -296,3 +296,46 @@
               @type file_name: StringType
               """ 
 
+
+ PyMS "User Guide" Style Guide
+ =============================
+
+1. General
+
+  1.1 Reference labels.
+
+    - In reference labels use strings with words separated
+    by hyphen. Examples:
+
+        \label{sec:time-string}
+        \label{sec:display-tic}
+        \label{fig:71-spec} 
+
+ 1.2 Refernce labels for sections, subsections, and figures
+    should be preceeded with a tag:
+
+        sections: 'sec:'
+        subsections: 'subsec:'
+        figures: 'fig:'
+
+   Examples:
+        
+        \label{sec:time-string}
+        \label{subsec:numpy}
+        \label{fig:71-spec} 
+
+2. Figures
+
+  2.1 Captions. All Figures must have figure captions. The last
+  sentence in Figure captions should not end with a fullstop.
+  Example:
+
+  \begin{figure}
+   \begin{center}
+    \includegraphics[scale=0.33]{graphics/chapter07/test-70a.eps}
+   \end{center}
+   \caption{Graphics window displayed by the script 70a/proc.py}
+   \label{fig:70a}
+  \end{figure}
+
+
