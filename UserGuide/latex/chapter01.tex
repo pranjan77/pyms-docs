@@ -14,11 +14,11 @@
 
 \chapter{Introduction}
 
-PyMS is a Python package and consists sub-packages written in Python
-programming language \cite{python}. PyMS is released as open source,
-under the GNU Public License version 2.
+PyMS is software for processing of chromatography--mass spectrometry data.
+PyMS is written in Python programming language \cite{python}, and is
+released as open source, under the GNU Public License version 2.
 
-The main idea behind PyMS is to provide a framework and a set of
+The driving idea behind PyMS is to provide a framework and a set of
 components for rapid development and testing of methods for processing
 of chromatography--mass spectrometry data. PyMS provides interactive
 processing capabilities through any of the various interactive Python
@@ -52,58 +52,82 @@ any existing functionality.
 
 \section{The PyMS project}
 
-There are three parts of the pyms project, each existing as a separate
-project in the Google Code repository that can be downloaded separately.
-These are:
+The PyMS project consists of three parts, and each of which exists
+as a project in the Google Code repository that can be downloaded
+separately. These three parts are:
 
 \begin{itemize}
-  \item pyms -- The PyMS code
-  \item pyms-docs -- The PyMS documentation
-  \item pyms-test -- Examples of how to use PyMS
+  \item pyms -- The PyMS code (http://code.google.com/p/pyms/)
+  \item pyms-docs -- The PyMS documentation (http://code.google.com/p/pyms-docs/)
+  \item pyms-test -- Examples of how to use PyMS (http://code.google.com/p/pyms-test/)
 \end{itemize}
 
-The data used in PyMS documentation and examples is available from the
-Bio21 Institute server at the University of Melbourne:\\
-{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms-data/}\\
-In addition, the current PyMS API documentation is available from here:\\
-{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms.api/index.html}
+The project 'pyms' contains the source code of the Python package PyMS.
+The project 'pyms-docs' contains PyMS style guide (relevant for those
+who contribute to the PyMS code) and User Guide (this document). The
+project 'pyms-test' contains tests and examples showing how to use
+various PyMS features. These examples are explained in detail in 
+subsequent chapters of this User Guide.
 
-\section{PyMS installation on Linux}
+In addition, the current PyMS API documentation (releant for those
+who are interested in PyMS internals) is available from here:\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms.api/index.html}\\
 
-There are several ways to install PyMS depending your computer configuration
-and preferences. The recommended way install PyMS is to compile Python
-from sources and install PyMS within the local Python installation. This
-procedure is described below.
+\section{PyMS installation}
 
-PyMS has been developed on Linux, and a detailed installation instructions
-for Linux are given below. PyMS has been tested on several major Linux
-distributions, including Red Hat Linux.
+PyMS is written in Python, and extensible and modular object-oriented
+scripting language \cite{python}. Python is highly portable, cross-platform 
+programming language which works well on all major modern operating
+systems (Linux, MacOS X, Windows). PyMS is written in pure Python, and
+therefore works on all platforms on which Python has been ported.
 
-\subsection{Downloading PyMS source code}
+The PyMS is essentially a python library (a 'package' in python parlance,
+which consists of several 'sub-packages'), and some of its functionality
+depends on several Python libraries, such as 'numpy' (the Python library
+for numerical computing), or 'matplotlib' (the Python library for plotting).
+These also need to work on the operating system of your choice for the
+functionality they provide to PyMS to be available. In general, the
+libraries that PyMS uses are available for all operating systems. The
+exception is 'pycdf' - a python interface to Unidata netCDF library
+written by Andre Gosselin of the Institut Maurice-Lamontagne, Canada
+(http://pysclint.sourceforge.net/pycdf/). {\em This library works only
+under Linux/Unix and therefore PyMS functionality which depends on
+it works only under the Unix operating system}.
 
-PyMS source code resides on Google Code servers, and can be accessed
-from the following URL: http://code.google.com/p/pyms/. Under the
-section "Source" one can find the instructions for downloading the
-source code. The same page provides the link under "This project's
+There are several ways to install PyMS depending your computer
+configuration and personal preferences. PyMS has been developed
+on Linux, and a detailed installation instructions for Linux are
+given below. PyMS should work on all major Linux distributions,
+and has been tested extensively on Red Hat Linux.
+
+\subsection{\label{subsec:code-download}Downloading PyMS source code}
+
+PyMS source code resides on publicly accessible Google Code servers,
+and can be accessed from the following URL: http://code.google.com/p/pyms/.
+Under the section "Source" one can find the instructions for downloading
+the source code. The same page provides the link under "This project's
 Subversion repository can be viewed in your web browser" which allows
 one to browse the source code on the server without actually downloading
-it.
+it. Regardless of the target operating system, the first step is to
+download the PyMS source code.
 
-Google Code maintains the source code with the program `subversion'
+Google Code server maintains the source code with the program `subversion'
 (an open-source version control system). To download the source code
-one needs we use the subversions client program called `svn'. The `svn'
-client exists for all mainstream operating systems\footnote{For example,
-on Linux CentOS 4 we have installed the RPM package
-`subversion-1.3.2-1.rhel4.i386.rpm' to provide us with the subversion
-client `svn'.}, for more information see http://subversion.tigris.org/.
-The book about subversion is freely available on-line at
-http://svnbook.red-bean.com/. Subversion has extensive functionality,
-however only the very basic functionality is needed to download PyMS
-source code.
+one needs we use the subversions client. Several subversion clients are
+available, some are open source, some freeware, and some are commerical
+(for more information see http://subversion.tigris.org/).
+We use the client program which ships will most Linux systems called
+'svn'. The 'svn' client exists for all mainstream operating
+systems\footnote{For example, on Linux CentOS 4 we have installed the
+RPM package `subversion-1.3.2-1.rhel4.i386.rpm' to provide the subversion
+client 'svn'}. Subversion has extensive functionality, however only the
+very basic functionality is needed to download PyMS source code (the
+book about subversion is freely available on-line at
+http://svnbook.red-bean.com/).
 
-If the computer is connected to the internet and the subversion client
-is installed, the following command will download the latest PyMS source
-code:
+If the computer is connected to the internet, and the subversion client
+'svn' is installed, the following command will download the latest PyMS
+source code:
 
 \begin{verbatim}
 $ svn checkout http://pyms.googlecode.com/svn/trunk/ pyms
@@ -111,25 +135,26 @@ A    pyms/Peak
 A    pyms/Peak/__init__.py
 A    pyms/Peak/List
 A    pyms/Peak/List/__init__.py
-.....
+... [ further output deleted ] ...
 Checked out revision 71.
 \end{verbatim}
 
-\subsection{PyMS installation}
+\subsection{PyMS installation on Linux}
 
-PyMS installation involves placing the PyMS code directory (pyms/) into
-a location visible to the Python interpreter. This can be in the standard
-place for 3rd party software (the directory site-packages/). If PyMS code
-is placed in a non-standard place the Python interpreter needs to be made
-aware of it before before it is possible to import PyMS modules (see the
-Python sys.path.append() command).
+We recommend compiling your own Python installation before installing
+PyMS. PyMS installation involves placing the PyMS code directory (pyms/)
+into a location visible to the Python interpreter. This can be in the
+standard place for 3rd party software (the directory site-packages/), or
+alternatively if PyMS code is placed in a non-standard location the
+Python interpreter needs to be made aware of it before before it is
+possible to import PyMS modules. For more on this please consult the
+Python command sys.path.append().
 
-We recommend compiling your own Python installation for PyMS.
+In addition to the source code, PyMS uses several external packages.
+These are explained below.
 
-In addition to the PyMS core source code, a number of external packages
-is used to provide additional functionality. These are explained below.
-
-\subsection{\label{subsec:numpy}Package `NumPy'}
+\subsection{\label{subsec:numpy}Package 'NumPy' (required for all
+aspects of PyMS)}
 
 The package NumPy is provides numerical capabilities to Python. This
 package is used throughout PyMS (and also required for some external
@@ -138,7 +163,7 @@ packages used in PyMS), to its installation is mandatory.
 The NumPy web site {\tt http://numpy.scipy.org/} provides the installation
 instructions and the link to the source code.
 
-\subsection{\label{subsec:pycdf}Package `pycdf' (required for reading
+\subsection{\label{subsec:pycdf}Package 'pycdf' (required for reading
 ANDI-MS files)}
 
 The pycdf (a python interface to Unidata netCDF library) source and
@@ -146,7 +171,7 @@ installation instructions can be downloaded from\\
 {\tt http://pysclint.sourceforge.net/pycdf/}. Follow the installation
 instructions to install pycdf.
 
-\subsection{\label{subsec:pycluster}Package `Pycluster' (required for peak
+\subsection{\label{subsec:pycluster}Package 'Pycluster' (required for peak
 alignment by dynamic programming)}
 
 The peak alignment by dynamic programming is located in the subpackage
@@ -155,21 +180,21 @@ as the clustering engine. Pycluster with its installation instructions
 can be found here:\\
 {\tt http://bonsai.ims.u-tokyo.ac.jp/~mdehoon/software/cluster/index.html}.
 
-\subsection{\label{subsec:scipy-ndmage}Package `scipy.ndimage' (required
+\subsection{\label{subsec:scipy-ndmage}Package 'scipy.ndimage' (required
 for TopHat baseline corrector)}
 
-If the full SciPy package is installed the `ndimage' will be available. However
-the SciPy contains large amount of functionality, and its installation is
-somewhat involved. In some situations in may be preferable to install only
-the subpackage `ndimage'. This subpackage is provided in the PyMS-dependencies gzipped
-file available for download from the PyMS webpage.
+If the full SciPy package is installed the 'ndimage' will be available.
+However the SciPy contains extensive functionality, and its installation
+is somewhat involved. Sometimes it is preferable to install only the
+subpackage `ndimage'. This subpackage is provided as the PyMS-dependencies
+gzipped file available for download from the PyMS webpage (see below).
 
 \subsection{\label{subsec:matplotlib}Package 'matplotlib' (required 
-for plotting information in Display module)}
+for plotting)}
 
-The displaying of information such as Ion Chromatograms and detected peaks
-is done using the package matplotlib. The matplotlib package and user information
-can be accessed at:\\
+The displaying of information such as Ion Chromatograms and detected
+peaks requires the package matplotlib. The matplotlib package can be
+downloaded from:\\
 {\tt http://matplotlib.sourceforge.net/}
 
 \section{Current PyMS development environment}
@@ -185,11 +210,20 @@ Pycluster-1.41
 matplotlib-0.99.1.2
 \end{verbatim}
 
-A quick installation guide for packages required by PyMS is given below.
+These packages bundled together into the archive 'PyMS-Linux-deps-1.1.tar.gz'
+which can be downloaded from the Bio21 Institute web server at the
+University of Melbourne:\\
+http://bioinformatics.bio21.unimelb.edu.au/pyms.html\\
+This bundle provides the dependencies required to install PyMS on Linux
+(one also needs to dowload the PyMS source code as explained in the
+section \ref{subsec:code-download}).
+
+A quick installation guide for packages required by PyMS on Linux
+is given below.
 
 \begin{enumerate}
 
-\item Python installation:
+\item 'Python' installation:
 
 \begin{verbatim}
 $ tar xvfz Python-2.5.2.tgz
@@ -200,10 +234,11 @@ $ make install
 \end{verbatim}
 
 \noindent
-This installs python in /usr/local/lib/python2.5.  Make sure that python called
-from the command line is the one just compiled and installed.
+This installs python in /usr/local/lib/python2.5. It is recommended
+to make sure that python called from the command line is the one
+just compiled and installed.
 
-\item NumPy installation:
+\item 'NumPy' installation:
 
 \begin{verbatim}
 $ tar xvfz numpy-1.1.1.tar.gz
@@ -211,11 +246,11 @@ $ cd numpy-1.1.1
 $ python setup.py install
 \end{verbatim}
 
-\item pycdf installation
+\item 'pycdf' installation
 
-Pycdf has two dependencies: the Unidata netcdf library and NumPy. The NumPy
-installation is described above. To install pycdf, the netcdf library must
-be downloaded\\
+Pycdf has two dependencies: the Unidata netcdf library and NumPy. The
+NumPy installation is described above. To install pycdf, the netcdf
+library must be downloaded\\
 ({\tt http://www.unidata.ucar.edu/software/netcdf/index.html}),\\
 compiled and installed first:
 
@@ -227,8 +262,8 @@ $ make
 $ make install
 \end{verbatim}
 
-The last step will create several binary `libnetcdf*' files in /usr/local/lib.
-pycdf can be installed as follows:
+The last step will create several binary `libnetcdf*' files in
+/usr/local/lib. Then 'pycdf' should be installed as follows:
 
 \begin{verbatim}
 $ tar xvfz pycdf-0.6-3b
@@ -236,7 +271,7 @@ $ cd pycdf-0.6-3b
 $ python setup.py install
 \end{verbatim}
 
-\item Pycluster installation
+\item 'Pycluster' installation
 
 \begin{verbatim}
 $ tar xvfz Pycluster-1.42.tar.gz
@@ -244,7 +279,7 @@ $ cd Pycluster-1.42
 $ python setup.py install
 \end{verbatim}
 
-\item ndimage installation:
+\item 'ndimage' installation:
 
 \begin{verbatim}
 $ unzip ndimage.zip
@@ -253,8 +288,8 @@ $ python setup.py install --prefix=/usr/local
 \end{verbatim}
 
 \noindent
-Since ndimage was installed outside the scipy package, this requires some manual
-correction:
+Since 'ndimage' was installed outside the scipy package, this requires
+some manual tweaking:
 
 \begin{verbatim}
 $ cd /usr/local/lib/python2.5/site-packages
@@ -263,7 +298,7 @@ $ touch scipy/__init__.py
 $ mv ndimage scipy
 \end{verbatim}
 
-\item matplotlib installation:
+\item 'matplotlib' installation:
 
 \begin{verbatim}
 $ tar xvfz matplotlib-0.99.1.2
@@ -273,9 +308,9 @@ $ python setup.py install
 \end{verbatim}
 
 \noindent
-The pyms.Display package uses the TKAgg backend for matplotlib. As this is
-not the default backend, the matplotlibrc file must be edited. To locate the
-matplotlibrc file, in a python interactive session:
+The 'pyms.Display' module uses the TKAgg backend for matplotlib. If
+this is not your default backend, the matplotlibrc file may be edited.
+To locate the file 'matplotlibrc', in a python interactive session:
 
 \begin{verbatim}
 >>> import matplotlib
@@ -290,11 +325,8 @@ parameter to 'TKAgg'.
 
 \section{Troubleshooting}
 
-The PyMS is essentially a python library (a `package' in python parlance, which
-consists of several `sub-packages'), which for some functionality depends on
-other python libraries, such as NumPy, pycdf, and Pycluster. The most likely
-problem with PyMS installation is a problem with installing one of the PyMS
-dependencies.
+The most likely problem with PyMS installation is a problem with
+installing one of the PyMS dependencies.
 
 \subsection{Pycdf import error}
 
@@ -328,42 +360,48 @@ as CentOS.
 
 \section{PyMS tutorial and examples}
 
-A tutorial illustrating various PyMS features in provided in subsequent chapter
-of this User Guide. The commands executed interactively are grouped together
-by example, and provided as Python scripts in the project `pyms-test' (this is
-a Google code project, similar to the project `pyms' which contains the PyMS
+This document provides extensive tutorial on the use of PyMS, and the
+corresponding examples can be downloaded from the publicly accessible
+Google code project 'pyms-test' (http://code.google.com/p/pyms-test/). 
+The data used in PyMS documentation and examples is available from the
+Bio21 Institute server at the University of Melbourne. Please follow
+the link from the PyMS web page:\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms}\\
+or go directly to\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms-data/}\\
+
+A tutorial illustrating various PyMS features in detail is provided
+in subsequent chapters of this User Guide. The commands executed
+interactively are grouped together by example, and provided as
+Python scripts in the project 'pyms-test' (this is a Google code
+project, similar to the project 'pyms' which contains the PyMS
 source code).
 
-The setup used in the examples below is as follows. The projects `pyms',
-`pyms-test', `pyms-docs', and `data' are all in the same directory,
-`/x/PyMS'. In the project `pyms-test' there is a directory corresponding to
-each example coded with the example number (ie. {\tt pyms-test/21a/}
-corresponds to Example 1a in Chapter 2).
+The setup used in the examples below is as follows. The projects 'pyms',
+'pyms-test', 'pyms-docs', and 'data' are all in the same directory,
+'/x/PyMS'. In the project 'pyms-test' there is a directory corresponding
+to each example, coded with the chapter number (ie. {\tt pyms-test/21a/}
+corresponds to the Example 21a, from Chapter 2).
 
-In each example directory, there is a script named `proc.py' which contains
-the commands given in the example.  Provided that the paths to `pyms' and
-`pyms-data' are set properly, these scripts could be run with the following
-command:
+In each example directory, there is a script named 'proc.py' which
+contains the commands given in the example.  Provided that the paths
+to 'pyms' and 'pyms-data' are set properly, these scripts could be
+run with the following command:
 
 \begin{verbatim}
 $ python proc.py
 \end{verbatim}
 
-Before running each example the Python interpreter was made aware of the
-PyMS location with the following commands:
+Before running each example the Python interpreter was made aware of
+the PyMS location with the following commands:
 
 \begin{verbatim}
 import sys
 sys.path.append("/x/PyMS")
 \end{verbatim}
 
-For brevity these commands will not be shown in the examples below, but
-they are included in `pyms-test' example scripts.  The above path may need
-to be adjusted to match your own directory structure.
-
-All data files (raw data files, peak lists etc.) used in the example below
-can be found at \\
-{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms/data/} \\
-and are assumed to be located in the `data' directory.
+For brevity these commands will not be shown in the examples below,
+but they are included in 'pyms-test' example scripts.  The above
+path may need to be adjusted to match your own directory structure.
 
 
