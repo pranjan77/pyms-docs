@@ -108,26 +108,33 @@ Under the section "Source" one can find the instructions for downloading
 the source code. The same page provides the link under "This project's
 Subversion repository can be viewed in your web browser" which allows
 one to browse the source code on the server without actually downloading
-it. Regardless of the target operating system, the first step is to
-download the PyMS source code.
+it. Regardless of the target operating system, the first step towards
+PyMS installation is to download the PyMS source code.
 
 Google Code server maintains the source code with the program `subversion'
 (an open-source version control system). To download the source code
 one needs we use the subversions client. Several subversion clients are
 available, some are open source, some freeware, and some are commerical
-(for more information see http://subversion.tigris.org/).
-We use the client program which ships will most Linux systems called
-'svn'. The 'svn' client exists for all mainstream operating
-systems\footnote{For example, on Linux CentOS 4 we have installed the
-RPM package `subversion-1.3.2-1.rhel4.i386.rpm' to provide the subversion
-client 'svn'}. Subversion has extensive functionality, however only the
-very basic functionality is needed to download PyMS source code (the
-book about subversion is freely available on-line at
-http://svnbook.red-bean.com/).
+(for more information see http://subversion.tigris.org/). The svn client
+programs are available for all operating systems. For example, on Linux
+we use the svn client program which ships will most Linux systems called
+simply 'svn'. The 'svn' exists for all mainstream operating
+systems\footnote{For example, on Linux CentOS 4 it ships as a part of
+the RPM package `subversion-1.3.2-1.rhel4.i386.rpm'}. A well known 
+svn client for Windows is TortoiseSVN (http://tortoisesvn.tigris.org/).
+TortoiseSVN provides graphical user interface, and is tightly integrated
+with Windows. TortoiseSVN is open source and can be downloaded from the
+project web page (http://tortoisesvn.tigris.org/). There are also several
+commercial svn clients for Windowes.
+
+Subversion has extensive functionality, however only the very basic
+functionality is needed to download PyMS source code. For more information
+about subversion please consult the book freely available
+at http://svnbook.red-bean.com/.
 
 If the computer is connected to the internet, and the subversion client
-'svn' is installed, the following command will download the latest PyMS
-source code:
+'svn' is installed. On Linux, the following command will download the
+latest PyMS source code:
 
 \begin{verbatim}
 $ svn checkout http://pyms.googlecode.com/svn/trunk/ pyms
@@ -139,19 +146,10 @@ A    pyms/Peak/List/__init__.py
 Checked out revision 71.
 \end{verbatim}
 
-\subsection{PyMS installation on Linux}
+\subsection{External Libraries}
 
-We recommend compiling your own Python installation before installing
-PyMS. PyMS installation involves placing the PyMS code directory (pyms/)
-into a location visible to the Python interpreter. This can be in the
-standard place for 3rd party software (the directory site-packages/), or
-alternatively if PyMS code is placed in a non-standard location the
-Python interpreter needs to be made aware of it before before it is
-possible to import PyMS modules. For more on this please consult the
-Python command sys.path.append().
-
-In addition to the source code, PyMS uses several external packages.
-These are explained below.
+In addition to the source code, PyMS uses several external libraries
+as explained below.
 
 \subsection{\label{subsec:numpy}Package 'NumPy' (required for all
 aspects of PyMS)}
@@ -197,9 +195,18 @@ peaks requires the package matplotlib. The matplotlib package can be
 downloaded from:\\
 {\tt http://matplotlib.sourceforge.net/}
 
-\section{Current PyMS development environment}
+\subsection{PyMS installation on Linux}
 
-PyMS is currently being developed with the following packages:
+We recommend compiling your own Python installation before installing
+PyMS. PyMS installation involves placing the PyMS code directory (pyms/)
+into a location visible to the Python interpreter. This can be in the
+standard place for 3rd party software (the directory site-packages/), or
+alternatively if PyMS code is placed in a non-standard location the
+Python interpreter needs to be made aware of it before before it is
+possible to import PyMS modules. For more on this please consult the
+Python command sys.path.append().
+
+PyMS is currently being developed on Linux with the following packages:
 
 \begin{verbatim}
 Python-2.5.2
@@ -210,13 +217,13 @@ Pycluster-1.41
 matplotlib-0.99.1.2
 \end{verbatim}
 
-These packages bundled together into the archive 'PyMS-Linux-deps-1.1.tar.gz'
-which can be downloaded from the Bio21 Institute web server at the
-University of Melbourne:\\
+For easy installation, we provide these packages bundled together into
+the archive 'PyMS-Linux-deps-1.1.tar.gz' which can be downloaded from
+the Bio21 Institute web server at the University of Melbourne:\\
 http://bioinformatics.bio21.unimelb.edu.au/pyms.html\\
-This bundle provides the dependencies required to install PyMS on Linux
-(one also needs to dowload the PyMS source code as explained in the
-section \ref{subsec:code-download}).
+
+In addition to the dependencies bundle, one also needs to dowload the
+PyMS source code as explained in the section \ref{subsec:code-download}).
 
 A quick installation guide for packages required by PyMS on Linux
 is given below.
@@ -322,6 +329,13 @@ Open the matplotlibrc file in a text editor and adjust the 'backend'
 parameter to 'TKAgg'.
 
 \end{enumerate}
+
+\subsection{PyMS installation on Windows}
+
+The PyMS code is highly portable and works on Windows, provided that
+Python is installed and that Python libraries used by PyMS (such as
+NumPy) are installed. 
+
 
 \section{Troubleshooting}
 
