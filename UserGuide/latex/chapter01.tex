@@ -146,10 +146,10 @@ A    pyms/Peak/List/__init__.py
 Checked out revision 71.
 \end{verbatim}
 
-\subsection{External Libraries}
+\section{\label{sec:external-libraries}External Libraries}
 
-In addition to the source code, PyMS uses several external libraries
-as explained below.
+In addition to the source code, for the full PyMS functionality
+several external libraries are required.
 
 \subsection{\label{subsec:numpy}Package 'NumPy' (required for all
 aspects of PyMS)}
@@ -195,7 +195,7 @@ peaks requires the package matplotlib. The matplotlib package can be
 downloaded from:\\
 {\tt http://matplotlib.sourceforge.net/}
 
-\subsection{PyMS installation on Linux}
+\section{PyMS installation on Linux}
 
 We recommend compiling your own Python installation before installing
 PyMS. PyMS installation involves placing the PyMS code directory (pyms/)
@@ -224,9 +224,8 @@ http://bioinformatics.bio21.unimelb.edu.au/pyms.html\\
 
 In addition to the dependencies bundle, one also needs to dowload the
 PyMS source code as explained in the section \ref{subsec:code-download}).
-
-A quick installation guide for packages required by PyMS on Linux
-is given below.
+Below we give a quick installation guide of packages required by PyMS
+on Linux.
 
 \begin{enumerate}
 
@@ -330,12 +329,20 @@ parameter to 'TKAgg'.
 
 \end{enumerate}
 
-\subsection{PyMS installation on Windows}
+\section{PyMS installation on Windows}
 
 The PyMS code is highly portable and works on Windows, provided that
 Python is installed and that Python libraries used by PyMS (such as
-NumPy) are installed. 
-
+NumPy) are installed. However, at this point the library 'pycdf'
+which provides the interface to the Unidata netCDF library does
+not exist for Windows. The 'pycdf' library is used for reading of
+raw data in ANDI-MS format, the widely used standard format for
+storing raw chromatography--mass spectrometry data
+(see \ref{sec:chapter2-introduction}). Therefore, at present the
+ability to read ANDI-MS files is limited to Linux. All other
+Python libraries required by PyMS (see \ref{sec:external-libraries})
+are available for Windows, and therefore all other PyMS functionality
+is available under Windows.
 
 \section{Troubleshooting}
 
