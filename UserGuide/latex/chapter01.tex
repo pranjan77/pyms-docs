@@ -195,6 +195,13 @@ peaks requires the package matplotlib. The matplotlib package can be
 downloaded from:\\
 {\tt http://matplotlib.sourceforge.net/}
 
+\subsection{\label{subsec:mpi4py}Package 'mpi4py' (required 
+for parallel processing)}
+
+This package is required for parallel processing with PyMS. It can be
+downloaded from:\\
+{\tt http://code.google.com/p/mpi4py/}
+
 \section{PyMS installation on Linux}
 
 We recommend compiling your own Python installation before installing
@@ -213,8 +220,11 @@ Python-2.5.2
 numpy-1.1.1
 netcdf-4.0
 pycdf-0.6-3b
+ndimage.zip
 Pycluster-1.41
 matplotlib-0.99.1.2
+mpi4py-1.2.1.tar.gz
+mpich2-1.2.1p1.tar.gz
 \end{verbatim}
 
 For easy installation, we provide these packages bundled together into
@@ -326,6 +336,13 @@ To locate the file 'matplotlibrc', in a python interactive session:
 \noindent
 Open the matplotlibrc file in a text editor and adjust the 'backend'
 parameter to 'TKAgg'.
+
+\item 'mpi4py' installation:
+
+This package is required for running PyMS processing on multiple processors
+(CPUs). Installation of this package, and instructions how to run PyMS in
+in parallel are given in \ref{chap:chapter9} 
+
 
 \end{enumerate}
 
