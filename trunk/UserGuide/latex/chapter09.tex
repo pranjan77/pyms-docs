@@ -113,5 +113,173 @@ properly and ready to use.
 
 \end{enumerate}
 
+\section{\label{sec:parallel-background}Background to using PyMS in parallel}
+
+Any processing that loops through ion chromatograms or mass spectra can
+be performed in parallel, by distributing the processing of individual
+ion chromatograms or mass spectra to different CPUs by using the
+efficient MPI mechanism.
+
+Before the parallel processing can be deployed, data needs to be binned
+to produce an IntensityMatrix object, as described in the Section
+\ref{sec:intensity-matrix}. This is eessentially a two dimensional
+matrix, with ion chromatograms along one dimension and mass spectra
+along the other dimension.
+
+Consider the processing which applies a noise smoothing function to
+each ion chromatogram. We first read the raw data:
+
+\begin{verbatim}
+andi_file = "/x/PyMS/data/gc01_0812_066.cdf"
+data = ANDI_reader(andi_file)
+\end{verbatim}
+ 
+Then build the intensity matrix, and get its dimensions:
+
+\begin{verbatim}
+im = build_intensity_matrix_i(data)
+n_scan, n_mz = im.get_size()
+\end{verbatim}
+
+The last command sets the variables n\_scan and n\_mz to the number
+scans and number of m/z values present in data, respectively.
+Processing of ion chromatograms with the noise smoothing function
+requires fetching of each ion chromatogram from the data, and
+application of the noise smoothing function. This can be achieved 
+with a simple loop: 
+
+\begin{verbatim}
+for ii in n_mz:
+    print ii+1,
+    ic = im.get_ic_at_index(ii)
+    ic_smooth = window_smooth(ic, window=7)
+\end{verbatim}
+
+This example epitomizes the typical processing required on the
+GC-MS data. Another, equally important processing, is that of
+individual mass spectra. In this case the same logic can be
+applied, except that one would loop over the other dimension
+of the IntensityMatrix object 'im'. That is, one would loop
+over all the scan indices, and use the method 
+get\_ms\_at\_index() to fetch individual mass spectra:
+
+
+\begin{verbatim}
+for ii in n_scan:
+    print ii+1,
+    ms = im.get_ms_at_index(ii)
+    # here do something the the mass spectra 'ms'
+\end{verbatim}
+
+Processing of data in this fashion is computationally intensive.
+A typical data set may consist of 3,000-10,000 scans and ~500
+m/z values. If complex processing algorithms are applied to
+each ion chromatogram (or mass spectra), the processing will
+quickly become computationally prohibitive.
+
+The type of calculation illustrated above is an ideal candidate
+for parallelization because each ion chromatogram (or mass
+spectrum) are processed independently. PyMS takes advantage
+of this and allows one to harvest the power of multiple CPUs
+to spead-up the processing. To achieve this PyMS can distributes
+the loop from the above (either type, ie. over ion chromatograms
+or mass spectra) over the available CPUs, achieveing a linear
+speed-up with the number of CPUs.
+
+
+\section{\label{sec:parallel-pyms}Using PyMS in parallel}
+
+Using PyMS in parallel reqires a minimal intervension, only
+that special method of the IntensityMatrix object is invoked
+in the for loop described above. For looping over all ion
+chromatograms in parallel,
+
+\begin{verbatim}
+for ii in im.iter_ic_indices():
+    print ii+1,
+    ic = im.get_ic_at_index(ii)
+    ic_smooth = window_smooth(ic, window=7)
+\end{verbatim}
+
+The only change is that 
+
+\begin{verbatim}
+for ii in n_mz:
+\end{verbatim}
+
+is replaced with
+
+\begin{verbatim}
+for ii in im.iter_ic_indices()
+\end{verbatim}
+
+The corresponsing method for looping over all mass spectra
+would involve replacing:
+
+\begin{verbatim}
+for ii in n_scan:
+\end{verbatim}
+
+with
+
+\begin{verbatim}
+for ii in im.iter_ms_indices()
+\end{verbatim}
+
+The special constructs {\tt for ii in im.iter\_ic\_indices():} and
+{\tt for ii in im.iter\_ms\_indices()} will distribute the calculation
+in parallel if MPI capability is available (ie. mpi4py is installed
+on the system, and multiple CPUs are available). If MPI capability
+is not available, the processing will be performed in a serial mode. 
+Running in parallel also requires some preparations, as explained
+in the example below.
+
+Consider how the following script named 'proc.py, that attempts
+to perform the noise smoothing example described above, can be
+run in serial and parallel mode.
+
+\begin{verbatim}
+"""proc.py
+"""
+
+import sys
+sys.path.append("/x/PyMS")
+
+from pyms.GCMS.IO.ANDI.Function import ANDI_reader
+from pyms.GCMS.Function import build_intensity_matrix_i
+from pyms.Noise.Window import window_smooth
+
+# read the raw data as a GCMS_data object
+andi_file = "/x/PyMS/data/gc01_0812_066.cdf"
+data = ANDI_reader(andi_file)
+
+# build the intensity matrix
+im = build_intensity_matrix_i(data)
+
+# get the size of the intensity matrix
+n_scan, n_mz = im.get_size()
+print "Size of the intensity matrix is (n_scans, n_mz):", n_scan, n_mz
+
+# loop over all m/z values, fetch the corresponding IC, and perform
+# noise smoothing
+for ii in im.iter_ic_indices():
+    print ii+1,
+    ic = im.get_ic_at_index(ii)
+    ic_smooth = window_smooth(ic, window=7)
+\end{verbatim}
+
+Although this script is enabled to run in parallel, without special
+care taken (or 'mpi4py' installed), it will run in serial mode on
+a single CPU:
+
+\begin{verbatim}
+$ python proc.py
+ -> Reading netCDF file '/x/PyMS/data/gc01_0812_066.cdf'
+Size of the intensity matrix is (n_scans, n_mz): 9865 551
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47
+... [ further output deleted ] ...
+\end{verbatim}
+
 
 

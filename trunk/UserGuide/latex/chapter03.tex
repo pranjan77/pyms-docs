@@ -15,7 +15,7 @@
 \chapter{GC-MS data derived objects}
 
 In this chapter the methods for converting the raw GC-MS data to an
-Intensity Matrix object are illustrated.
+IntensityMatrix object are illustrated.
 
 In the raw GC-MS data, consecutive scans do not necessarily contain the same
 mass per charge (mass) values. For data processing, it is often necessary to
@@ -23,7 +23,7 @@ convert the data to a matrix with a set number of masses and scans. In PyMS
 there are functions to explicitly convert the raw mass values to consistent
 values across all scans.
 
-\section{IntensityMatrix Object}
+\section{\label{sec:intensity-matrix}IntensityMatrix Object}
 
 The general scheme for converting raw mass values is to bin intensity values
 based on the interval the corresponding mass belongs to. The general procedure
