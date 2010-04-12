@@ -31,8 +31,87 @@ software distributions downloaded from the projects' web site.
 \begin{enumerate}
 
 \item From the mpich2 project web site download the current distribution of
-mpich2 (in this case the file 'mpich2-1.2.1p1.tar.gz').
+mpich2 (in our case the file 'mpich2-1.2.1p1.tar.gz').
+
+\item Prepare the directory for mpich2 installation. In this example
+we have chosen to use /usr/local/mpich2/. Our version of mpitch2 is
+1.2.1, and to allow for the installation of different version later,
+we create a subdirectory "1.2.1",
+
+\begin{verbatim}
+$ mkdir -vp /usr/local/mpich2/1.2.1
+\end{verbatim}
+
+The above command will make the directory /usr/local/mpich2/ and also
+/usr/local/mpich2/1.2.1. Note that /usr/local is usually owned by
+root, and the above commands may require root privileges.
+
+\item Unpack this file and change to the source code directory:
+
+\begin{verbatim}
+$ tar xvfz mpich2-1.2.1p1.tar.gz 
+$ cd  mpich2-1.2.1p1
+\end{verbatim}
+
+\item Configure, compile, and install mpich2:
+
+\begin{verbatim}
+$ ./configure --prefix=/usr/local/mpich2/1.2.1 --enable-sharedlibs=gcc
+$ make
+$ make install
+\end{verbatim}
+
+If /usr/local/mpich2/1.2.1 is owned by rood, the above command
+may require root privileges.
 
 \end{enumerate}
+
+\subsection{\label{sec:mpi4py}Installation of 'mpi4py'}
+
+\begin{enumerate}
+
+\item From the mpi4py project web site download the current distribution
+of mpi4py (in our case the file 'mpi4py-1.2.1.tar.gz').
+
+\item Unpack this file and change to the source code directory:
+
+\begin{verbatim}
+$ tar xvfz mpi4py-1.2.1.tar.gz
+$ cd mpi4py-1.2.1
+\end{verbatim}
+
+\item Edit the file 'mpi.cfg' to reflect the location of mpich2.  In
+our case this file after editing contained the following:
+
+\begin{verbatim}
+# MPICH2
+[mpi]
+mpi_dir              = /usr/local/mpich2/1.2.1
+mpicc                = %(mpi_dir)s/bin/mpicc
+mpicxx               = %(mpi_dir)s/bin/mpicxx
+\end{verbatim}
+
+\item Install mpi4py:
+
+\begin{verbatim}
+$ python setup.py install
+\end{verbatim}
+
+\item Check that mpi4py works:
+
+\begin{verbatim}
+$ python
+Python 2.5.2 (r252:60911, Sep 10 2008, 14:39:22) 
+[GCC 4.1.1 20070105 (Red Hat 4.1.1-52)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import mpi4py
+>>> 
+\end{verbatim}
+
+If the above command import produced no output, mpi4py is installed
+properly and ready to use.
+
+\end{enumerate}
+
 
 
