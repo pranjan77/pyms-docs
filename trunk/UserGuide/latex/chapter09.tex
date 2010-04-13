@@ -230,13 +230,13 @@ The special constructs {\tt for ii in im.iter\_ic\_indices():} and
 {\tt for ii in im.iter\_ms\_indices()} will distribute the calculation
 in parallel if MPI capability is available (ie. mpi4py is installed
 on the system, and multiple CPUs are available). If MPI capability
-is not available, the processing will be performed in a serial mode. 
-Running in parallel also requires some preparations, as explained
-in the example below.
+is not available, the processing will be performed in a serial mode.
+Running in parallel also requires some prior preparations, as explained
+below.
 
-Consider how the following script named 'proc.py, that attempts
-to perform the noise smoothing example described above, can be
-run in serial and parallel mode.
+Consider how the following script that performs noise smoothing example
+described above (named 'proc.py'). This script is can be run in serial
+or parallel mode.
 
 \begin{verbatim}
 """proc.py
@@ -268,9 +268,8 @@ for ii in im.iter_ic_indices():
     ic_smooth = window_smooth(ic, window=7)
 \end{verbatim}
 
-Although this script is enabled to run in parallel, without special
-care taken (or 'mpi4py' installed), it will run in serial mode on
-a single CPU:
+A simple running of this script will produce a serial run without
+any warning messages:
 
 \begin{verbatim}
 $ python proc.py
@@ -281,5 +280,102 @@ Size of the intensity matrix is (n_scans, n_mz): 9865 551
 ... [ further output deleted ] ...
 \end{verbatim}
 
+Inspection of the CPU usage during the execution of the program
+shows that only one CPU is utilised 100\% (although multiple CPUs
+are available) as shown in Figure \ref{fig:top-serial}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=1.0]{graphics/chapter09/top-serial.eps}
+  \end{center}
+  \caption{The xterm output of the program 'top' with PyMS running in
+  serial mode on the computer with multiple CPUs}
+  \label{fig:top-serial}
+\end{figure}
+
+To run the above script in parallel, one needs first to start the
+mpitch2 process launcher, called 'mpd' (this is a program, in this
+example located in\\
+ {\tt /usr/local/mpich2/1.2.1/bin/mpd},\\
+see the section \label{sec:mpitch2}). This can be achieved as follows:
+
+\begin{verbatim}
+$ /usr/local/mpich2/1.2.1/bin/mpd --daemon
+\end{verbatim}
+
+The above command start 'mpd' as a daemon (the program runs in the
+background, without a controlling terminal).  A common problem
+that causes the above command is fail is the absence of the
+{\tt .mpd.conf
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=1.0]{graphics/chapter09/top-serial.eps}
+  \end{center}
+  \caption{The xterm output of the program 'top' with PyMS running in
+  serial mode on the computer with multiple CPUs}
+  \label{fig:top-serial}
+\end{figure}
+} file which 'mpd' requires to be present in the
+home directory of the user who is starting the process. Here is
+an excerpt from the 'mpd' help page:
+
+\begin{verbatim}
+A file named .mpd.conf file must be present in the user's home directory
+with read and write access only for the user, and must contain at least
+a line with MPD_SECRETWORD=<secretword>
+To run mpd as root, install it while root and instead of a .mpd.conf file
+use mpd.conf (no leading dot) in the /etc directory.' 
+\end{verbatim}
+
+Fixing this problem is simple, and requies creating the file
+{\tt ~/.mpd.conf}, which in our case contains only one line:
+
+\begin{verbatim}
+MPD_SECRETWORD=euSe0veo
+\end{verbatim}
+
+After this the 'mpd' can be launched.
+
+Running the PyMS script in the parallel mode requires the use of 'mpirun'
+command,
+
+\begin{verbatim}
+$ /usr/local/mpich2/1.2.1/bin/mpirun -np 2 python proc.py 
+\end{verbatim}
+
+The above command prepare 'python proc.py' to run in parallel, in this
+case by using two CPUS ({\tt -np 2}). The execution produces the
+following output:
+
+\begin{verbatim}
+$ /usr/local/mpich2/1.2.1/bin/mpirun -np 2 python proc.py 
+ -> Reading netCDF file '/x/PyMS/data/gc01_0812_066.cdf'
+ -> Reading netCDF file '/x/PyMS/data/gc01_0812_066.cdf'
+Size of the intensity matrix is (n_scans, n_mz):Size of
+the intensity matrix is (n_scans, n_mz): 9865 551
+276 9865 551
+1 277 2 278 3 279 4 280 5 281 6 282 7 283 8 284 9 285 10 286 11 287 12
+288 13 289 14 290 15 291 16 292 17 293 18 294 19 295 20 296 21 297 22
+298 23 299 24 300 25 301 26 302 27 303 28 304 2
+... [ further output deleted ] ...
+\end{verbatim}
+
+The above shows that two processes are active (each reading its own
+version of data). While the distribution of processing between the
+two processes has been achieved automatically by PyMS. Since both
+processes were started from the same terminal their output is
+intermingled. This time the procesing is using two CPUs, and this
+can be seen from the inspection of CPU utilisation, as shown in
+Figure \ref{fig:top-parallel}. Also the execution of the script
+'proc.py' is now two times faster.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=1.0]{graphics/chapter09/top-parallel.eps}
+  \end{center}
+  \caption{The xterm output of the program 'top' with PyMS running in
+  parallel mode with two CPUs}
+  \label{fig:top-parallel}
+\end{figure}
 
 
