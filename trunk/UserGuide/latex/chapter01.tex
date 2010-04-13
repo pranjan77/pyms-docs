@@ -379,22 +379,22 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> import pycdf
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-  File "/usr/local/lib/python2.5/site-packages/pycdf/__init__.py", line 22, in <module>
-    from pycdf import *
-  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdf.py", line 1096, in <module>
-    import pycdfext as _C
-  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdfext.py", line 5, in <module>
-    import _pycdfext
+  File "/usr/local/lib/python2.5/site-packages/pycdf/__init__.py",
+        line 22, in <module> from pycdf import *
+  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdf.py",
+        line 1096, in <module> import pycdfext as _C
+  File "/usr/local/lib/python2.5/site-packages/pycdf/pycdfext.py",
+        line 5, in <module> import _pycdfext
 ImportError: /usr/local/lib/python2.5/site-packages/pycdf/_pycdfext.so:
     cannot restore segment prot after reloc: Permission denied
 \end{verbatim}
 
-This problem is removed simply by disabling SELinux (login as `root', open the
-menu Administration $\rightarrow$ Security Level and Firewall, tab SELinux,
-change settings from `Enforcing' to `Disabled').
+This problem is removed simply by disabling SELinux (login as `root',
+open the menu Administration $\rightarrow$ Security Level and Firewall,
+tab SELinux, change settings from `Enforcing' to `Disabled').
 
-This problem is likely to occur on Red Hat Linux derivative distributions such
-as CentOS.
+This problem is likely to occur on Red Hat Linux derivative distributions
+such as CentOS.
 
 \section{PyMS tutorial and examples}
 
@@ -441,5 +441,18 @@ sys.path.append("/x/PyMS")
 For brevity these commands will not be shown in the examples below,
 but they are included in 'pyms-test' example scripts.  The above
 path may need to be adjusted to match your own directory structure.
+
+\section{\label{sec:pyms-windows}Using PyMS on Windows}
+
+Thanks to cross-platform compatibility of Python, most PyMS functionality
+works seamlessly on Windows. The only exception is reading of data
+in NetCDF format which is not supported on Windows because, because
+the 'pycdf' package is not supported on Windows (see the Subsection
+\ref{subsec:pycdf}).
+
+We use Linux for the development and deployment PyMS, and this User
+Guide largely assumes that PyMS is used under Linux. The exception
+is this Subsection, where we give some pointers on how to use PyMS
+under Windows.
 
 
