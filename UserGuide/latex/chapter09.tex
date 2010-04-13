@@ -122,7 +122,7 @@ efficient MPI mechanism.
 
 Before the parallel processing can be deployed, data needs to be binned
 to produce an IntensityMatrix object, as described in the Section
-\ref{sec:intensity-matrix}. This is eessentially a two dimensional
+\ref{sec:intensity-matrix}. This is essentially a two dimensional
 matrix, with ion chromatograms along one dimension and mass spectra
 along the other dimension.
 
@@ -181,15 +181,15 @@ The type of calculation illustrated above is an ideal candidate
 for parallelization because each ion chromatogram (or mass
 spectrum) are processed independently. PyMS takes advantage
 of this and allows one to harvest the power of multiple CPUs
-to spead-up the processing. To achieve this PyMS can distributes
+to speed-up the processing. To achieve this PyMS can distributes
 the loop from the above (either type, ie. over ion chromatograms
-or mass spectra) over the available CPUs, achieveing a linear
+or mass spectra) over the available CPUs, achieving a linear
 speed-up with the number of CPUs.
 
 
 \section{\label{sec:parallel-pyms}Using PyMS in parallel}
 
-Using PyMS in parallel reqires a minimal intervension, only
+Using PyMS in parallel requires a minimal intervention, only
 that special method of the IntensityMatrix object is invoked
 in the for loop described above. For looping over all ion
 chromatograms in parallel,
@@ -213,7 +213,7 @@ is replaced with
 for ii in im.iter_ic_indices()
 \end{verbatim}
 
-The corresponsing method for looping over all mass spectra
+The corresponding method for looping over all mass spectra
 would involve replacing:
 
 \begin{verbatim}
@@ -327,17 +327,15 @@ To run mpd as root, install it while root and instead of a .mpd.conf file
 use mpd.conf (no leading dot) in the /etc directory.' 
 \end{verbatim}
 
-Fixing this problem is simple, and requies creating the file
+Fixing this problem is simple, and requires creating the file
 {\tt ~/.mpd.conf}, which in our case contains only one line:
 
 \begin{verbatim}
 MPD_SECRETWORD=euSe0veo
 \end{verbatim}
 
-After this the 'mpd' can be launched.
-
-Running the PyMS script in the parallel mode requires the use of 'mpirun'
-command,
+After this the 'mpd' can be launched.  Running the PyMS script in the parallel
+mode requires the use of 'mpirun' command,
 
 \begin{verbatim}
 $ /usr/local/mpich2/1.2.1/bin/mpirun -np 2 python proc.py 
@@ -364,7 +362,7 @@ The above shows that two processes are active (each reading its own
 version of data). While the distribution of processing between the
 two processes has been achieved automatically by PyMS. Since both
 processes were started from the same terminal their output is
-intermingled. This time the procesing is using two CPUs, and this
+intermingled. This time the processing is using two CPUs, and this
 can be seen from the inspection of CPU utilisation, as shown in
 Figure \ref{fig:top-parallel}. Also the execution of the script
 'proc.py' is now two times faster.
