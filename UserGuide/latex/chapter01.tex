@@ -346,20 +346,6 @@ in parallel are given in Section \ref{sec:mpi}.
 
 \end{enumerate}
 
-\section{PyMS installation on Windows}
-
-The PyMS code is highly portable and works on Windows, provided that
-Python is installed and that Python libraries used by PyMS (such as
-NumPy) are installed. However, at this point the library 'pycdf'
-which provides the interface to the Unidata netCDF library does
-not exist for Windows. The 'pycdf' library is used for reading of
-raw data in ANDI-MS format, the widely used standard format for
-storing raw chromatography--mass spectrometry data
-(see \ref{sec:chapter2-introduction}). Therefore, at present the
-ability to read ANDI-MS files is limited to Linux. All other
-Python libraries required by PyMS (see \ref{sec:external-libraries})
-are available for Windows, and therefore all other PyMS functionality
-is available under Windows.
 
 \section{Troubleshooting}
 
@@ -444,15 +430,93 @@ path may need to be adjusted to match your own directory structure.
 
 \section{\label{sec:pyms-windows}Using PyMS on Windows}
 
-Thanks to cross-platform compatibility of Python, most PyMS functionality
-works seamlessly on Windows. The only exception is reading of data
-in NetCDF format which is not supported on Windows because, because
-the 'pycdf' package is not supported on Windows (see the Subsection
-\ref{subsec:pycdf}).
+Thanks to cross-platform compatibility of Python, PyMS works seamlessly
+on Windows. The only exception is reading of data in ANDI-MS (NetCDF)
+format, widely used standard format for storing raw
+chromatography--mass spectrometry data (see \ref{sec:chapter2-introduction})
+This capability in PyMS depends on the 'pycdf' library, which is not
+supported on Windows (see the Subsection \ref{subsec:pycdf}). Therefore
+at present the ability to read ANDI-MS files is limited to Linux. All
+other PyMS functionality is available under Windows.
 
 We use Linux for the development and deployment PyMS, and this User
-Guide largely assumes that PyMS is used under Linux. The exception
-is this Subsection, where we give some pointers on how to use PyMS
-under Windows.
+Guide largely assumes that PyMS is used under Linux. In this Subsection
+we give some pointers on how to use PyMS under Windows.
+
+\subsection{PyMS installation on Windows}
+
+\begin{enumarate}
+
+\item Install Python, NumPy, SciPy, and matplotlib for Windows.
+The bundle of these software packages tested under Windows XP and
+Windows 7 can be downloaded from the PyMS project page at the
+Bio21 Institute, University of Melbourne\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms.html}
+
+\item Download the latest PyMS code from the PyMS Google Code
+project page\\
+{\tt http://code.google.com/p/pyms/downloads/list#}
+
+\item Unpack the PyMS code and place it in a standard place for
+Python libraries, or adjust the PYTHONPATH variable to include
+the path to PyMS. If Python is installed in C:\Python25, the
+standard place for Python libraries is C:\Python25\Libs\site-packages
+
+\item Start IDLE, or other Python shell. If PyMS is installed
+properly, the following command will not return any warning or
+error messages:
+
+\begin{verbatim}
+>>> import pyms
+\end{verbatim}
+
+\end{enumarate}
+
+\subsection{Example processing GC-MS data with PyMS on Windows}
+
+The example data can be downloaded from\\
+{\tt http://bioinformatics.bio21.unimelb.edu.au/pyms/data/}.
+We will use the data file in the JCAMP-DX format, named
+{\tt gc01\_0812\_066.jdx}. Once downloaded this data file
+will be placed in the folder {\tt C:\Data}.
+
+The Python environment can be accessed from several Python
+shells. The default shell that comes with the Python 2.5
+installation is IDLE. In this example we first load the
+raw data,
+
+\begin{verbatim}
+>>> from pyms.GCMS.IO.JCAMP.Function import JCAMP_reader
+>>> jcamp_file = "C:\Data\gc01_0812_066.jdx"
+>>> data = JCAMP_reader(jcamp_file)
+ -> Reading JCAMP file 'C:\Data\gc01_0812_066.jdx'
+\end{verbatim}
+
+Then build the intensity matrix object by binning:
+
+\begin{verbatim}
+>>> from pyms.GCMS.Function import build_intensity_matrix_i
+>>> im = build_intensity_matrix_i(data)
+\end{verbatim}
+
+We obtain the dimensions of the intensity matrix, then loop
+over all ion chromatograms, and for each ion chromatogram
+apply Savitzky-Golay noise filter and tophat baseline correction.
+The resulting ion chromatogram is saved back into the intensity
+matrix:
+
+\begin{verbatim}
+>>> n_scan, n_mz = im.get_size()
+>>> from pyms.Noise.SavitzkyGolay import savitzky_golay
+>>> from pyms.Baseline.TopHat import tophat
+>>> for ii in range(n_mz):
+	print "working on IC", ii
+	ic = im.get_ic_at_index(ii)
+	ic1 = savitzky_golay(ic)
+	ic_smooth = savitzky_golay(ic1)
+	ic_base = tophat(ic_smooth, struct="1.5m")
+	im.set_ic_at_index(ii, ic_base)
+\end{verbatim}
+
 
 
