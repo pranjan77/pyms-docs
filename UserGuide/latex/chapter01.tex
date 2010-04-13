@@ -430,7 +430,7 @@ path may need to be adjusted to match your own directory structure.
 
 \section{\label{sec:pyms-windows}Using PyMS on Windows}
 
-Thanks to cross-platform compatibility of Python, PyMS works seamlessly
+Python is highly cross-platform compatible, and PyMS works seamlessly
 on Windows. The only exception is reading of data in ANDI-MS (NetCDF)
 format, widely used standard format for storing raw
 chromatography--mass spectrometry data (see \ref{sec:chapter2-introduction})
@@ -445,7 +445,7 @@ we give some pointers on how to use PyMS under Windows.
 
 \subsection{PyMS installation on Windows}
 
-\begin{enumarate}
+\begin{enumerate}
 
 \item Install Python, NumPy, SciPy, and matplotlib for Windows.
 The bundle of these software packages tested under Windows XP and
@@ -455,12 +455,12 @@ Bio21 Institute, University of Melbourne\\
 
 \item Download the latest PyMS code from the PyMS Google Code
 project page\\
-{\tt http://code.google.com/p/pyms/downloads/list#}
+{\tt http://code.google.com/p/pyms/}
 
 \item Unpack the PyMS code and place it in a standard place for
 Python libraries, or adjust the PYTHONPATH variable to include
-the path to PyMS. If Python is installed in C:\Python25, the
-standard place for Python libraries is C:\Python25\Libs\site-packages
+the path to PyMS. If Python is installed in C:\\Python25, the
+standard place for Python libraries is C:\\Python25\\Libs\\site-packages
 
 \item Start IDLE, or other Python shell. If PyMS is installed
 properly, the following command will not return any warning or
@@ -470,7 +470,7 @@ error messages:
 >>> import pyms
 \end{verbatim}
 
-\end{enumarate}
+\end{enumerate}
 
 \subsection{Example processing GC-MS data with PyMS on Windows}
 
@@ -478,7 +478,7 @@ The example data can be downloaded from\\
 {\tt http://bioinformatics.bio21.unimelb.edu.au/pyms/data/}.
 We will use the data file in the JCAMP-DX format, named
 {\tt gc01\_0812\_066.jdx}. Once downloaded this data file
-will be placed in the folder {\tt C:\Data}.
+will be placed in the folder {\tt C:\\Data}.
 
 The Python environment can be accessed from several Python
 shells. The default shell that comes with the Python 2.5
@@ -502,8 +502,8 @@ Then build the intensity matrix object by binning:
 We obtain the dimensions of the intensity matrix, then loop
 over all ion chromatograms, and for each ion chromatogram
 apply Savitzky-Golay noise filter and tophat baseline correction.
-The resulting ion chromatogram is saved back into the intensity
-matrix:
+The resulting noise and baseline corrected ion chromatogram
+is saved back into the intensity matrix:
 
 \begin{verbatim}
 >>> n_scan, n_mz = im.get_size()
@@ -517,6 +517,5 @@ matrix:
 	ic_base = tophat(ic_smooth, struct="1.5m")
 	im.set_ic_at_index(ii, ic_base)
 \end{verbatim}
-
 
 
