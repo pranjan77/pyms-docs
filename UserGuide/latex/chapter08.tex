@@ -30,7 +30,7 @@ if a metabolite contains three carbon atoms and we denote unlabelled atom with
  ‘0’ and labelled with ‘1’, the possible labelling patterns for the carbon 
 backbone are 000, 001, 010, 011, 100, 101, 110, 111. Mass spectrometry can only
 resolve isotopomer distribution completely if enough fragments can be detected 
-(for a compound with n carbon atoms this means 2$^{n}$ –1 different fragments 
+(for a compound with n carbon atoms this means 2$^{n}$ – 1 different fragments 
 containing different number and/or combinations of carbons).
 
 The same metabolite has n+1 different masses: base mass M (000), singly labelled
@@ -38,7 +38,7 @@ mass M+1 (001, 010, 100), doubly labelled mass M+2 (011, 101, 110) and fully
 labelled mass M+3 (111). The MS measurement of the molecular ion gives the mass 
 isotopomer distribution (e.g. M, M+1, M+2, M+3) of the compound.
 
-The algorithm developed relies on the value of the metabolite’s diagnostic
+The algorithm developed ( Figure \ref{fig:pymsMIDs}) relies on the value of the metabolite’s diagnostic
 fragment ion to extract the ion chromatograms from the data file.
 Metabolite’s retention time is then used for the feature extraction. Peak
 apex is defined as the local maximum within a specified window of the given
@@ -46,6 +46,14 @@ retention time. Left and right boundaries are defined as the first local minima 
 the left and right of the peak apex. The extraction of left and right boundary
 values is repeated for the characteristic fragment ion and its subsequent
 isotopomers.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=0.33]{graphics/chapter08/pymsMIDs.eps}
+  \end{center}
+  \caption{Data Flow Chart}
+  \label{fig:pymsMIDs}
+\end{figure}
 
 The boundary values are then averaged for each file and the overall isotopomer
 intensity is quantified by summing all of the intensities between average left and
