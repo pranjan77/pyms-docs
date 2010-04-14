@@ -63,11 +63,12 @@ file name is:
 \begin{verbatim}
  '/x/PyMS/data/'
 \end{verbatim}
-The extension file numbers 'a0903_297, a0903_298, a0903_299' are stored inside 
-'data_files' file. The compound is alanine, the retention time is 6.93 minutes 
+
+The extension file numbers 'a20090\_3297', 'a200903\_298' and 'a200903\_299' are stored inside
+'data\_files' file. The compound is alanine, the retention time is 6.93 minutes 
 and the diagnostic ions are 190 and 116 with MID vector size of 6 (i.e. ions to 
 be extracted are m/z 190, 191, 192, 193, 194, and 195 and 116, 117, 118, 119, 
-120 and 121 respectively). This information is stored inside 'ion_definitions' 
+120 and 121 respectively). This information is stored inside 'ion\_definitions' 
 file.
 
 To enter the input data:
@@ -94,19 +95,21 @@ Then read in both input files:
 \end{verbatim}
 
 Next loop over data files and extract MID:
+\begin{verbatim}
 >>> for file_name in data_files:
 >>>     andi_file = data_file_root + file_name + ".CDF"
 >>>     data = ANDI_reader(andi_file)
 >>>     im = build_intensity_matrix_i(data)
 >>>     for mid_table in mid_table_list:
 >>>         extract_mid(mid_table, file_name, im, time_win, int_tresh)
+\end{verbatim}
 
-Finally, write MID data tables to previously defined out_file:
+Finally, write MID data tables to previously defined out\_file:
 \begin{verbatim}
 >>> write_mid_tables(mid_table_list, out_file)
 \end{verbatim}
 
-The out file should contain:
+The out\_file should contain:
 
 \begin{verbatim}
 
@@ -149,7 +152,7 @@ subsequent isotopomer ICs are extracted in the likewise manner.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/82.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/82.eps}
   \end{center}
   \caption{Ion Chromatogram Extraction at m/z 116}
   \label{fig:82}
@@ -192,10 +195,9 @@ retention time locking, currently employed in the local lab, is sufficient
 for its correct operation, and indices, while certainly beneficial, are not 
 necessary.
 
-/subsection
-{Peak Shape}
+\subsection{Peak Shape}
 
-Detecting Peak Apex
+{\bf Detecting Peak Apex}
 
 Following from the TIC retention time discussion in the previous section, the 
 two anticipated scenarios are represented in figure \ref{fig:83}. The TIC retention 
@@ -204,7 +206,7 @@ time will be located immediately before (on the left of) or after
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/83.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/83.eps}
   \end{center}
   \caption{Peak Apex Detection}
   \label{fig:83}
@@ -221,7 +223,7 @@ As we are not guaranteed that the TIC retention time will be located within a
 specified window of ICs peak apex, and by examining the two dimensional IC 
 space by placing our detected ‘local maximum’ at the origin of a Cartesian 
 coordinate system, we can draw some conclusions on the success of finding the 
-true peak apex (figure /ref{fig:84}). Firstly, if either left or right neighbouring intensities are 
+true peak apex (figure \ref{fig:84}). Firstly, if either left or right neighbouring intensities are 
 greater than our detected ‘local maximum’ we can safely deduce that the IC peak 
 apex detection has failed. In the case that both left and right neighbour 
 intensities are equal a warning will be raised as GC-MS peaks are not expected 
@@ -231,7 +233,7 @@ value (not implemented in the current version).
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/84.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/84.eps}
   \end{center}
   \caption{Left and Right Peak Neighbour Check}
   \label{fig:84}
@@ -240,18 +242,18 @@ value (not implemented in the current version).
 The above analysis also covers the scenarios where TIC retention time is located 
 too close to a much larger peak, or the peak is simply missed by the particular 
 IC retention time being too far to the left or too far to the right from the 
-supplied overall TIC retention time (figure /ref{fig:85}).
+supplied overall TIC retention time (figure \ref{fig:85}).
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/85.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/85.eps}
   \end{center}
   \caption{Missed or Large Peak Check}
   \label{fig:85}
 \end{figure}
 
-The four scenarios pictured in figure /ref{fig:85} suggest a fifth ‘middle 
-ground’ scenario shown in figure /ref{fig:86}. Namely TIC retention time can 
+The four scenarios pictured in figure \ref{fig:85} suggest a fifth ‘middle 
+ground’ scenario shown in figure \ref{fig:86}. Namely TIC retention time can 
 land in the middle of two peaks with similar intensities. With only a slight 
 time shift between ICs the detected peak apex could oscillate between the two 
 peaks! The algorithm will detect this and raise a warning, as it is still 
@@ -262,24 +264,24 @@ two peaks in the diagram on the right belong to two different ICs.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/86.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/86.eps}
   \end{center}
   \caption{Close or Wide Peak}
   \label{fig:86}
 \end{figure}
 
-Detecting left and right boundary
+{\bf Detecting left and right boundary}
 
 Having analysed the possible scenarios for the relationship between TIC 
 retention time and detected peak apex, this brings us to the detection of left 
-and right peak boundary (figure /ref{fig:87}). If our peak detection was 
+and right peak boundary (figure \ref{fig:87}). If our peak detection was 
 successful this should be as easy as detecting first local minimum on the right 
 and first local minimum on the left of detected peak apex. The integration then 
 proceeds via summing up of all intensity between the two boundaries.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/87.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/87.eps}
   \end{center}
   \caption{Feature detection at mass-to-charge ratio of 116 and retention time of 6.93 minutes}
   \label{fig:87}
@@ -287,7 +289,7 @@ proceeds via summing up of all intensity between the two boundaries.
 
 In addition integrating multiple ICs belonging to a single compound inside a 
 single file can help integrate low intensity irregular shape peaks. This is 
-pictured in figure /ref{fig:88}, and accomplished via setting an intensity 
+pictured in figure \ref{fig:88}, and accomplished via setting an intensity 
 threshold parameter which is equal to the intensity below which peaks are too 
 close to the noise, irregular shape and impossible to integrate via above 
 described method. In the drawing below the procedure is illustrated for the 
@@ -298,9 +300,9 @@ illustrates the importance of baseline correction for these low intensity peaks.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/88.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/88.eps}
   \end{center}
-  \caption{Averaging of left and right boundary values inside each Ion Chromatogram, and baseline correction (inspired by Antoniewicz et al., 2007a}
+  \caption{Averaging of left and right boundary values inside each Ion Chromatogram, and baseline correction (inspired by Antoniewicz et al., 2007a)}
   \label{fig:88}
 \end{figure}
 
@@ -308,11 +310,11 @@ The introduction of an intensity threshold parameter introduces one more
 undesirable scenario. Namely, as peaks are not detected below threshold and the 
 algorithm operates in a ‘blind mode’ it is possible for a neighbouring peak 
 (not present or not as high intensity in other ICs) to interfere with the 
-integration result (figure /ref{fig:89}). Should this happen a warning is raised.
+integration result (figure \ref{fig:89}). Should this happen a warning is raised.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/89.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/89.eps}
   \end{center}
   \caption{Large Peak Co-eluting with a Peak below Intensity Threshold}
   \label{fig:89}
@@ -321,7 +323,7 @@ integration result (figure /ref{fig:89}). Should this happen a warning is raised
 \subsection
 {Mass Spectra}
 
-The diagram in Figure /ref{fig:89} introduces another important question. 
+The diagram in Figure \ref{fig:89} introduces another important question. 
 When is a neighbouring peak a co-elution and when just a shoulder? The only way 
 to reliably distinguish the two scenarios is via the use of mass spectra, which 
 acts as a signature for a particular compound in GC-MS data. In fact TIC 
@@ -329,12 +331,12 @@ retention time itself is determined via mass spectral library, which can be
 used inside unlabelled data. Metabolic labelling, however introduces uncertainty 
 into this signature, i.e. components can no longer be compared with the standard 
 unlabelled mass spectra. Indeed, a test run of an existing similarity algorithm 
-(Robinson et. Al, 2007) showed that labelled mass spectra can be more similar 
+(Robinson et al., 2007) showed that labelled mass spectra can be more similar 
 to spectra of other labelled compounds, than their own unlabelled spectra.
 
 \begin{figure}
   \begin{center}
-    \includegraphics[scale=1]{graphics/chapter08/90.eps}
+    \includegraphics[scale=0.7]{graphics/chapter08/90.eps}
   \end{center}
   \caption{Co-elution or a Shoulder of a Single Peak Dilemma}
   \label{fig:90}
@@ -360,7 +362,7 @@ to the same compound or not. Therefore it is argued that, although outside the
 scope of this algorithm due to time constraint considerations, the process 
 should be amenable to automation. 
 
-/subsection
+\subsection
 {Setting the two parameters}
 
 Setting the threshold too high will result in large number of unintegrated 
