@@ -376,4 +376,20 @@ Figure \ref{fig:top-parallel}. Also the execution of the script
   \label{fig:top-parallel}
 \end{figure}
 
+This simple example shows how to speed-up PyMS processing on a common
+workstation with two CPUs. The MPI also allows PyMS processing to run
+on specialised computers with many CPUs, such as Linux clusters. The
+MPI implementation allows PyMS to be easily used in such distributed
+computing environments, much like in the example above. We have tested
+PyMS on Linux clusters, and the resulting speed-up is nearly linear
+with the number of CPUs employed (Figure \ref{fig:speedup-parallel}).
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=0.75]{graphics/chapter09/speedup-parallel.eps}
+  \end{center}
+  \caption{The speedup in PyMS processing when run in parallel on a Linux
+  cluster as a function of a number of CPUs deployed}
+  \label{fig:speedup-parallel}
+\end{figure}
 
