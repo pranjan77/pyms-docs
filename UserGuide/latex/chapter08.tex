@@ -33,7 +33,7 @@ if a metabolite contains three carbon atoms and we denote unlabelled atom with
  ‘0’ and labelled with ‘1’, the possible labelling patterns for the carbon 
 backbone are 000, 001, 010, 011, 100, 101, 110, 111. Mass spectrometry can only
 resolve isotopomer distribution completely if enough fragments can be detected 
-(for a compound with n carbon atoms this means 2$^{n}$ – 1 different fragments 
+(for a compound with n carbon atoms this means 2$^{n}$-1 different fragments 
 containing different number and/or combinations of carbons).
 
 The same metabolite has n+1 different masses: base mass M (000), singly labelled
@@ -46,7 +46,7 @@ GC-MS data pre-processing (high and low frequency noise removal) as well as the
 construction of Intensity Matrix is accomplished via functionality of the GCMS 
 module( Figure \ref{fig:81}). The new algorithm takes a list of each 
 metabolite’s fragment ions, TIC retention time and a required number of 
-isotopomers (or MID vector size) and extracts the mass isotopomer distribution 
+isotopomers (MID vector size) and extracts the mass isotopomer distribution 
 for each metabolite. The algorithm’s performance for a particular data set is 
 optimised via two parameters, namely the intensity threshold and a time window.
 
@@ -68,9 +68,19 @@ base file name is:
 The extension file numbers 'a20090\_3297', 'a200903\_298' and 'a200903\_299' are
 stored inside 'data\_files' file. The compound is alanine, the retention time
 is 6.93 minutes and the diagnostic ions are 190 and 116 with MID vector size of
-6 (i.e. ions to be extracted are m/z 190, 191, 192, 193, 194, and 195 and 116,
+6 (i.e. ions to be extracted are m/z 190, 191, 192, 193, 194, and 195; and 116,
 117, 118, 119, 120 and 121 respectively). This information is stored inside
 'ion\_definitions' file.
+
+Firstly, import the relevant modules:
+
+\begin{verbatim}
+>>> from pyms.GCMS.IO.ANDI.Function import ANDI_reader
+>>> from pyms.GCMS.Function import build_intensity_matrix_i
+>>> from pyms.MIDs.Function import parse_ion_defs, parse_data_defs, \
+...    write_mid_tables
+>>> from pyms.MIDs.MassExtraction.Function import extract_mid
+\end{verbatim}
 
 To enter the input data:
 
@@ -100,11 +110,11 @@ To loop over data files and extract MID:
 
 \begin{verbatim}
 >>> for file_name in data_files:
->>>     andi_file = data_file_root + file_name + ".CDF"
->>>     data = ANDI_reader(andi_file)
->>>     im = build_intensity_matrix_i(data)
->>>     for mid_table in mid_table_list:
->>>         extract_mid(mid_table, file_name, im, time_win, int_tresh)
+...     andi_file = data_file_root + file_name + ".CDF"
+...     data = ANDI_reader(andi_file)
+...     im = build_intensity_matrix_i(data)
+...     for mid_table in mid_table_list:
+...         extract_mid(mid_table, file_name, im, time_win, int_tresh)
 \end{verbatim}
 
 Finally, write MID data tables to previously defined out\_file:
@@ -116,7 +126,25 @@ Finally, write MID data tables to previously defined out\_file:
 The out\_file should contain:
 
 \begin{verbatim}
+Alanine
+rt = 415.8secs
+rt = 6.93mins
+ion 190
+mdv size = 6
+file name,M+0,M+1,M+2,M+3,M+4,M+5,
+a0903_297,0.757476593654,0.161643594022,0.0686776427591,...
+a0903_298,0.755688322848,0.164943331054,0.0675399871565,...
+a0903_299,0.754408795882,0.166596996121,0.0671474860614,...
 
+Alanine
+rt = 415.8secs
+rt = 6.93mins
+ion 116
+mdv size = 6
+file name,M+0,M+1,M+2,M+3,M+4,M+5,
+a0903_297,0.742205716152,0.185529670258,0.0623422956963,...
+a0903_298,0.709695079502,0.209264922281,0.0701801446155,...
+a0903_299,0.696956557166,0.21788080549,0.0737847830385,...
 \end{verbatim}
 
 \section
@@ -135,7 +163,7 @@ of subsequent isotopomers
 \item Unlabelled mass spectra
 \end{itemize}
 
-Below each of these is explained in detail.
+Next each of these is explained in detail.
 
 \subsection{Diagnostic Ion Value and Number of Mass Isotopomers}
 
@@ -150,10 +178,7 @@ considered unlabelled (this is not strictly true due to natural isotopic
 abundance - dealt with in the next section).  Another important point is that 
 each compound will have many fragments containing both different and the same 
 parts of the carbon skeleton, thus redundant data will be available for 
-consistency checks. These checks are currently not implemented. A further study 
-should be conducted to determine, which fragments contain the same information 
-and which ones can be used for redundancy checks (the fragment usability will 
-depend on co-elution and relative abundance).
+consistency checks. These checks are currently not implemented. 
 
 Example in the figure \ref{fig:82} gives a visual representation of the 
 extraction of m/z 116 diagnostic ion for TMS derivatised alanine. The 
@@ -236,9 +261,9 @@ neighbouring intensities are greater than our detected ‘local maximum’ one
 can safely deduce that the IC peak apex detection has failed. In the case
 that both left and right neighbour intensities are equal a warning will
 be raised as GC-MS peaks are not expected to be flat, and this could indicate
-unusually high baseline. This can be further checked by comparing peak apex
-intensity with the instrument detection limit value (not implemented in the
-current version).
+unusually high baseline or MS detector reaching its limit. This can be further 
+checked by comparing peak apex intensity with the instrument detection limit 
+value (not implemented in the current version).
 
 \begin{figure}
   \begin{center}
@@ -263,13 +288,13 @@ the right from the supplied overall TIC retention time (figure \ref{fig:85}).
 
 The four scenarios pictured in figure \ref{fig:85} suggest a ‘middle 
 ground’ scenario shown in figure \ref{fig:86}. The TIC retention time
-can happen to in the middle of two peaks with similar intensities.
+can happen to be in the middle of two peaks with similar intensities.
 In this case, with only a slight time shift between ICs the detected
 peak apex would oscillate between the two peaks. The algorithm will
 detect this and raise a warning, as it is still possible to have an
 unusually wide peak with legitimate peak apex shift of plus/minus
 half the time window size (also pictured to the right). Note that
-the peaks in the first diagram in Figure 16 belong to the same IC,
+the peaks in the first diagram in \ref{fig:86} belong to the same IC,
 while the two peaks in the diagram on the right belong to two
 different ICs.
 
@@ -288,7 +313,7 @@ TIC retention time and detected peak apex, this brings us to the detection
 of left and right peak boundary (figure \ref{fig:87}). If our peak detection
 was successful this should be as easy as detecting first local minimum on
 the right and first local minimum on the left of detected peak apex. The
-integration then proceeds via summing up of all intensity between the two
+integration then proceeds via summing up of all intensities between the two
 boundaries.
 
 \begin{figure}
@@ -317,7 +342,7 @@ peaks.
     \includegraphics[scale=0.7]{graphics/chapter08/88.eps}
   \end{center}
   \caption{Averaging of left and right boundary values inside an ion chromatogram,
-and baseline correction (inspired by Antoniewicz et al., 2007a)}
+and baseline correction (inspired by \cite{anto07})}
   \label{fig:88}
 \end{figure}
 
@@ -346,7 +371,7 @@ retention time itself is determined via mass spectral library, which can be
 used inside unlabelled data. Metabolic labelling, however introduces uncertainty 
 into this signature, i.e. components can no longer be compared with the standard 
 unlabelled mass spectra. Indeed, a test run of an existing similarity algorithm 
-(Robinson et al., 2007) shows that labelled mass spectra can be more similar 
+\cite{Robinson07} shows that labelled mass spectra can be more similar 
 to spectra of other labelled compounds, than their own unlabelled spectra.
 
 \begin{figure}
@@ -386,11 +411,11 @@ with higher threshold (to avoid peak shape detection of dubious peaks), and one
 for low abundance peaks which would benefit from lower threshold. This of course 
 is not necessary and a well-chosen single threshold is sufficient. 
 
-As discussed earlier, setting the window size too narrow will result in 
+As discussed earlier, setting the time window too narrow will result in 
 inability to detect peak apex (as it will not be present within the window) 
-setting the window too wide will increase the chance of neighbouring peak being 
-detected instead. Thus a window size of just below average peak width will give 
-optimum performance.
+setting the time window too wide will increase the chance of neighbouring peak 
+being detected instead. Thus a window size of just below average peak width will 
+give optimum performance.
 
 \section{Mass Isotopomer Distribution Correction in $^{13}$C Experiments}
 
