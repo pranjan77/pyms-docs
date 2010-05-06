@@ -4,7 +4,8 @@
 TEXFILE	= UserGuide.tex
 CHAPTERS = latex/chapter01.tex latex/chapter02.tex latex/chapter03.tex \
 latex/chapter04.tex latex/chapter05.tex latex/chapter06.tex \
-latex/chapter07.tex latex/chapter08.tex latex/chapter09.tex
+latex/chapter07.tex latex/chapter08.tex latex/chapter09.tex \
+latex/chapter10.tex
 
 pdf:	$(TEXFILE:.tex=.pdf)
 ps:	$(TEXFILE:.tex=.ps)
