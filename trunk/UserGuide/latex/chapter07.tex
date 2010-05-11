@@ -89,6 +89,34 @@ This results in figure \ref{fig:70b} being displayed:
   \label{fig:70b}
 \end{figure}
 
+\section{Displaying the mass spectrum}
+[ {\em This example is in pyms-test/70c} ]
+
+The pyms Display module can also be used to display individual mass spectra. The 
+following selects the mass spectrum of interest:
+
+\begin{verbatim}
+... im is an intensity matrix
+>>> ms = im.get_ms_at_index(1024)
+\end{verbatim}
+
+The pyms function {\tt plot\_ms()} can then be called to display the mass spectrum to 
+the screen.
+
+\begin{verbatim}
+>>> plot_ms(ms, 'Mass Spectrum at index 1024')
+\end{verbatim}
+
+The resulting window is shown below in figure \ref{fig:70c}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[scale=0.33]{graphics/chapter07/test-70c.eps}
+  \end{center}
+  \caption{Graphics window displayed by the script 70c/proc.py}
+  \label{fig:70c}
+\end{figure}
+
 \section{Displaying detected peaks on the TIC plot}
 
 \noindent
@@ -129,7 +157,7 @@ figure.
 
 \begin{verbatim}
 >>>display.plot_peaks(peak_list, 'Peaks')
-\end{verbatim}
+\end{verbatgoogle.com.au/im}
 
 Finally, the function {\tt do\_plotting()} is called to draw the figure with 
 labels and display the plot.
