@@ -40,7 +40,7 @@ limits subsequent processing to this interval:
 
 \subsection{Providing input to the simulator}
 \noindent
-[ {\em This example is in pyms-test/80} ]
+[ {\em This example is in pyms-test/100} ]
 
 The peaks are detected using the PyMS function {\tt BillerBiemann()}, and subsequently
 filtered to remove those which do not meet certain requirements. This procedure is
@@ -71,9 +71,9 @@ simulated Intensity Matrix.
 
 \begin{figure}[h]
   \begin{center}
-    \includegraphics[scale=0.25]{graphics/chapter10/test-80.eps}
+    \includegraphics[scale=0.25]{graphics/chapter10/test-100.eps}
   \end{center}
-  \caption{Graphics window displayed by the script 80/proc.py}
+  \caption{Graphics window displayed by the script 100/proc.py}
   \label{fig:no-noise}
 \end{figure}
 
@@ -92,7 +92,7 @@ value at that point.
 \subsection{Constant scale noise}
 
 \noindent
-[ {\em This example is in pyms-test/81} ]
+[ {\em This example is in pyms-test/101} ]
 
 The Python package NumPy contains routines for pseudo random number generation. These
 "random" values are drawn from a normal distribution with a user defined scale over the same number
@@ -113,9 +113,9 @@ This noisy IC can be displayed using the PyMS package Display, the resulting fig
 
 \begin{figure}[h]
   \begin{center}
-    \includegraphics[scale=0.25]{graphics/chapter10/test-81.eps}
+    \includegraphics[scale=0.25]{graphics/chapter10/test-101.eps}
   \end{center}
-  \caption{Graphics window displayed by the script 81/proc.py}
+  \caption{Graphics window displayed by the script 101/proc.py}
   \label{fig:gaussc-noise-ic}
 \end{figure}
 
@@ -124,7 +124,7 @@ This noisy IC can be displayed using the PyMS package Display, the resulting fig
 \label{subsec:gaussv-noise-ic}
 
 \noindent
-[ {\em This example is in pyms-test/82} ]
+[ {\em This example is in pyms-test/102} ]
 
 In reality, noise from a GC-MS experiment tends to have higher values in areas where peaks occur than in
 the valleys between peaks. To attempt to model this, a variable scale noise function has been implemented in
@@ -148,9 +148,9 @@ The resulting noisy IC is shown in figure \ref{fig:gaussv-noise-ic}
 
 \begin{figure}[h]
   \begin{center}
-    \includegraphics[scale=0.25]{graphics/chapter10/test-82.eps}
+    \includegraphics[scale=0.25]{graphics/chapter10/test-102.eps}
   \end{center}
-  \caption{Graphics window displayed by the script 82/proc.py}
+  \caption{Graphics window displayed by the script 102/proc.py}
   \label{fig:gaussv-noise-ic}
 \end{figure}
 
@@ -166,7 +166,7 @@ The noise models in question are exactly the same as for the single IC noise fun
 \subsection{Constant scale gaussian noise}
 
 \noindent
-[ {\em This example is in pyms-test/83} ]
+[ {\em This example is in pyms-test/103} ]
 For constant scale gaussian noise:
 
 \begin{verbatim}
@@ -183,9 +183,9 @@ viewed in the PyMS package Display, with the resulting figure shown below (figur
 
 \begin{figure}[h]
   \begin{center}
-    \includegraphics[scale=0.25]{graphics/chapter10/test-83.eps}
+    \includegraphics[scale=0.25]{graphics/chapter10/test-103.eps}
   \end{center}
-  \caption{Graphics window displayed by the script 83/proc.py}
+  \caption{Graphics window displayed by the script 103/proc.py}
   \label{fig:gaussc-noise}
 \end{figure}
 
@@ -193,7 +193,7 @@ viewed in the PyMS package Display, with the resulting figure shown below (figur
 \subsection{Variable scale gaussian noise}
 \label{subsec:gaussv-noise}
 \noindent
-[ {\em This example is in pyms-test/84} ]
+[ {\em This example is in pyms-test/104} ]
 
 To apply variable scale gaussian noise to the whole simulated dataset:
 
@@ -210,16 +210,16 @@ sub-section \ref{subsec:gaussv-noise-ic} above.
 
 \begin{figure}[h]
   \begin{center}
-    \includegraphics[scale=0.25]{graphics/chapter10/test-84.eps}
+    \includegraphics[scale=0.25]{graphics/chapter10/test-104.eps}
   \end{center}
-  \caption{Graphics window displayed by the script 84/proc.py}
+  \caption{Graphics window displayed by the script 104/proc.py}
   \label{fig:gaussv-noise}
 \end{figure}
 
 \section{Detecting Peaks in the Simulated data}
 
 \noindent
-[ {\em This example is in pyms-test/85} ]
+[ {\em This example is in pyms-test/105} ]
 
 The simulated intensity matrix may be processed in PyMS in the same way as an intensity
 matrix derived from real data. Applying the same techniques as outlined in section 
@@ -230,8 +230,8 @@ The found peaks are shown below in fig \ref{fig:sim-peaks}.
 
 \begin{figure}[h]
   \begin{center}
-    \includegraphics[scale=0.25]{graphics/chapter10/test-85.eps}
+    \includegraphics[scale=0.25]{graphics/chapter10/test-105.eps}
   \end{center}
-  \caption{Graphics window displayed by the script 85/proc.py}
+  \caption{Graphics window displayed by the script 105/proc.py}
   \label{fig:sim-peaks}
 \end{figure}
