@@ -218,10 +218,45 @@ list has been constructed, the filters can be applied by;
 The number of detected peaks is now more realistic of what would be expected in
 the test sample.
 
+\section{Noise analysis for peak filtering}
+\noindent
+[ {\em This example is in pyms-test/54} ]
+
+In the previous section the cutoff parameter for peak filtering was set by the
+user. This can work well for individual data files, but can cause problems when
+applied to large experiments with many individual data files. Where experimental 
+conditions have changed slightly between experimental runs, the ion intensity over
+the GC-MS run may also change. This means that an inflexible cutoff value can
+work for some data files, while excluding too many, or including too many peaks in
+other files.
+
+An alternative to manually setting the value for cutoff, is to use the pyms function
+{\tt window\_analyzer()}. This function examines a Total Ion Chromatogram (TIC) and 
+computes a value for the median absolute deviation in troughs between peaks. This 
+gives an approximate threshold value above which false peaks from noise should
+be filtered out.
+
+To compute this noise value:
+\begin{verbatim}
+>>> from pyms.Noise.Analysis import window_analyzer
+... data is a GCMS data object
+>>> tic = data.get_tic()
+>>> noise_level = window_analyzer(tic)
+\end{verbatim}
+
+Now the usual peak deconvolution steps are performed, and the peak list is filtered
+using this noise value as the cutoff:
+
+\begin{verbatim}
+... pl is a peak list, n is number of ions above threshold
+>>> peak_list = num_ions_threshold(pl, n, noise_level)
+\end{verbatim}
+
+
 \section{Peak area estimation}
 
 \noindent
-[ {\em This example is in pyms-test/54} ]
+[ {\em This example is in pyms-test/55} ]
 
 The Peak object does not contain any information about the width or area of the
 peak when it is created. This information can be added after the instantiation
