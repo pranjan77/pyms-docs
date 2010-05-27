@@ -68,7 +68,7 @@ or specific retention times (in ``seconds'' or ``minutes'');
 
 An IntensityMatrix object has a set mass range and interval that is derived
 from the data at the time of building the intensity matrix. The range of mass
-values can be modified. This is done, primarily, to ensure that the range of
+values can be cropped. This is done, primarily, to ensure that the range of
 masses used are consistent when comparing samples.
 
 Given a previously loaded raw GC-MS data file that has been converted into an
@@ -118,7 +118,7 @@ Load the data and get the TIC:
 Apply the mean window smoothing with the 5-point window:
 
 \begin{verbatim}
-from pyms.Noise.SavitzkyGolay import window_smooth
+from pyms.Noise.Window import window_smooth
 tic1 = window_smooth(tic, window=5)
  -> Window smoothing (mean): the wing is 2 point(s)
 \end{verbatim}

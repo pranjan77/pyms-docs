@@ -16,10 +16,10 @@
 
 \section{Peak Object}
 
-Fundamental to GC-MS analysis is the identification of individual components of
-the sample mix. The basic component unit is represented as a signal Peak. In
-PyMS a signal peak is represented as `Peak' object defined in
-{\tt pyms.Peak.Class}, and functions to detect the peaks are also provided
+Fundamental to GC-MS analysis is the identification of individual components
+of the sample mix. The basic component unit is represented as a signal peak.
+In PyMS a signal peak is represented as `Peak' object (the class defined in
+{\tt pyms.Peak.Class}). PyMS provides functions to detect peaks and create
 (discussed at the end of the chapter).
 
 A peak object stores a minimal set of information about a signal peak, namely,
@@ -34,8 +34,8 @@ can be filtered from the GC-MS data and added to the Peak object information.
 
 A peak object can be created for a scan at a given retention time by providing
 the retention time (in minutes or seconds) and the MassSpectrum object of the
-scan. For example, first a file is loaded and an IntensityMatrix, {\em
-im}, built, then a MassSpectrum, {\em ms}, can be selected at a given
+scan. In the example below, first a file is loaded and an IntensityMatrix,
+{\em im}, built, then a MassSpectrum, {\em ms}, can be selected at a given
 time (31.17 minutes in this example).
 
 \begin{verbatim}
