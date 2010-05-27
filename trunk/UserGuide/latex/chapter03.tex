@@ -14,14 +14,11 @@
 
 \chapter{GC-MS data derived objects}
 
-In this chapter the methods for converting the raw GC-MS data to an
-IntensityMatrix object are illustrated.
-
 In the raw GC-MS data, consecutive scans do not necessarily contain the same
 mass per charge (mass) values. For data processing, it is often necessary to
-convert the data to a matrix with a set number of masses and scans. In PyMS
-there are functions to explicitly convert the raw mass values to consistent
-values across all scans.
+convert the data to a matrix with a set number of masses and scans. In PyMS,
+the resulting object is called intensity matrix. In this chapter the methods
+for converting the raw GC-MS data to an intensity matrix object are illustrated.
 
 \section{\label{sec:intensity-matrix}IntensityMatrix Object}
 The general scheme for converting raw mass values is to bin intensity values
@@ -146,7 +143,8 @@ The size as the number of scans and the number of bins is returned by:
 There are 9865 scans and 551 bins in this example.
 
 The raw masses have been binned into new mass units based on the minimum mass
-in the raw data and the bin size. A list of the new masses are returned by:
+in the raw data and the bin size. A list of the new masses can be obtained
+as follows:
 
 \begin{verbatim}
 >>> masses = im.get_mass_list()
@@ -232,7 +230,7 @@ build\_intensity\_matrix\_i(data, lower, upper)}.
 \noindent
 A MassSpectrum object contains two attributes, {\tt mass\_list} and
 {\tt mass\_spec}, a list of the mass values and corresponding intensities,
-respectively. MassSpectrum is returned by the IntensityMatrix method of {\tt
+respectively. MassSpectrum is returned by the IntensityMatrix method {\tt
 get\_ms\_at\_index(index)}.
 
 For example, the properties of the first MassSpectrum object of an
@@ -259,7 +257,9 @@ mass intensities as a function of retention time. This can can be either
 m/z channel intensities (for example, the ion chromatogram at m/z = 73),
 or cumulative intensities over all measured m/z (TIC).
 
-An IonChromatogram for the TIC and a given mass or index can be obtained by;
+An IonChromatogram for the TIC and a given mass or index can be obtained
+as follows:
+
 
 \begin{verbatim}
 >>> tic = data.get_tic()
@@ -360,8 +360,8 @@ It is also possible to save the data as comma separated data with a ``.csv''
 extension by the command\\
 ``{\tt im.export\_ascii("output/data", "csv")}''.
 
-Additionally, the entire IntensityMatrix can be exported as LECO CSV. This is
- useful for import into other analytical software packages.
+Additionally, the entire IntensityMatrix can be exported in LECO CSV format.
+This is useful for import into other analytical software packages.
 The format is a header line specifying the column heading information as:
 ``scan, retention time, mass1, mass2, $\dots$'', and then each row as the
 intensity data.

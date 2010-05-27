@@ -22,14 +22,12 @@ was developed by the Analytical Instrument Association.} and Joint Committee on
 Atomic and Molecular Physical Data (JCAMP-DX)\footnote{JCAMP-DX is maintained by
 the International Union of Pure and Applied Chemistry.} formats. These formats
 are essentially recommendations, and it is up to individual vendors of mass
-spectrometry processing software to implement ``export to ANDI-MS'' or ``export
-to JCAMP-DX'' features in their software. It is also possible to get third party
-converters. The information contained in the exported data files
+spectrometry processing software to implement properly "export to ANDI-MS"
+or "export to JCAMP-DX" features in their software. It is also possible to
+get third party converters. The information contained in the exported data files
 can vary significantly, depending on the instrument, vendor's software, or
-conversion utility.
-
-For PyMS, the minimum set of assumptions about the information contained in the
-data file are:
+conversion utility. PyMS makes the following  minimum set of assumptions
+about the information contained in the data file:
 
 \begin{itemize}
  \item The data contain the m/z and intensity value pairs across a scan.
@@ -39,7 +37,7 @@ data file are:
 Internally, PyMS stores the raw data from ANDI files or JCAMP files as a
 GCMS\_data object.
 
-\section{Reading the raw GC-MS data}
+\section{Creating a "GCMS\_data" object}
 
 \subsection{Reading JCAMP GC-MS data}
 
@@ -74,9 +72,9 @@ of the class GCMS\_data.
 The PyMS package pyms.GCMS.IO.ANDI provides capabilities to read the raw
 GC-MS data stored in the ANDI-MS format.
 
-The file `gc01\_0812\_066.cdf' (located in `data') is a GC-MS experiment
-converted to ANDI-MS format from Agilent ChemStation (from the same data as in
-example 20a above). This file can be loaded as follows:
+The file "gc01\_0812\_066.cdf" is a GC-MS experiment converted to ANDI-MS
+format from Agilent ChemStation (the same data as in the example 20a above).
+This file can be loaded as follows:
 
 \begin{verbatim}
 >>> from pyms.GCMS.IO.ANDI.Function import ANDI_reader
@@ -95,7 +93,7 @@ of the class GCMS\_data.
 \subsection{Methods}
 
 \noindent
-[ {\em The following examples are the same in pyms-test/20a and pyms-test/20b} ]
+[ {\em Examples below are in pyms-test/20a and pyms-test/20b} ]
 
 The object `data' (from the two previous examples) stores the raw data as a {\em
 GCMS\_data} object. Within the GCMS\_data object, raw data are stored as a list
@@ -174,7 +172,7 @@ returned by:
 >>> scans[0].get_max_mass()
 \end{verbatim}
 
-\subsection{Exporting data and printing information about a data set}
+\subsection{Exporting data and obtaining information about a data set}
 
 \noindent
 [ {\em This example is in pyms-test/20c} ]
@@ -200,7 +198,8 @@ that can be used for this purpose.
 >>>
 \end{verbatim}
 
-To export the entire raw data to a file, use the method write():
+The entire raw data can be exported to a file with the method 
+write():
 
 \begin{verbatim}
 >>> data.write("output/data")
@@ -213,7 +212,7 @@ and writes two CSV files. One has extention ``.I.csv'' and
 contains the intensities (``output/data.I.csv'' in this example),
 and the other has the extension ``.mz'' and contains the
 corresponding table of m/z value (``output/data.mz.csv'' in
-this example). In general these are not two-dimensional matrices,
+this example). In general, these are not two-dimensional matrices,
 because different scans may have different number of m/z
 values recorded.
 
