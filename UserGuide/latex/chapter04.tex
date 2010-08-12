@@ -140,10 +140,32 @@ a time string (in this example, 7 seconds):
 
 Time strings are explained in the Section \ref{sec:time-string}.
 
+\subsection{Window Averaging on Intensity Matrix}
+\noindent
+[{\em This example is in pyms-test/41b}]
+
+In the previous section, window averaging was applied to an 
+Ion Chromatogram object (in that case a TIC). Where filtering
+is to be performed on all Ion Chromatograms, the {\tt window\_smooth\_im()}
+function may be used instead. 
+
+The use of this function is identical to the Ion Chromatogram
+{\tt window\_smooth()} function, except that an Intensity Matrix
+is passed to it.
+
+For example, to perform window smoothing on an Intensity Matrix 
+object with a 5 point window and mean window smoothing:
+
+\begin{verbatim}
+>>> from pyms.Noise.Window import window_smooth_im()
+... im is a PyMS IntensityMatrix object
+>>> im_smooth = window_smooth_im(im, window = 5, median = False)
+\end{verbatim}
+
 \subsection{Savitzky--Golay noise filter}
 
 \noindent
-[ {\em This example is in pyms-test/41b} ]
+[ {\em This example is in pyms-test/41c} ]
 
 A more sophisticated noise filter is the Savitzky-Golay filter.
 Given the data loaded as above, this filter can be applied as
@@ -159,10 +181,27 @@ follows:
 
 In this example the default parameters were used.
 
-\section{Baseline correction}
+\subsection{Savitzky-Golay Noise filtering of Intensity Matrix Object}
 
 \noindent
-[ {\em This example is in pyms-test/42} ]
+[ {\em This example is in pyms-test/41d} ]
+
+The {\tt savitzky\_golay()} function described in the previous section
+acts on a single Ion Chromatogram. Where it is desired to perform
+Savitzky Golay filtering on the whole Intensity matrix the function
+{\tt savitzky\_golay\_im()} may be used as follows:
+
+\begin{verbatim}
+>>> from pyms.Noise.SavitzkyGolay import savitzky_golay_im
+... im is a PyMS IntensityMatrix object
+>>> im_smooth = savitzky_golay(im)
+\end{verbatim}
+
+
+
+\section{Baseline correction}
+\noindent
+[ {\em This example is in pyms-test/42a} ]
 
 Baseline distortion originating from instrument imperfections and
 experimental setup is often observed in mass spectrometry data,
@@ -213,6 +252,26 @@ Savitzky-Golay smoothing was applied, followed by baseline correction.
 Finally the original, smoothed, and smoothed and baseline corrected
 TIC were saved in the directory 'output/'.
 
+\subsection{Tophat Baseline correction on an Intensity Matrix object}
+
+\noindent
+[ {\em This example is in pyms-test/42b} ]
+
+The function outlined in the instructions above {\tt tophat()}, acts
+on a single Ion Chromatogram. To perform baseline correction on an
+Intenstity Matrix object (i.e. on all Ion Chromatograms) the 
+{\tt tophat\_im()} function may be used.
+
+Using the same definition for "{\tt struct}" as above, use of the 
+{\tt tophat\_im()} function is as follows:
+
+\begin{verbatim}
+>>> from pyms.Baseline.TopHat import tophat_im()
+... im is an Intensity Matrix object
+>>> im_base_corr = tophat(im, struct="1.5m")
+\end{verbatim} 
+
+
 \section{Pre-processing the IntensityMatrix}
 
 \noindent
@@ -234,6 +293,11 @@ chromatogram in the intensity matrix;
 ...     im.set_ic_at_index(ii, ic_bc)
 ...
 \end{verbatim}
+
+Alternatively, the filtering may be performed on the Intensity Matrix without
+using a {\tt for} loop, as outlined in the sections above. However filtering by 
+Ion Chromatogram in a {\tt for} loop as described here is much faster.
+
 
 The resulting IntensityMatrix object can be ``dumped'' to a file for later
 retrieval. There are general perpose object file handling methods in {\tt
