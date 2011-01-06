@@ -439,7 +439,7 @@ at present the ability to read ANDI-MS files is limited to Linux. All
 other PyMS functionality is available under Windows.
 
 We use Linux for the development and deployment PyMS, and this User
-Guide largely assumes that PyMS is used under Linux. In this Subsection
+Guide largely assumes that PyMS is used under Linux. In this section
 we give some pointers on how to use PyMS under Windows.
 
 \subsection{PyMS installation on Windows}
@@ -471,13 +471,14 @@ error messages:
 
 \end{enumerate}
 
-\subsection{Example processing GC-MS data with PyMS on Windows}
+\subsection{Example processing GC-MS data on Windows}
 
 The example data can be downloaded from\\
 {\tt http://bioinformatics.bio21.unimelb.edu.au/pyms/data/}.
 We will use the data file in the JCAMP-DX format, named
 {\tt gc01\_0812\_066.jdx}. Once downloaded this data file
-will be placed in the folder {\tt C:\\Data}.
+will be placed in the folder {\tt C:Data} for the example
+below.
 
 The Python environment can be accessed from several Python
 shells. The default shell that comes with the Python 2.5
@@ -491,30 +492,34 @@ raw data,
  -> Reading JCAMP file 'C:\Data\gc01_0812_066.jdx'
 \end{verbatim}
 
-Then build the intensity matrix object by binning:
+The intensity matrix object is built by binning:
 
 \begin{verbatim}
 >>> from pyms.GCMS.Function import build_intensity_matrix_i
 >>> im = build_intensity_matrix_i(data)
 \end{verbatim}
 
-We obtain the dimensions of the intensity matrix, then loop
-over all ion chromatograms, and for each ion chromatogram
-apply Savitzky-Golay noise filter and tophat baseline correction.
-The resulting noise and baseline corrected ion chromatogram
-is saved back into the intensity matrix:
+In this example, we show how to btain the dimensions of the
+newly created intensity matrix, then loop over all ion chromatograms,
+and for each ion chromatogram apply Savitzky-Golay noise filter
+and tophat baseline correction:
 
 \begin{verbatim}
 >>> n_scan, n_mz = im.get_size()
 >>> from pyms.Noise.SavitzkyGolay import savitzky_golay
 >>> from pyms.Baseline.TopHat import tophat
 >>> for ii in range(n_mz):
-	print "working on IC", ii
-	ic = im.get_ic_at_index(ii)
-	ic1 = savitzky_golay(ic)
-	ic_smooth = savitzky_golay(ic1)
-	ic_base = tophat(ic_smooth, struct="1.5m")
-	im.set_ic_at_index(ii, ic_base)
+    print "working on IC", ii
+    ic = im.get_ic_at_index(ii)
+    ic1 = savitzky_golay(ic)
+    ic_smooth = savitzky_golay(ic1)
+    ic_base = tophat(ic_smooth, struct="1.5m")
+    im.set_ic_at_index(ii, ic_base)
 \end{verbatim}
 
+The resulting noise and baseline corrected ion chromatogram is saved
+back into the intensity matrix. As this example illustrates, PyMS
+depends on Python and can be used in the exactly the same way under
+any operating system that supports Python. For more advanced use
+refer to subsequent chapters.
 
