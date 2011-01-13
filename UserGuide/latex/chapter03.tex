@@ -60,50 +60,47 @@ per the NIST library).
 
 \subsection{Discussion of Binning Boundaries}
 
-For any chemical element \begin{math}X\end{math}, let \begin{math}w(x)\end{math} 
-be the atomic weight of \begin{math}X\end{math}. 
-Now 
+For any chemical element $X$, let $w(x)$ be the atomic weight of $X$, and
+
 \begin{equation}
 \delta(X) = \frac{w(X) - \{w(X)\}}{w(X)}, 
 \end{equation}
-where \begin{math}\{a\}\end{math} is the integer value of a(rounded to the 
-nearest integer)
 
-Then, for Hydrogen \begin{math}\delta(H) = \frac{1.007825032 - 1}{1.007825032} = 
-0.0076\end{math}. Similarly \begin{math}\delta(^{12}C) = 0\end{math}, \begin{math}
-\delta(^{14}N) = 0.00022\end{math}, \begin{math}\delta(^{16}O) = -0.00032\end{math}
-, etc.
+where $\{a\}$ is the integer value of $a$ (rounded to the nearest integer).
 
-Let also \begin{math}\Delta(X) = w(X) - \{w(x)\}\end{math}. Then \begin{math}-0.023
-<\Delta(P), \Delta(Si) < 0\end{math}.
+For example, for hydrogen $\delta(^1\rm{H}) = \frac{1.007825032 - 1}{1.007825032} = 
+0.0076$. Similarly $\delta(^{12}\rm{C}) = 0$, $ \delta(^{14}\rm{N}) = 0.00022$,
+$\delta(^{16}\rm{O}) = -0.00032$, etc.
 
-Now let a compound undergo GC-MS and let Y be one of it's fragments. If Y consists 
-of \begin{math}k_{1}\end{math}atoms of type \begin{math}X_{1}\end{math}, 
-\begin{math}k_{2}\end{math} atoms of type \begin{math}X_{2}\end{math},....., 
-\begin{math}k_{r}\end{math} atoms of type \begin{math}X_{r}\end{math}, then
-\begin{math}\Delta(Y) = k_{1}*\Delta(X_{1}) + k_{2}*\Delta(X_{2}) + ....+ k_{r}*
-\Delta(X_{r})\end{math}.
+Let also $\Delta(X) = w(X) - \{w(x)\}$. Then $-0.023 <\Delta(^{31}\rm{P}),
+\Delta(^{28}\rm{Si}) < 0$.
+
+Let a compound undergo GC-MS and let Y be one of it's fragments. If Y consists 
+of $k_{1}$atoms of type $X_{1}$, 
+$k_{2}$ atoms of type $X_{2}$,....., 
+$k_{r}$ atoms of type $X_{r}$, then
+$\Delta(Y) = k_{1}*\Delta(X_{1}) + k_{2}*\Delta(X_{2}) + ....+ k_{r}*
+\Delta(X_{r})$.
 
 The fragment will usually not contain more than 2 or 3 P or Si atoms and if it's 
 molecular weight is less than 550 it may not contain more than 35 O atoms, so 
-\begin{math}\Delta(Y) \geq -0.023*5 - 0.00051*35 = -0.133\end{math}.
+$\Delta(Y) \geq -0.023*5 - 0.00051*35 = -0.133$.
 
-On the other hand, of Y contains \begin{math}k\end{math} H atoms and \begin{math}m\end{math}
- N atoms, then \begin{math}\Delta(Y) \leq k*0.00783 + m*0.00051\end{math}. Since for each two 
-Hydrogen atoms we will need at least one Carbon (or heavier)atom, we may have no more than
- 80 Hydrogen atoms, so in this case (i.e. H and C atoms only)\begin{math}\Delta(Y) \leq 
-80*0.00783 = 0.63\end{math}. If we replace Carbon by any heavier atom we will have to sacrifice 
-at least 2 hydrogen atoms so \begin{math}\Delta(Y)\end{math} becomes even smaller.
+On the other hand, of Y contains $k$ H atoms and $m$ N atoms, then $\Delta(Y)
+\leq k*0.00783 + m*0.00051$. Since for each two hydrogen atoms at least one
+carbon (or heavier) atom is needed, giving the limit of no more than 80 hydrogen
+atoms. Therefore in this case (i.e. H and C atoms only)$\Delta(Y) \leq 80*0.00783
+= 0.63$. If carbon is replaced by any heavier atom, at least 2 hydrogen atoms
+will be eliminated and $\Delta(Y)$ will become even smaller.
 
-If the molecular weight of \begin{math}Y\end{math} does not exceed 550 (typically the 
-largest mass scanned for in a GC-MS setup) then \begin{math}\mathbf{-0.133 \leq \Delta(Y) 
-\leq 0.63}\end{math}. This means that if we set our binning boundaries to 
-\begin{math}(-0.3, 0.7)\end{math} or \begin{math}(-0.2, 0.8)\end{math} there is no danger 
-of having a fragment whose molecular weight is very close to the boundary, as long as it's
-molecular weight does not exceed 550.
+If the molecular weight of $Y$ does not exceed 550 (typically the largest mass
+scanned for in a GC-MS setup) then $\mathbf{-0.133 \leq \Delta(Y) \leq 0.63}$.
+This means that if we set our binning boundaries to $(-0.3, 0.7)$ or $(-0.2, 0.8)$
+the opportunity for having a fragment whose molecular weight is very close to
+the boundary is minimised.
 
-Since the resolution of MS is at least 0.1 dalton, we may assume that it's error does not 
-exceed 0.05, so even MS accuracy will not cause any problem. 
+Since the resolution of MS is at least 0.1 dalton, we may assume that it's error
+does not exceed 0.05, and MS accuracy will not cause additional problems.
 
 \subsection{Build intensity matrix}
 
