@@ -134,6 +134,7 @@ intensity matrix can be built as follows:
 The size as the number of scans and the number of bins is returned by:
 \begin{verbatim}
 >>> im.get_size()
+(9865, 551)
 \end{verbatim}
 
 There are 9865 scans and 551 bins in this example.
@@ -144,20 +145,37 @@ as follows:
 
 \begin{verbatim}
 >>> masses = im.get_mass_list()
+>>> print masses[:10]
+[50.0, 51.0, 52.0, 53.0, 54.0, 55.0, 56.0, 57.0, 58.0, 59.0]
 \end{verbatim}
 
-It is also possible to search for a particular mass, by finding the index of the
-binned mass closest to the desired mass. For example, the index of the closest
-binned mass to a mass of 73.3 m/z is returned by:
+The last command prints the first ten masses. The methods {\tt im.get\_min\_mass()}
+and {\tt get\_max\_mass()} return the minimum and maximum mass:
+
+\begin{verbatim}
+>>> print im.get_min_mass()
+50.0
+>>> print im.get_max_mass()
+600.0
+\end{verbatim}
+
+It is also possible to search for a particular mass, by finding the index of
+the binned mass closest to the desired mass. For example, the index of the
+closest binned mass to a mass of 73.3 m/z can be found by using the
+methods {\tt get\_index\_of\_mass()}:
 
 \begin{verbatim}
 >>> index = im.get_index_of_mass(73.3)
+>>> print index
+23
 \end{verbatim}
 
-The value of the closest mass can be returned by:
+The value of the closest mass can be returned by the method
+{\tt get\_mass\_at\_index()}:
 
 \begin{verbatim}
 >>> print im.get_mass_at_index(index)
+73.0
 \end{verbatim}
 
 A mass of 73.0 is returned in this example.
@@ -200,14 +218,14 @@ A mass of 73.5 is returned in this example.
 
 It is also possible to build an intensity matrix with integer masses and a bin
 interval of one. The default range for the binning is -0.3 and +0.7 mass
-units. The function is imported from ``pyms.GCMS.Function''.
+units. The function is imported from ``pyms.GCMS.Function'':
 
 \begin{verbatim}
 >>> from pyms.GCMS.Function import build_intensity_matrix_i
 >>> im = build_intensity_matrix_i(data)
 \end{verbatim}
 
-The masses are now all integers.
+The masses are now integers.
 
 \begin{verbatim}
 >>> index = im.get_index_of_mass(73.3)
@@ -219,7 +237,7 @@ A mass of 73 is returned in this example.
 The lower and upper bounds can be adjusted by {\tt
 build\_intensity\_matrix\_i(data, lower, upper)}.
 
-\section{MassSpectrum Object}
+\section{MassSpectrum object}
 
 \noindent
 [ {\em This example is in pyms-test/31} ]
@@ -243,7 +261,7 @@ IntensityMatrix, {\em im}, can be investigated by;
 \noindent
 The length of all attributes should be the same.
 
-\section{IonChromatogram Object}
+\section{IonChromatogram object}
 \label{sec:ion-chromatogram-object}
 \noindent
 [ {\em This example is in pyms-test/31} ]
@@ -277,7 +295,7 @@ if the ion chromatogram is a TIC, "False" otherwise:
 'ic' is a TIC: False
 \end{verbatim}
 
-\subsection{Writing IonChromatogram data to a file}
+\subsection{Writing IonChromatogram object to a file}
 
 \noindent
 [ {\em This example is in pyms-test/31} ]
@@ -355,11 +373,11 @@ the data is saved as space separated data with a ``.dat'' extension. It is
 also possible to save the data as comma separated data with a ``.csv''
 extension by the command ``{\tt im.export\_ascii("output/data", "csv")}''.
 
-Additionally, the entire IntensityMatrix can be exported in LECO CSV format.
-This is useful for import into other analytical software packages. The format
-has a header line specifying the column heading information as: ``scan,
-retention time, mass1, mass2, $\dots$'', and then each row as the intensity
-data.
+Additionally, the entire IntensityMatrix can be exported to LECO CSV format.
+This facility is useful for import into other analytical software packages.
+The format has a header line specifying the column heading information as:
+``scan, retention time, mass1, mass2, $\dots$'', and then each row as the
+intensity data.
 
 \begin{verbatim}
 >>> im.export_leco_csv("output/data_leco.csv")
