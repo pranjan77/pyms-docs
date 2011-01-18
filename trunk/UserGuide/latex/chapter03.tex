@@ -31,11 +31,10 @@ is as follows:
     \item Sum intensities whose masses are in a given bin.
 \end{itemize}
 
-A mass, $m$, is considered to belong to a bin when
-$c - l \le m < c + u$
-, where $c$ is the centre of the bin, $l$ is the lower boundary and $u$ is
-the upper boundary of the bin. The default bin interval is one with a lower and
-upper boundary of $\pm0.5$.
+A mass, $m$, is considered to belong to a bin when $c - l \le m < c + u$,
+where $c$ is the centre of the bin, $l$ is the lower boundary and $u$ is
+the upper boundary of the bin. The default bin interval is one with a lower
+and upper boundary of $\pm0.5$.
 
 A function to bin masses to the nearest integer is also available. The default
 bin interval is one with a lower boundary of -0.3 and upper boundary of +0.7 (as
@@ -120,8 +119,8 @@ function. First the raw data is imported as before.
 
 \noindent
 Then the data can be converted to an intensity matrix using the functions
-available in ``pyms.GCMS.Function'', namely {\tt build\_intensity\_matrix()}
-and {\tt build\_intensity\_matrix\_i()}.
+{\tt build\_intensity\_matrix()} and {\tt build\_intensity\_matrix\_i()},
+available in ``pyms.GCMS.Function''.
 
 The default operation of {\tt build\_intensity\_matrix()} is to use a bin
 interval of one and treat the masses as floating point numbers. The default
@@ -168,24 +167,25 @@ A mass of 73.0 is returned in this example.
 \noindent
 [ {\em This example is in pyms-test/30b} ]
 
-The bin interval can be set to values other than one. For example, the bin
-interval can be set to 0.5. The boundaries can also be adjusted. In this
-example, to fit the 0.5 bin interval, the upper and lower boundaries are set to
-$\pm$0.25.
+The bin interval can be set to values other than one, and binning boundaries
+can also be adjusted. In the example below, to fit the 0.5 bin interval, the
+upper and lower boundaries are set to $\pm$0.25.
 
 \begin{verbatim}
 im = build_intensity_matrix(data, 0.5, 0.25, 0.25)
 \end{verbatim}
 
-The size of the intensity matrix will reflect the change in the number of bins.
+The size of the intensity matrix will reflect the change in the number of bins:
+
 \begin{verbatim}
 >>> im.get_size()
 \end{verbatim}
 
-There are 9865 scans (as before) and 1101 bins in this example.
+In this example there are 9865 scans (as before), but 1101 bins.
 
 The index and binned mass of the mass closest to 73.3 should also reflect the
 different binning.
+
 \begin{verbatim}
 >>> index = im.get_index_of_mass(73.3)
 >>> print im.get_mass_at_index(index)
@@ -226,9 +226,9 @@ build\_intensity\_matrix\_i(data, lower, upper)}.
 
 \noindent
 A MassSpectrum object contains two attributes, {\tt mass\_list} and
-{\tt mass\_spec}, a list of the mass values and corresponding intensities,
-respectively. MassSpectrum is returned by the IntensityMatrix method {\tt
-get\_ms\_at\_index(index)}.
+{\tt mass\_spec}, a list of mass values and corresponding intensities,
+respectively. MassSpectrum is returned by the IntensityMatrix method
+{\tt get\_ms\_at\_index(index)}.
 
 For example, the properties of the first MassSpectrum object of an
 IntensityMatrix, {\em im}, can be investigated by;
@@ -257,7 +257,6 @@ or cumulative intensities over all measured m/z (TIC).
 An IonChromatogram for the TIC and a given mass or index can be obtained
 as follows:
 
-
 \begin{verbatim}
 >>> tic = data.get_tic()
 >>> ic = im.get_ic_at_index(0)
@@ -265,11 +264,11 @@ as follows:
 \end{verbatim}
 
 \noindent
-This will return, respectively: the TIC; the ion chromatogram of the first mass;
-and the ion chromatogram of the mass closest to 73.
+This will return, respectively: the TIC; the ion chromatogram of the first
+mass; and the ion chromatogram of the mass closest to 73.
 
-An ion chromatogram object has a method {\tt is\_tic()} which returns
-True if the ion chromatogram is a TIC, False otherwise:
+An ion chromatogram object has a method {\tt is\_tic()} which returns "True"
+if the ion chromatogram is a TIC, "False" otherwise:
 
 \begin{verbatim}
 >>> print "'tic' is a TIC:", tic.is_tic()
@@ -351,17 +350,16 @@ and the list of retention times (from {\tt im.get\_time\_list()}) using the
 
 \noindent
 will create ``data.im.dat'', ``data.mz.dat'', and ``data.rt.dat'' where these
- are the intensity matrix, retention time vector, and m/z vector.
-By default the data is saved as space separated data with a ``.dat'' extension.
-It is also possible to save the data as comma separated data with a ``.csv''
-extension by the command\\
-``{\tt im.export\_ascii("output/data", "csv")}''.
+are the intensity matrix, retention time vector, and m/z vector. By default
+the data is saved as space separated data with a ``.dat'' extension. It is
+also possible to save the data as comma separated data with a ``.csv''
+extension by the command ``{\tt im.export\_ascii("output/data", "csv")}''.
 
 Additionally, the entire IntensityMatrix can be exported in LECO CSV format.
-This is useful for import into other analytical software packages.
-The format is a header line specifying the column heading information as:
-``scan, retention time, mass1, mass2, $\dots$'', and then each row as the
-intensity data.
+This is useful for import into other analytical software packages. The format
+has a header line specifying the column heading information as: ``scan,
+retention time, mass1, mass2, $\dots$'', and then each row as the intensity
+data.
 
 \begin{verbatim}
 >>> im.export_leco_csv("output/data_leco.csv")
@@ -373,8 +371,8 @@ intensity data.
 [ {\em This example is in pyms-test/32} ]
 
 The LECO CSV data format can be used to import ASCII data directly into an
-IntensityMatrix object.  The data must follow the format outlined above.  For
-example, the file saved above can be read and compared to the original:
+IntensityMatrix object.  The data must follow the format outlined above.
+For example, the file saved above can be read and compared to the original:
 
 \begin{verbatim}
 >>> from pyms.GCMS.Class import IntensityMatrix
@@ -389,3 +387,4 @@ example, the file saved above can be read and compared to the original:
 
 The line ``IntensityMatrix([0],[0],[[0]])'' is required to create an empty
 IntensityMatrix object.
+
