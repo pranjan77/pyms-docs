@@ -329,3 +329,26 @@ above).
 %peak lists. This allows peak detection methods from different programs to be
 %evaulated or a peak detection method to be compared to a 'known' or expert
 %evaluated result.
+
+\section{PyMS Common Ion Area Quantitation}
+[ {\em This example is in pyms-test/64 } ]
+\label{sec:common-ion}
+
+The PyMS common ion algorithm compares the area of a single ion for each
+peak in an alignment. The ion is chosen by a method of Alignment, and the 
+choice is made by counting the number of times each ion appears in the
+list of the highest abundant ions for each peak.
+
+When using the common ion approach to area quantitation, a different
+method of Alignment is used to write the area matrix; {\tt
+  write\_common\_ion\_csv()}. This requires a list of the common ions
+for each peak in the alignment. This list can be generated the Alignment method {\tt common\_ion}.
+
+Continuing from the previous example, usage is as follows:
+\begin{verbatim}
+>>> common_ion_list = A9.common_ion()
+... common_ion_list is a list of the common ion for each peak in the 
+... alignment. It is the same length as the alignment
+>>> A9.write_common_ion_csv('output/area_common_ion.csv', common_ion_list)
+... area_common_ion.csv is written to the output folder
+\end{verbatim}
