@@ -258,20 +258,23 @@ using this noise value as the cutoff:
 \noindent
 [ {\em This example is in pyms-test/55} ]
 
-The Peak object does not contain any information about the width or area of the
-peak when it is created. This information can be added after the instantiation
-of a Peak object. The area of the peak can be set by the {\tt set\_area()}
-method of the peak object.
+The Peak object does not contain any information about the width or
+area of the peak when it is created. This information can be added
+after the instantiation of a Peak object. The area of the peak can be
+set by the {\tt set\_area()}, or {\tt set\_ion\_areas()} method of the
+peak object.
 
-The peak area can by obtained by the {\tt peak\_sum\_area()} function in {\tt
-pyms.Peak.Function}. The function determines the total
-area as the sum of the ion intensities for all masses that apex at the given
-peak. To calculate the peak area of a single mass, the intensities are added
-from the apex of the mass peak outwards. Edge values are added until the
-following conditions are met: the added intensity adds less than 0.5\% to the
-accumulated area; or the added intensity starts increasing (i.e. when the ion is
-common to co-eluting compounds). To avoid noise effects, the edge value is taken
-at the midpoint of three consecutive edge values.
+
+The total peak area can by obtained by the {\tt peak\_sum\_area()}
+function in {\tt pyms.Peak.Function}. The function determines the
+total area as the sum of the ion intensities for all masses that apex
+at the given peak. To calculate the peak area of a single mass, the
+intensities are added from the apex of the mass peak outwards. Edge
+values are added until the following conditions are met: the added
+intensity adds less than 0.5\% to the accumulated area; or the added
+intensity starts increasing (i.e. when the ion is common to co-eluting
+compounds). To avoid noise effects, the edge value is taken at the
+midpoint of three consecutive edge values.
 
 Given a list of peaks, areas can be determined and added as follows:
 \begin{verbatim}
@@ -281,3 +284,34 @@ Given a list of peaks, areas can be determined and added as follows:
 ...     peak.set_area(area)
 ...
 \end{verbatim}
+
+\subsection{PyMS Common Ion Algorithm}
+
+[ {\em This example is in pyms-test/56} ]
+
+The user is given the option of using the PyMS Common Ion area
+quantitation algorithm, which uses the single most abundant and most
+often occuring ion area across an aligned peak to quantify the area in
+the final aligned data matrix. This contrasts with the approach
+outlined above which uses the total area, i.e. the sum of all
+single ion areas under the peak.
+
+The advantage of the common ion approach is a greater degree of
+accuracy, as noise or other unwanted signal will have little impact on
+results. If the common ion approach is chosen, then the total area
+need not be set. Instead the area of most abundant ions is found and
+set using the {\tt top\_ion\_areas()} method of peak. The default number of
+ions is 5, but may be set by the user by supplying the {\tt num\_ions}
+argument.
+
+\begin{verbatim}
+>>> from pyms.Peak.Function import peak_top_ion_areas
+>>> for peak in peak_list:
+>>>     area_dict = peak_top_ions_areas(intensity_matrix, peak, num_ions=5)
+>>>     peak.set_ion_areas(area_dict)
+...
+\end{verbatim}
+
+
+Further information on the common ion approach is given in section \ref{sec:common-ion}.
+
