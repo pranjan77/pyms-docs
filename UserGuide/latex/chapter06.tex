@@ -1,0 +1,373 @@
+% chapter06.tex
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %                                                                           %
+ %    PyMS documentation                                                     %
+ %    Copyright (C) 2005-2010 Vladimir Likic                                 %
+ %                                                                           %
+ %    The files in this directory provided under the Creative Commons        %
+ %    Attribution-NonCommercial-NoDerivs 2.1 Australia license               %
+ %    http://creativecommons.org/licenses/by-nc-nd/2.1/au/                   %
+ %    See the file license.txt                                               %
+ %                                                                           %
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Peak alignment by dynamic programming}
+
+PyMS provides functions to align GC-MS peaks by dynamic programming
+\cite{Robinson07}.  The peak alignment by dynamic programming uses both peak
+apex retention time and mass spectra.  This information is determined from the
+raw GC-MS data by applying a series of processing steps to produce data that
+can then be aligned and used for statistical analysis.  The details are
+described in this chapter.
+
+\section{Preparation of multiple experiments for peak alignment
+by dynamic programming}
+
+\subsection{Creating an Experiment}
+
+\noindent
+[ {\em This example is in pyms-test/60} ]
+
+Before aligning peaks from multiple experiments, the peak objects need to be
+created and encapsulated into PyMS experiment objects. During this process
+it is often useful to pre-process the peaks in some way, for example to
+null certain m/z channels and/or to select a certain retention time range.
+
+To capture the data and related information prior to peak alignment, an
+{\tt Experiment} object is used. The {\tt Experiment} object is defined in
+{\tt pyms.Experiment.Class}.
+
+The procedure is to proceed as described in the previous chapter. Namely: read
+a file; bin the data into fixed mass values; smooth the data; remove the
+baseline; deconvolute peaks; filter the peaks; set the mass range; remove
+uninformative ions; and estimate peak areas.  The process is given in the
+following program listing.
+
+\begin{verbatim}
+01  import sys, os
+02  sys.path.append("/x/PyMS")
+03
+04  from pyms.GCMS.IO.ANDI.Function import ANDI_reader
+05  from pyms.GCMS.Function import build_intensity_matrix_i
+06  from pyms.Noise.SavitzkyGolay import savitzky_golay
+07  from pyms.Baseline.TopHat import tophat
+08  from pyms.Peak.Class import Peak
+09  from pyms.Peak.Function import peak_sum_area
+10
+11  from pyms.Deconvolution.BillerBiemann.Function import BillerBiemann, \
+12      rel_threshold, num_ions_threshold
+13
+14  # deconvolution and peak list filtering parameters
+15  points = 9; scans = 2; n = 3; t = 3000; r = 2;
+16
+17  andi_file = "/x/PyMS/data/a0806_077.cdf"
+18
+19  data = ANDI_reader(andi_file)
+20
+21  # integer mass
+22  im = build_intensity_matrix_i(data)
+23
+24  # get the size of the intensity matrix
+25  n_scan, n_mz = im.get_size()
+26
+27  # smooth data
+28  for ii in range(n_mz):
+29      ic = im.get_ic_at_index(ii)
+30      ic1 = savitzky_golay(ic)
+31      ic_smooth = savitzky_golay(ic1)
+32      ic_base = tophat(ic_smooth, struct="1.5m")
+33      im.set_ic_at_index(ii, ic_base)
+34
+35  # do peak detection on pre-trimmed data
+36
+37  # get the list of Peak objects
+38  pl = BillerBiemann(im, points, scans)
+39
+40  # trim by relative intensity
+41  apl = rel_threshold(pl, r)
+42
+43  # trim by threshold
+44  peak_list = num_ions_threshold(apl, n, t)
+45
+46  print "Number of Peaks found:", len(peak_list)
+47
+48  # ignore TMS ions and set mass range
+49  for peak in peak_list:
+50      peak.crop_mass(50,540)
+51      peak.null_mass(73)
+52      peak.null_mass(147)
+53      # find area
+54      area = peak_sum_area(im, peak)
+55      peak.set_area(area)
+56
+\end{verbatim}
+
+The resulting list of peaks can now be stored as an {\tt Experiment} object.
+
+\begin{verbatim}
+from pyms.Experiment.Class import Experiment
+from pyms.Experiment.IO import store_expr
+
+# create an experiment
+expr = Experiment("a0806_077", peak_list)
+
+# set time range for all experiments
+expr.sele_rt_range(["6.5m", "21m"])
+
+store_expr("output/a0806_077.expr", expr)
+\end{verbatim}
+
+Once an experiment has been defined, it is possible to limit the peak list to
+a desired range using {\tt sele\_rt\_range()}.  The resulting experiment object
+can then be stored for later alignment.
+
+\subsection{Multiple Experiments}
+
+\noindent
+[ {\em This example is in pyms-test/61a} ]
+
+This example considers the preparation of three GC-MS experiments for peak
+alignment. The experiments are named `a0806\_077', `a0806\_078', `a0806\_079',
+and represent separate GC-MS sample runs from the same biological sample.
+
+The procedure is the same as above, and repeated for each experiment.  For
+example:
+
+\begin{verbatim}
+...
+# define path to data files
+base_path = "/x/PyMS/data/"
+
+# define experiments to process
+expr_codes = [ "a0806_077", "a0806_078", "a0806_079" ]
+
+# loop over all experiments
+for expr_code in expr_codes:
+
+    print "Processing", expr_code
+
+    # define the names of the peak file and the corresponding ANDI-MS file
+    andi_file = os.path.join(base_path, expr_code + ".cdf")
+...
+
+...
+    # create an experiment
+    expr = Experiment(expr_code, peak_list)
+
+    # use same time range for all experiments
+    expr.sele_rt_range(["6.5m", "21m"])
+
+    store_expr("output/"+expr_code+".expr", expr)
+\end{verbatim}
+
+\noindent
+[ {\em This example is in pyms-test/61b} ]
+
+The previous set of data all belong to the same experimental condition.  That
+is, they represent one group and any comparison between the data is a within
+group comparison. For the original experiment, another set of GC-MS data was
+collected for a different experimental condition.  This group must also be
+stored as a set of experiments, and can be used for between group comparison.
+
+The experiments are named `a0806\_140', `a0806\_141', `a0806\_142', and are
+processed and stored as above (see pyms-test/61b).
+
+\section{Dynamic programming alignment of peak lists from multiple experiments}
+
+\noindent
+\begin{itemize}
+\item {\em This example is in pyms-test/62}
+\item {\em This example uses the subpackage pyms.Peak.List.DPA, which in turn
+uses the Python package 'Pycluster'.  For 'Pycluster' installation instructions
+see the Section \ref{subsec:pycluster}.}
+\end{itemize}
+
+In this example the experiments `a0806\_077', `a0806\_078', and `a0806\_079'
+prepared in pyms-test/61a will be aligned, and therefore the script
+pyms-test/61a/proc.py must be run first, to create the files
+`a0806\_077.expr', `a0806\_078.expr', `a0806\_079.expr' in the directory
+pyms-test/61a/output/. These files contain the post-processed peak lists
+from the three experiments.
+
+A script for running the dynamic programming alignment on these experiments is
+given below.
+
+\begin{verbatim}
+"""proc.py
+"""
+
+import sys, os
+sys.path.append("/x/PyMS/")
+
+from pyms.Experiment.IO import load_expr
+from pyms.Peak.List.DPA.Class import PairwiseAlignment
+from pyms.Peak.List.DPA.Function import align_with_tree, exprl2alignment
+
+# define the input experiments list
+exprA_codes = [ "a0806_077", "a0806_078", "a0806_079" ]
+
+# within replicates alignment parameters
+Dw = 2.5  # rt modulation [s]
+Gw = 0.30 # gap penalty
+
+# do the alignment
+print 'Aligning expt A'
+expr_list = []
+expr_dir = "../61a/output/"
+for expr_code in exprA_codes:
+    file_name = os.path.join(expr_dir, expr_code + ".expr")
+    expr = load_expr(file_name)
+    expr_list.append(expr)
+F1 = exprl2alignment(expr_list)
+T1 = PairwiseAlignment(F1, Dw, Gw)
+A1 = align_with_tree(T1, min_peaks=2)
+
+A1.write_csv('output/rt.csv', 'output/area.csv')
+\end{verbatim}
+
+
+The script reads the experiment files from the directory where they were stored
+({\tt 61a/output}), and creates a list of the loaded {\tt Experiment} objects.
+Each experiment object is converted into an {\tt Alignment} object with {\tt
+exprl2alignment()}. In this example, there is only one experimental condition
+so the alignment object is only for within group alignment (this special case
+is called 1-alignment). The variable F1 is a Python list containing three
+alignment objects.
+
+The pairwise alignment is then performed.  The parameters for the alignment by
+dynamic programming are: Dw, the retention time modulation in seconds; and Gw,
+the gap penalty.  These parameters are explained in detail in
+\cite{Robinson07}.  {\tt PairwiseAlignment()}, defined in {\tt
+pyms.Peak.List.DPA.Class} is a class that calculates the similarity between a
+ll peaks in one sample with those of another sample.  This is done for all
+possible pairwise alignments (2-alignments). The output of
+{\tt PairwiseAlignment()} (T1) is an object which contains the dendrogram tree
+that maps the similarity relationship between the input 1-alignments, and also
+1-alignments themselves.
+
+The function {\tt align\_with\_tree()} takes the object
+T1 and aligns the individual alignment objects according to
+the guide tree.  In this example, the individual alignments are
+three 1-alignments, and the function {\tt align\_with\_tree()} first
+creates a 2-alignment from the two most similar 1-alignments
+and then adds the third 1-alignment to this to create a
+3-alignment. The parameter `{\tt min\_peaks=2}' specifies that any peak
+column of the data matrix that has less than two peaks in the final
+alignment will be dropped.  This is useful to clean up the data
+matrix of accidental peaks that are not truly observed over the
+set of replicates.
+
+Finally, the resulting 3-alignment is saved by writing alignment tables
+containing peak retention times (`rt1.csv') and the corresponding peak areas
+(`area1.csv'). These two files are plain ASCII files is CSV format, and are
+saved in the directory {\tt 62/output/}.
+
+\noindent
+The file `area1.csv' contains the data matrix where the corresponding peaks are
+aligned in the columns and each row corresponds to an experiment. The file
+`rt1.csv' is useful for manually inspecting the alignment in some GUI driven
+program.
+
+\section{Between-state alignment of peak lists from multiple experiments}
+
+\noindent
+[ {\em This example is in pyms-test/63} ]
+
+In the previous example the list of peaks were aligned within a single
+experiment with multiple replicates (``within-state alignment'').  In practice,
+it is of more interest to compare the two experimental states. In a typical
+experimental setup there can be multiple replicate experiments on each
+experimental state or condition. To analyze the results of such an experiment
+statistically, the list of peaks need to be aligned within each
+experimental state and also between the states. The result of such an alignment
+would be the data matrix of integrated peak areas. The data matrix contains
+ a row for each sample and the number of columns is determined by
+the number of unique peaks (metabolites) detected in all the experiments.
+
+In principle, all experiments could be aligned across conditions and
+replicates in the one process. However, a more robust approach is to first align
+experiments within each set of replicates (within-state
+alignment), and then to align the resulting alignments (between-state
+alignment) \cite{Robinson07}.
+
+This example demonstrates how the peak lists from two cell states are
+aligned. The cell state, A, consisting of three experiments aligned in {\em
+pyms-test/61a} (`a0806\_077', `a0806\_078', `a0806\_079') and cell state,
+B, consisting of three experiments aligned in {\em pyms-test/61b} (`a0806\_140',
+`a0806\_141', and `a0806\_142').
+
+The between group alignment can be performed by the following alignment
+commands.
+
+\begin{verbatim}
+# between replicates alignment parameters
+Db = 10.0 # rt modulation
+Gb = 0.30 # gap penalty
+
+print 'Aligning input {1,2}'
+T9 = PairwiseAlignment([A1,A2], Db, Gb)
+A9 = align_with_tree(T9)
+
+A9.write_csv('output/rt.csv', 'output/area.csv')
+\end{verbatim}
+
+\noindent
+where A1 and A2 are the results of the within group alignments (as above) for
+group A and B, respectively.
+
+In this example the retention time tolerance for between-state alignment is
+greater compared to the retention time tolerance for the within-state alignment
+as we expect less fidelity in retention times between them.  The same functions
+are used for the within-state and between-state alignment. The result of the
+alignment is saved to a file as the area and retention time matrices (described
+above).
+
+%\section{Comparing two peak lists by using dynamic programming alignment}
+%
+%The PyMS package {\tt pyms.Peak.List.Metric} provides a function to compare two
+%peak lists. This allows peak detection methods from different programs to be
+%evaulated or a peak detection method to be compared to a 'known' or expert
+%evaluated result.
+
+\section{Common Ion Area Quantitation}
+[ {\em This example is in pyms-test/64 } ]
+\label{sec:common-ion}
+
+The {\tt area.csv} file produced in the preceding section lists the
+total area of each peak in the alignment. The total area is the sum of
+the areas of each of the individual ions in the peak. While this approach
+produces broadly accurate results, it can result in errors where
+neighbouring peaks or unfiltered noise add to the peak in some way.
+
+One alternative to this approach is to pick a single ion which is
+common to a particular peak (compound), and to report only the area of this ion
+for each occurance of that peak in the alignment. Using the method
+{\tt common\_ion()} of the PyMS class Alignment, PyMS can select an ion for
+each aligned peak which is both abundant and occurs most often 
+for that peak. We call this the 'Common Ion Algorithm' (CIA).
+
+To implement this in PyMS, it is essential that the individual ion
+areas have been set (see section \ref{sec:individual-ion-areas}).
+
+
+\subsection{Using the Common Ion Algorithm}
+When using the CIA for area quantitation, a different method of the
+class Alignment is used to write the area matrix; {\tt
+  write\_common\_ion\_csv()}. This requires a list of the common ions
+for each peak in the alignment. This list is generated using the
+Alignment class method {\tt common\_ion()}.
+
+Continuing from the previous example, the following invokes common ion
+filtering on previously created alignment object 'A9':
+\begin{verbatim}
+>>> common_ion_list = A9.common_ion()
+\end{verbatim}
+
+The variable 'common\_ion\_list' is a list of the common ion for each
+peak in the alignment. This list is the same length as the
+alignment. To write peak areas using common ion quantitation:
+
+\begin{verbatim} 
+>>> A9.write_common_ion_csv('output/area_common_ion.csv',common_ion_list)
+\end{verbatim}
