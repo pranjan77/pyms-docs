@@ -201,9 +201,9 @@ This package is required for parallel processing with PyMS. It can be
 downloaded from:\\
 {\tt http://code.google.com/p/mpi4py/}
 
-\section{PyMS installation on Linux}
+\section{Notes on PyMS installation on Linux}
 
-We recommend compiling your own Python installation before installing
+It is recommended to compile your own Python installation before installing
 PyMS. PyMS installation involves placing the PyMS code directory (pyms/)
 into a location visible to the Python interpreter. This can be in the
 standard place for 3rd party software (the directory site-packages/), or
@@ -212,7 +212,322 @@ Python interpreter needs to be made aware of it before before it is
 possible to import PyMS modules. For more on this please consult the
 Python command sys.path.append().
 
-PyMS is currently being developed on Linux with the following packages:
+In order for existing test scripts provided with the 'pyms-test' project
+to run without any modification, PyMS should be installed in the
+{\tt /x/PyMS/} directory. To create this directory enter on a command
+line:
+
+\begin{verbatim}
+$ mkdir -p /x/PyMS/
+\end{verbatim}
+
+\section{PyMS installation tutorial (current)}
+
+Currently PyMS is being developed on Linux with the following set of
+packages:
+
+\begin{verbatim}
+Python-2.7.2
+numpy-1.6.1
+netcdf-4.1.3
+pycdf-0.6-3b
+scipy-ndimage.tar.gz
+scipy-misc.tar.gz
+Pycluster-1.5.0
+\end{verbatim}
+
+We provide these packages bundled together into the archive
+'PyMS-Linux-deps-2.0.tar.gz' which can be downloaded from
+the Bio21 Institute web server at the University of Melbourne:\\
+http://bioinformatics.bio21.unimelb.edu.au/pyms.html\\
+
+In addition to the dependencies bundle, one also needs to dowload the
+PyMS source code as explained in the section \ref{subsec:code-download}).
+
+Below is a tutorial showing how to install all the packages on Red Hat
+Linux 6.
+
+\begin{enumerate}
+
+\item 'Python' installation:
+
+\begin{verbatim}
+$ tar xvf Python-2.7.2.tgz
+$ cd Python-2.7.2
+$ ./configure
+$ make
+$ make install
+\end{verbatim}
+
+\noindent
+This installs python in /usr/local/lib/python2.7. It is recommended
+to make sure that python called from the command line is the one
+just compiled and installed. Starting python from the command line
+should report version 2.7:
+
+\begin{verbatim}
+$ python
+Python 2.7.2 (default, Feb 15 2012, 14:00:58) 
+[GCC 4.4.4 20100726 (Red Hat 4.4.4-13)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+\end{verbatim}
+
+\item Package 'NumPy' (required for all aspects of PyMS)
+
+The package NumPy is provides numerical capabilities to Python. This
+package is used throughout PyMS (and also required for some external
+packages used in PyMS), so its installation is mandatory.
+
+\begin{verbatim}
+$ tar xvf numpy-1.6.1.tar.gz
+$ cd numpy-1.6.1
+$ python setup.py install
+\end{verbatim}
+
+\item Package 'pycdf'
+
+In order to install {\tt pycdf}, netcdf must first be installed. We
+suggest installing netcdf without the HCDF dependency, as this is not
+needed for PyMS.
+
+\begin{verbatim}
+$ tar xvf netcdf-4.1.3.tar.gz
+$ cd netcdf-4.1.3
+$ ./configure --disable-netcdf-4
+$ make
+# make install
+\end{verbatim}
+
+Note that by default, netcdf libraries are installed in '/usr/local/lib'.
+
+Now the {\tt pycdf} library can be installed:
+
+\begin{verbatim}
+$ tar xvf pycdf-0.6-3b.tar.gz
+$ cd pycdf-0.6-3b
+$ python setup.py install
+\end{verbatim}
+
+It is useful to run the 'pycdf' package example to verify that 'netcdf'
+and 'pycdf' libraries are installed correctly. In the folder
+'pycdf-0.6-3b/examples' run:
+
+\begin{verbatim}
+]$ python compr.py
+Running with pycdf configured for: numpy
+
+step 1, obs_table
+[[ 1  3 -4  5 10]
+ [ 0 10  8  7  4]
+ [-1  4  5  9 13]]
+should be
+[[ 1  3 -4  5 10]
+ [ 0 10  8  7  4]
+ [-1  4  5  9 13]]
+
+...more output omitted...
+\end{verbatim}
+
+If the pycdf example produces an error similar to this:
+
+\begin{verbatim}
+$ python compr.py 
+Traceback (most recent call last):
+  File "copr.py", line 7, in <module>
+.....
+ImportError: libnetcdf.so.7: cannot open shared object file: No such file
+or directory
+\end{verbatim}
+
+This indicates tha pycdf cannot find the netcdf shared libraries. 
+For example, the netcdf library is installed in '/usr/local/lib',
+but may not be cashed and ready for use. This is normally achieved
+with the command 'ldconfig'. If the 'netcdf' library is properly
+installed and ready to use, the output of 'ldconfig' command
+should be similar to the following:
+
+\begin{verbatim}
+]# /sbin/ldconfig -v | grep netcdf
+        libnetcdf.so.7 -> libnetcdf.so.7.1.1
+        libnetcdff.so.5 -> libnetcdff.so.5.1.0
+        libnetcdf_c++.so.4 -> libnetcdf_c++.so.4.1.0
+\end{verbatim}
+
+If this command produces no output, consult 'ldconfig' configuration
+options. In particular, the directory where 'netcdf' was installed
+('/usr/local/lib' by default) must be included in the library path.
+This can be achieved either by modifying '/etc/ld.so.conf.d' or by
+using the {\tt LD\_LIBRARY\_PATH} environment variable. 
+
+\item Package 'PyCluster'
+
+PyCluster is used by PyMS for peak alignment by dynamic programming.
+
+\begin{verbatim}
+$ tar xvf Pycluster-1.50.tar.gz
+$ cd Pycluster-1.50
+$ python setup.py install
+\end{verbatim}
+
+\item Package 'SciPY'
+
+The module 'ndimage', used for baseline correction in PyMS, is part
+of a much larger library called SciPy. To save installation of such
+a large library we install only the parts we require. These are the
+ndimage library, and a dependency of ndimage; scipy's 'misc' library.
+
+Modules which require 'ndimage' expect it to be part of this scipy
+library so some extra steps are necessary to allow ndimage to be
+accessed properly by Python.
+
+First:
+
+\begin{verbatim}
+$ tar xvf scipy-ndimage.tar.gz
+$ cd ndimage
+$ python setup.py install
+\end{verbatim}
+
+\begin{verbatim}
+$ tar xvf scipy-misc.tar.gz
+$ cd misc
+$ python setup.py install
+\end{verbatim}
+
+The ndimage and misc libraries should be now installed in the
+location: {\tt /usr/local/lib/python2.7/site-packages/}.  (If your
+version of Python is 2.7). Observe the screen output from the {\tt
+  python setup.py install} command to see precisely where they have
+been installed.
+
+Python programs will expect ndimage to be at {\tt
+  /usr/local/lib/python2.7/site-packages/scipy/ndimage} so we will
+manually put it there, and add an \_\_init\_\_.py file which tells
+Python that a library is present at that location. We must also move
+module 'misc' so that 'ndimage' finds it:
+
+\begin{verbatim}
+$ cd /usr/local/lib/python2.7/site-packages
+$ mkdir scipy
+$ touch scipy/__init__.py
+$ mv ndimage scipy
+$ mv misc scipy
+\end{verbatim}
+
+\end{enumerate}
+
+\subsection{Extra Dependencies}
+
+In addition to the dependencies listed above, PyMS also makes use of
+some other python packages for specific needs. The first, matplotlib,
+is used to display graphical output (such as ion chromatograms, peak
+locations). mpich and mpi4py, together provide the ability to run PyMS
+scripts in parallel.
+
+\begin{enumerate}
+
+\item Package 'matplotlib'
+
+\begin{verbatim}
+$ tar xvf matplotlib-0.99.1.2.tar.gz
+$ cd matplotlib-0.99.1.1  
+$ python setup.py build   
+$ python setup.py install
+\end{verbatim}
+
+\item Installation of the package 'mpi4py'
+
+Before 'mpi4py' can be installed, MPI libraries for parallel computation
+(mpich) must be installed.
+
+From the mpich2 project web site download the current distribution of mpich2
+(in our case the file 'mpich2-1.2.1p1.tar.gz'), or use the version included
+with PyMS-deps versions 2.0 and above.
+
+Prepare the directory for mpich2 installation. In this example we have chosen
+to use /usr/local/mpich2/. Our version of mpitch2 is 1.2.1, and to allow for
+the installation of different version later, we create a subdirectory "1.2.1",
+
+\begin{verbatim}
+$ mkdir -vp /usr/local/mpich2/1.2.1
+\end{verbatim}
+
+The above command will make the directory /usr/local/mpich2/ and also
+/usr/local/mpich2/1.2.1. Note that /usr/local is usually owned by root,
+and the above commands may require root privileges.
+
+Unpack the mpitch source archive and change to the source code directory:
+
+\begin{verbatim}
+$ tar xvf mpich2-1.2.1p1.tar.gz 
+$ cd mpich2-1.2.1p1
+\end{verbatim}
+
+Configure, compile, and install mpich2:
+
+\begin{verbatim}
+$ ./configure --prefix=/usr/local/mpich2/1.2.1 --enable-sharedlibs=gcc
+$ make
+$ make install
+\end{verbatim}
+
+If /usr/local/mpich2/1.2.1 is owned by root, the last command may require
+root privileges.
+
+With this completed, one can install the package 'mpi4py'. From the mpi4py
+project web site download the current distribution of mpi4py (in our case
+the file 'mpi4py-1.2.1.tar.gz'), or use the distribution included in
+PyMS-Deps 2.0 and above.  Unpack the source archive and change to the
+source code directory:
+
+\begin{verbatim}
+$ tar xvf mpi4py-1.2.1.tar.gz
+$ cd mpi4py-1.2.1
+\end{verbatim}
+
+Edit the file 'mpi.cfg' which can be found in this directory, to reflect the
+location of mpich2.  In our case this file after editing contained the
+following:
+
+\begin{verbatim}
+# MPICH2
+[mpi]
+mpi_dir              = /usr/local/mpich2/1.2.1
+mpicc                = %(mpi_dir)s/bin/mpicc
+mpicxx               = %(mpi_dir)s/bin/mpicxx
+\end{verbatim}
+
+Install the package 'mpi4py':
+
+\begin{verbatim}
+$ python setup.py install
+\end{verbatim}
+
+Check that mpi4py works:
+
+\begin{verbatim}
+]$ python
+Python 2.7.2 (default, Feb 15 2012, 14:00:58) 
+[GCC 4.4.4 20100726 (Red Hat 4.4.4-13)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import mpi4py
+>>> 
+\end{verbatim}
+
+If the above command import produced no output, mpi4py is installed
+properly and ready to use.
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Old dependencies installation tutorial
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{PyMS installation tutorial (old)}
+
+Prior to 2011, PyMS was being developed on Linux with the following set of
+packages:
 
 \begin{verbatim}
 Python-2.5.2
@@ -226,15 +541,16 @@ mpi4py-1.2.1.tar.gz
 mpich2-1.2.1p1.tar.gz
 \end{verbatim}
 
-For easy installation, we provide these packages bundled together into
-the archive 'PyMS-Linux-deps-1.1.tar.gz' which can be downloaded from
+We provide these packages bundled together into the archive
+'PyMS-Linux-deps-1.1.tar.gz' which can be downloaded from
 the Bio21 Institute web server at the University of Melbourne:\\
 http://bioinformatics.bio21.unimelb.edu.au/pyms.html\\
 
 In addition to the dependencies bundle, one also needs to dowload the
 PyMS source code as explained in the section \ref{subsec:code-download}).
-Below we give a quick installation guide of packages required by PyMS
-on Linux.
+
+Below is a tutorial showing how to install all the packages on Red Hat
+Linux 5.
 
 \begin{enumerate}
 
@@ -342,9 +658,7 @@ This package is required for running PyMS processing on multiple processors
 (CPUs). Instructions how to install this package and run PyMS processing
 in parallel are given in Section \ref{sec:mpi}. 
 
-
 \end{enumerate}
-
 
 \section{Troubleshooting}
 
@@ -374,9 +688,9 @@ ImportError: /usr/local/lib/python2.5/site-packages/pycdf/_pycdfext.so:
     cannot restore segment prot after reloc: Permission denied
 \end{verbatim}
 
-This problem is removed simply by disabling SELinux (login as `root',
-open the menu Administration $\rightarrow$ Security Level and Firewall,
-tab SELinux, change settings from `Enforcing' to `Disabled').
+This problem is remedied by disabling SELinux (login as `root', open the
+menu Administration $\rightarrow$ Security Level and Firewall, tab SELinux,
+change settings from `Enforcing' to `Disabled').
 
 This problem is likely to occur on Red Hat Linux derivative distributions
 such as CentOS.
